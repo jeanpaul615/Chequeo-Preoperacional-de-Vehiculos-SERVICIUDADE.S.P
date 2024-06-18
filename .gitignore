@@ -20,3 +20,7 @@ lib64/
 parts/
 sdist/
 var
+
+# others
+.env
+.vscode
