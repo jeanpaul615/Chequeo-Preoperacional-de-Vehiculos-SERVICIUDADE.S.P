@@ -11,3 +11,4 @@ PROJECT_NAME: str = os.getenv("PROJECT_NAME")
 @app.get("/")
 def read_root():
     return {"message": f"Welcome to {PROJECT_NAME}" }
+
