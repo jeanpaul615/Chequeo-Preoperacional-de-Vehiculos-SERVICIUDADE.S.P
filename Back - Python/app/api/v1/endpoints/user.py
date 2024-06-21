@@ -15,7 +15,6 @@ def get_all_user(db: Session = Depends(deps.get_db)):
         raise HTTPException(status_code=400, detail="Users not registered")
     return user_list
 
-
 @router.post("/users/", response_model=User)
 def create_user(user_in: UserCreate, db: Session = Depends(deps.get_db)):
     user = crud_user.get_user_by_email(db, email=user_in.email)
