@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from datetime import datetime
 import enum
 from typing import Optional
@@ -26,3 +27,5 @@ class UserCreate(BaseModel):
 class UserAuth(BaseModel):
     email: str
     password: str
+=======
+>>>>>>> cec8882118d740c6898122a0ba37d9487553af61
