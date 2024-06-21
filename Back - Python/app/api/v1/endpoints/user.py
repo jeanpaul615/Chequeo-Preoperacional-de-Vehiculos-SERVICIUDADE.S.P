@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.crud import user as crud_user
 from app.schemas.user import User, UserCreate
-from app.api import deps
+from app.core import deps
 
 router = APIRouter()
 

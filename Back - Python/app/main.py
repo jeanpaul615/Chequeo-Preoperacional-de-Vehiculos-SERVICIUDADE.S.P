@@ -1,10 +1,11 @@
 import os
 from fastapi import FastAPI
-from app.api.v1.endpoints import user
+from app.api.v1.endpoints import user, login
 
 app = FastAPI()
 
 app.include_router(user.router, prefix="/api/v1", tags=["users"])
+app.include_router(login.router, prefix="/api/v1", tags=["login"])
 
 PROJECT_NAME: str = os.getenv("PROJECT_NAME")
 
