@@ -3,6 +3,7 @@ import os
 from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError
 import jwt
 from sqlalchemy.orm import Session
 from app.core.password import verify_password
@@ -13,7 +14,6 @@ from app.core import deps
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
-
 
 def authenticate_user(db: Session = Depends(deps.get_db), user = Depends(deps.get_oath2_scheme)):
     try:
@@ -26,7 +26,7 @@ def authenticate_user(db: Session = Depends(deps.get_db), user = Depends(deps.ge
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error authenticate user: {str(e)}")
 
-def get_current_user(token: str, db: Session):
+def get_current_user(token: str = Depends(deps.get_oath2_scheme), db: Session = Depends(deps.get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -54,10 +54,10 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def verify_token(token: str):
+def verify_token(token: str = Depends(deps.get_oath2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except jwt.JWTError:
+    except JWTError:
         return None
     

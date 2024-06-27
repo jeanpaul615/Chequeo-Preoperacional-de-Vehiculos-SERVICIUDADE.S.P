@@ -4,12 +4,12 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.crud import user as crud_user
 from app.schemas.user import User, UserCreate
-from app.core import deps
+from app.core import deps, auth
 
 router = APIRouter()
 
 @router.get("/users/", response_model=List[User])
-def get_all_user(db: Session = Depends(deps.get_db)):
+def get_all_user(db: Session = Depends(deps.get_db), current_user: User = Depends(auth.get_current_user)):
     user_list = crud_user.get_all_user(db)
     if not user_list:
         raise HTTPException(status_code=400, detail="Users not registered")
