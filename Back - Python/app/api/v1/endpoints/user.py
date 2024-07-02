@@ -1,6 +1,6 @@
+from datetime import datetime
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.crud import user as crud_user
 from app.schemas.user import User, UserCreate

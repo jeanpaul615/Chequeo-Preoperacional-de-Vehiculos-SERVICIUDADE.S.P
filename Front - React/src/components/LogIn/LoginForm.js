@@ -1,26 +1,59 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
+import { Auth } from "../../controllers/PostControllers/Auth"; // Ajusta la ruta según sea necesario
 
 function LoginForm() {
-  const [showPassword, setShowPassword] = useState(true); // Estado para controlar la visibilidad de la contraseña
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false); // Cambiado a false para ocultar la contraseña
+  const [formData, setFormData] = useState({
+    username: "",
+    password: ""
+  });
+  const [error, setError] = useState(null);
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword); // Cambia el estado para mostrar u ocultar la contraseña
+    setShowPassword(!showPassword);
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await Auth(formData);
+      console.log("Respuesta de login:", response);
+      if(response)
+        navigate("/dashboard");
+      navigate("/");
+
+    } catch (error) {
+      setError(error.message || "Error al iniciar sesión");
+    }
   };
 
   return (
-    <div className="p-5 rounded-lg shadow-md md:w-full w- max-w-md border-dotted border-2 border-gray-400">
-      <h3 className="text-center text-2xl font-bold mb-2 -mt-4<">
+    <div className="p-5 rounded-lg shadow-md md:w-full w-max-w-md border-dotted border-2 border-gray-400">
+      <h3 className="text-center text-2xl font-bold mb-2 -mt-4">
         Inicio de Sesión
       </h3>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="pl-2 text-sm block text-gray-700 italic font-bold">
-            Correo Electrónico:
+            Usuario:
           </label>
           <input
-            type="email"
+            type="username"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
             className="w-full px-4 py-2 border rounded-full border-blue-700 focus:outline-none focus:border-gray-300"
+            required
           />
         </div>
         <div className="mb-4 relative">
@@ -28,8 +61,12 @@ function LoginForm() {
             Contraseña:
           </label>
           <input
-            type={showPassword ? "text" : "password"} // Mostrar texto si showPassword es true
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
             className="w-full px-4 py-2 border rounded-full border-blue-700 focus:outline-none focus:border-gray-300"
+            required
           />
           <button
             type="button"
@@ -49,6 +86,7 @@ function LoginForm() {
             )}
           </button>
         </div>
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <div className="mb-6 text-right">
           <a href="/login" className="text-blue-500 text-sm italic">
             ¿Olvidaste tu contraseña?
@@ -60,10 +98,10 @@ function LoginForm() {
         >
           INGRESAR
         </button>
-        <div className="text-right  mt-4">
+        <div className="text-right mt-4">
           <a href="/login" className="text-sm">
             <span className="text-black italic">No tienes una cuenta?</span>{" "}
-            <span className="text-orange-600 font-bold  ">Registrarse</span>
+            <span className="text-orange-600 font-bold">Registrarse</span>
           </a>
         </div>
       </form>
