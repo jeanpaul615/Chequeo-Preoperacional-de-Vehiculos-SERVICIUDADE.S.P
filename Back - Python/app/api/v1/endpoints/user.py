@@ -1,19 +1,23 @@
+import json
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.crud import user as crud_user
 from app.schemas.user import User, UserCreate
 from app.core import deps, auth
+from app.utils.verify_roles import is_admin
 
 router = APIRouter()
 
 @router.get("/users/", response_model=List[User])
-def get_all_user(db: Session = Depends(deps.get_db), current_user: User = Depends(auth.get_current_user)):
-    user_list = crud_user.get_all_user(db)
-    if not user_list:
-        raise HTTPException(status_code=400, detail="Users not registered")
-    return user_list
+def get_all_user(db: Session = Depends(deps.get_db), verify_token: dict = Depends(auth.verify_token)): 
+    if is_admin(verify_token):   
+        user_list = crud_user.get_all_user(db)
+        if not user_list:
+            raise HTTPException(status_code=400, detail="Users not registered")
+        return user_list
+    else:
+        raise HTTPException(status_code=401, detail="Unauthorized user")
 
 @router.post("/users/", response_model=User)
 def create_user(user_in: UserCreate, db: Session = Depends(deps.get_db)):

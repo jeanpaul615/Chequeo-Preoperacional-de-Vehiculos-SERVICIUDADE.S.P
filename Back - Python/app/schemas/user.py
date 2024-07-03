@@ -26,3 +26,9 @@ class UserCreate(BaseModel):
 class UserAuth(BaseModel):
     email: str
     password: str
+    
+class UserAuthenticated(BaseModel):
+    user_id: int
+    email: str
+    role: UserRole
+    status: bool

@@ -1,13 +1,9 @@
 from datetime import datetime
 import enum
-from sqlalchemy import Boolean, Column, DateTime, Enum, Integer, SmallInteger, String
+from sqlalchemy import Boolean, Column, DateTime, Enum, SmallInteger, String
 from app.db.base import Base
 from app.db.session import engine
-
-class UserRole(enum.Enum):
-    ADMIN = "ADMIN"
-    AUDITOR = 'AUDITOR'
-    CONDUCTOR = 'CONDUCTOR'
+from app.schemas.user import UserRole
 
 class User(Base):
     __tablename__ = "user"
