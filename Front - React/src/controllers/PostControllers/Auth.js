@@ -1,5 +1,6 @@
 import axios from "axios";
 import qs from "qs"; // Importa el módulo qs para formatear los datos como x-www-form-urlencoded
+import Swal from "sweetalert2";
 
 export const Auth = async (authData) => {
   try {
@@ -11,11 +12,8 @@ export const Auth = async (authData) => {
         'Content-Type': 'application/x-www-form-urlencoded' // Especificar el tipo de contenido como x-www-form-urlencoded
       }
     });
-
-    console.log("Respuesta de login:", response);
     return response.data;
   } catch (error) {
-    console.error('Error al autenticar:', error);
-    throw error;
+    Swal.fire('Error al autenticar:', error);
   }
 }

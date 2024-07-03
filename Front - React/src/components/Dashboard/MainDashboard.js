@@ -6,36 +6,85 @@ function MainDashboard() {
     <div>
       <Sidebar />
       <div className="p-4 sm:ml-64">
-    <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-       <div className="grid grid-cols-3 gap-4 mb-4">
-          <div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-             <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                </svg>
-             </p>
+        <div className="p-4 border-2 border-gray-200 border-dashed text-center rounded-lg dark:border-gray-700">
+          <div className="grid grid-cols-3 gap-4 mb-4">
+            {/*item 1 - Conductores registrados*/}
+            <div className="flex items-center justify-center h-24 text-center rounded bg-gray-50 dark:bg-gray-800">
+              <p className="text-2xl text-gray-400 dark:text-gray-500">
+                Conductores registrados
+              </p>
+            </div>
+            {/*item 2 - Vehiculos registrados*/}
+            <div className="flex items-center text-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+              <p className="text-2xl text-gray-400 dark:text-gray-500">
+                Vehiculos registrados
+              </p>
+            </div>
+            {/*item 3 - Tipos de Vehículos y dependencias(Aseo, acueducto, alcantarillado)*/}
+            <div className="flex items-center text-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+              <p className="text-2xl text-gray-400 dark:text-gray-500">
+                Tipos de Vehículos y dependencias(Aseo, acueducto,
+                alcantarillado)
+              </p>
+            </div>
           </div>
-          <div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-             <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                </svg>
-             </p>
+          {/*item 4 - Diagrama de barras de chequeo realizado cada dia*/}
+          <div className="flex items-center text-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+            <p className="text-2xl text-gray-400 dark:text-gray-500">
+              Cantidad de revisadores y auditores registrados
+            </p>
           </div>
-          <div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-             <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                </svg>
-             </p>
+          <div className="grid grid-cols-3 gap-4 mb-4">
+            {/*item 5 - Cantidad de chequeos realizados en el día*/}
+            <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+              <p className="text-2xl text-gray-400 dark:text-gray-500">
+                Cantidad de chequeos realizados en el día
+              </p>
+            </div>
+            {/*Item 6 - Cantidad de chequeos realizados en el mes*/}
+            <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+              <p className="text-2xl text-gray-400 dark:text-gray-500">
+                Cantidad de chequeos realizados en el mes
+              </p>
+            </div>
+            {/* Item 7 - Chequeos revisados y auditados*/}
+            <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+              <p className="text-2xl text-gray-400 dark:text-gray-500">
+                Chequeos revisados y auditados
+              </p>
+            </div>
           </div>
-       </div>
-       <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-          <p className="text-2xl text-gray-400 dark:text-gray-500">
-             <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-             </svg>
-          </p>
-       </div>
-       </div>
+          {/* Item 8 - Diagrama de barras de chequeos realizados cada mes*/}
+          <div className="text-center flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+            <p className="text-2xl text-gray-400 dark:text-gray-500">
+              Diagrama de barras de chequeos realizados cada mes
+            </p>
+          </div>
+          <div>
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              {/*item 9 - Diagrama circular de tipos de vehiculos*/}
+              <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+                <p className="text-2xl text-gray-400 dark:text-gray-500">
+                  Diagrama circular de tipos de vehiculos
+                </p>
+              </div>
+              {/*Item 10 -Diagrama de barras comparacion de conductores,vehiculos,revisadores y auditores*/}
+              <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+                <p className="text-2xl text-gray-400 dark:text-gray-500">
+                  Cantidad de chequeos realizados en el mes
+                </p>
+              </div>
+              {/* Item 11 - Cantidad de revisadores y auditores registrados*/}
+              <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+                <p className="text-2xl text-gray-400 dark:text-gray-500">
+                  Cantidad de revisadores y auditores registrados
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
- </div>
   );
 }
 

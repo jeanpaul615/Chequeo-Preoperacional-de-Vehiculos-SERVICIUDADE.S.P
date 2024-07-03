@@ -30,7 +30,8 @@ function LoginForm() {
       console.log("Respuesta de login:", response);
       if(response)
         navigate("/dashboard");
-      navigate("/");
+      else
+        navigate("/");
 
     } catch (error) {
       setError(error.message || "Error al iniciar sesión");
