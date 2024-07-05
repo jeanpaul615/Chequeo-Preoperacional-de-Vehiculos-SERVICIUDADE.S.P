@@ -76,22 +76,20 @@ export default function ContainerInspection({ formData, handleChange }) {
             layoutId={selectedGroupId}
             className="fixed inset-0 bg-white p-8 z-50 overflow-auto"
           >
-            {componentGroups
-              .filter(group => group.id === selectedGroupId)
-              .map(group => (
-                <div key={group.id}>
-                  <h3 className="text-xl font-semibold mb-4">{group.title}</h3>
-                  {group.components.map(({ id, component: Component }) => (
-                    <Component key={id} formData={formData} handleChange={handleChange} />
-                  ))}
-                  <motion.button
-                    onClick={() => setSelectedGroupId(null)}
-                    className="mt-4 p-2 bg-red-500 text-white rounded"
-                  >
-                    Close
-                  </motion.button>
-                </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-4">
+                {componentGroups.find(group => group.id === selectedGroupId).title}
+              </h3>
+              {componentGroups.find(group => group.id === selectedGroupId).components.map(({ id, component: Component }) => (
+                <Component key={id} formData={formData} handleChange={handleChange} />
               ))}
+              <motion.button
+                onClick={() => setSelectedGroupId(null)}
+                className="mt-4 p-2 bg-red-500 text-white rounded"
+              >
+                Close
+              </motion.button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

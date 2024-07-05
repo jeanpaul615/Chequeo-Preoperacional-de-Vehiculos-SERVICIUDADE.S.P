@@ -50,14 +50,14 @@ export default function InspectionRevisionInterna({ formData, handleChange }) {
         />
         <InspectionSelect
           label="Manijas/Chapas"
-          name="manijas-chapas"
-          value={formData['manijas-chapas']}
+          name="manijasChapas"
+          value={formData.manijasChapas}
           handleChange={handleChange}
         />
         <InspectionSelect
           label="Puertas/Seguros"
-          name="puertas-seguros"
-          value={formData['puertas-seguros']}
+          name="puertasSeguros"
+          value={formData.puertasSeguros}
           handleChange={handleChange}
         />
         <InspectionSelect
@@ -67,9 +67,9 @@ export default function InspectionRevisionInterna({ formData, handleChange }) {
           handleChange={handleChange}
         />
         <InspectionSelect
-          label="Sillas/Cojinería"
-          name="sillas-cojineria"
-          value={formData['sillas-cojineria']}
+          label="Sillas o Cojinería"
+          name="sillasCojineria"
+          value={formData.sillasCojineria}
           handleChange={handleChange}
         />
       </div>

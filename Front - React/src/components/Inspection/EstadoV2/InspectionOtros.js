@@ -9,7 +9,7 @@ export default function InspectionOtros({ formData, handleChange }) {
         <InspectionSelect
           label="Latonería y Pintura"
           name="Latoneríaypintura"
-          value={formData.Latoneríaypintura}
+          value={formData.Latoneriaypintura}
           handleChange={handleChange}
         />
         <InspectionSelect

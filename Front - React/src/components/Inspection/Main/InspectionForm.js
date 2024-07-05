@@ -27,7 +27,7 @@ const InspectionForm = () => {
    niveldecombustibles: "",
    cargabateria: "",
    temperaturamotor: "",
-   tacometrovelocímetro: "",
+   tacometrovelocimetro: "",
    parabrisas: "",
    limpiaparabrisas: "",
    laterales: "",
@@ -54,7 +54,7 @@ const InspectionForm = () => {
    puertasSeguros: "",
    elevavidrios: "",
    sillasCojineria: "",
-   latoneriaPintura: "",
+   latoneriaypintura: "",
    estadoPlatonCarroceria: "",
    carpas: "",
    compuertas: "",
@@ -62,10 +62,10 @@ const InspectionForm = () => {
    sillas: "",
    cojineria: "",
    tapetes: "",
-   pernosCompletos: "",
-   muellesAmortiguadores: "",
-   tanqueCombustible: "",
-   tanqueAire: "",
+   pernoscompletos: "",
+   muellesyamortiguadores: "",
+   tanquecombustible: "",
+   tanqueaire: "",
    llantaDelanteraDerecha: "",
    llantaDelanteraIzquierda: "",
    llantaTraseraDerecha: "",
@@ -86,7 +86,6 @@ const InspectionForm = () => {
    estadoSaludConductor: ""
   });
 
-  const [showNiveles, setShowNiveles] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -98,15 +97,14 @@ const InspectionForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    setShowNiveles(true);
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
       <form onSubmit={handleSubmit}>
         <Container formData={formData} handleChange={handleChange} />
-        {showNiveles && <Container formData={formData} handleChange={handleChange} />}
       </form>
+      <button id="submit" type="submit" className="mt-4 p-2 bg-blue-500 text-white rounded"> Guardar</button>
     </div>
   );
 };
