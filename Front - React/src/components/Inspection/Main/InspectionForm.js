@@ -54,7 +54,7 @@ const InspectionForm = () => {
    puertasSeguros: "",
    elevavidrios: "",
    sillasCojineria: "",
-   latoneriaypintura: "",
+   LatoneriayPintura: "",
    estadoPlatonCarroceria: "",
    carpas: "",
    compuertas: "",

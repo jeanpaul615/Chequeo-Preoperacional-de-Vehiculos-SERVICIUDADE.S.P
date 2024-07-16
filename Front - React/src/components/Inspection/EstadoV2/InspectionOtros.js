@@ -9,13 +9,13 @@ export default function InspectionOtros({ formData, handleChange }) {
         <InspectionSelect
           label="Latonería y Pintura"
           name="Latoneríaypintura"
-          value={formData.Latoneriaypintura}
+          value={formData.LatoneriayPintura}
           handleChange={handleChange}
         />
         <InspectionSelect
           label="Estado Platón y Carrocería"
           name="estadoplatónycarrocería"
-          value={formData.estadoplatónycarrocería}
+          value={formData.estadoPlatonCarroceria}
           handleChange={handleChange}
         />
         <InspectionSelect
