@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.crud import user as crud_user
-from app.schemas.user import User, UserCreate
+from app.schemas.inspection.user import User, UserCreate
 from app.core.deps import get_db_inspection
 from app.core.auth import verify_token, verify_admin
 

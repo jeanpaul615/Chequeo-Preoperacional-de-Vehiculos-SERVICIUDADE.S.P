@@ -3,7 +3,8 @@ import enum
 from sqlalchemy import Boolean, Column, DateTime, Enum, SmallInteger, String
 from app.db.base import Base
 from app.db.session import engine_inspection
-from app.schemas.user import UserRole
+from app.schemas.inspection.user import UserRole
+
 
 class User(Base):
     __tablename__ = "user"
