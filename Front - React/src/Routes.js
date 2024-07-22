@@ -6,6 +6,7 @@ import InspectionForm from './components/Inspection/Main/InspectionForm';
 import DatatableDrivers from './components/Drivers/Datatable';
 import DataTableIndicators from './components/Indicators/Datatable';
 import DataTableVariables from './components/Variables/Datatable';
+import DatatableVehicles from './components/Vehicle/Datatable';
 
 export default function App() {
   return (
@@ -17,6 +18,8 @@ export default function App() {
         <Route exact path='/drivers' element={<DatatableDrivers />} />
         <Route exact path='/indicators' element={<DataTableIndicators />} />
         <Route exact path='/variables' element={<DataTableVariables />} />
+        <Route exact path='/vehicules' element={<DatatableVehicles />} />
+
       </Routes>
     </Router>
   );

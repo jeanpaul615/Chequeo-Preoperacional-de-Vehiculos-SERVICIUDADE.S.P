@@ -14,4 +14,3 @@ class Token(Base):
     
 Base.metadata.create_all(bind=engine)
     
-    
