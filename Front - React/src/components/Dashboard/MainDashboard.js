@@ -1,7 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
 import Sidebar from "../../containers/Sidebar";
 
-function MainDashboard() {
+const MainDashboard = () => {
+  const [driversCount, setDriversCount] = useState(0);
+  const [vehiclesCount, setVehiclesCount] = useState(0);
+  const [inspectorsCount, setInspectorsCount] = useState(0);
+  const [dailyChecksCount, setDailyChecksCount] = useState(0);
+  const [monthlyChecksCount, setMonthlyChecksCount] = useState(0);
+  const [auditedChecksCount, setAuditedChecksCount] = useState(0);
+
+  const token = localStorage.getItem("access_token");
+
+  const fetchData = async () => {
+    try {
+      const driversResponse = await axios.get("http://localhost:8000/api/v1/drivers", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setDriversCount(driversResponse.data.length);
+
+      const vehiclesResponse = await axios.get("http://localhost:8000/api/v1/vehicles", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setVehiclesCount(vehiclesResponse.data.length);
+
+      const inspectorsResponse = await axios.get("http://localhost:8000/api/v1/inspectors", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setInspectorsCount(inspectorsResponse.data.length);
+
+      const dailyChecksResponse = await axios.get("http://localhost:8000/api/v1/daily-checks", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setDailyChecksCount(dailyChecksResponse.data.length);
+
+      const monthlyChecksResponse = await axios.get("http://localhost:8000/api/v1/monthly-checks", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setMonthlyChecksCount(monthlyChecksResponse.data.length);
+
+      const auditedChecksResponse = await axios.get("http://localhost:8000/api/v1/audited-checks", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setAuditedChecksCount(auditedChecksResponse.data.length);
+    } catch (error) {
+      Swal.fire("Error al obtener los datos:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <div>
       <Sidebar />
@@ -11,13 +75,13 @@ function MainDashboard() {
             {/*item 1 - Conductores registrados*/}
             <div className="flex items-center justify-center h-24 text-center rounded bg-gray-50 dark:bg-gray-800">
               <p className="text-2xl text-gray-400 dark:text-gray-500">
-                Conductores registrados
+                Conductores registrados: {driversCount}
               </p>
             </div>
             {/*item 2 - Vehiculos registrados*/}
             <div className="flex items-center text-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
               <p className="text-2xl text-gray-400 dark:text-gray-500">
-                Vehiculos registrados
+                Vehículos registrados: {vehiclesCount}
               </p>
             </div>
             {/*item 3 - Tipos de Vehículos y dependencias(Aseo, acueducto, alcantarillado)*/}
@@ -31,26 +95,26 @@ function MainDashboard() {
           {/*item 4 - Diagrama de barras de chequeo realizado cada dia*/}
           <div className="flex items-center text-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
             <p className="text-2xl text-gray-400 dark:text-gray-500">
-              Cantidad de revisadores y auditores registrados
+              Cantidad de revisadores y auditores registrados: {inspectorsCount}
             </p>
           </div>
           <div className="grid grid-cols-3 gap-4 mb-4">
             {/*item 5 - Cantidad de chequeos realizados en el día*/}
             <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
               <p className="text-2xl text-gray-400 dark:text-gray-500">
-                Cantidad de chequeos realizados en el día
+                Cantidad de chequeos realizados en el día: {dailyChecksCount}
               </p>
             </div>
             {/*Item 6 - Cantidad de chequeos realizados en el mes*/}
             <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
               <p className="text-2xl text-gray-400 dark:text-gray-500">
-                Cantidad de chequeos realizados en el mes
+                Cantidad de chequeos realizados en el mes: {monthlyChecksCount}
               </p>
             </div>
             {/* Item 7 - Chequeos revisados y auditados*/}
             <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
               <p className="text-2xl text-gray-400 dark:text-gray-500">
-                Chequeos revisados y auditados
+                Chequeos revisados y auditados: {auditedChecksCount}
               </p>
             </div>
           </div>
@@ -86,6 +150,6 @@ function MainDashboard() {
       </div>
     </div>
   );
-}
+};
 
 export default MainDashboard;
