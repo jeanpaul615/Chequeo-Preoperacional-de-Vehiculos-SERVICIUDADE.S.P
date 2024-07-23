@@ -1,10 +1,10 @@
 from datetime import datetime
 import enum
 from sqlalchemy import Boolean, Column, DateTime, Enum, SmallInteger, String
+from sqlalchemy.orm import relationship
 from app.db.base import Base
 from app.db.session import engine_inspection
 from app.schemas.inspection.user import UserRole
-
 
 class User(Base):
     __tablename__ = "user"
@@ -17,4 +17,7 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.now(), nullable=False)
     updated_at = Column(DateTime, default=None, onupdate=datetime.now())
     
+    # Define the relationship with Driver
+    drivers = relationship("Driver", back_populates="user")
+
 Base.metadata.create_all(bind=engine_inspection)

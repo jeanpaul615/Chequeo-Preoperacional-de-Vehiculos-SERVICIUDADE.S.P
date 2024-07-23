@@ -11,10 +11,6 @@ router = APIRouter()
 
 @router.get("/drivers/", response_model=List[Driver])
 def get_all_drivers(db: Session = Depends(get_db_inspection), token: dict = Depends(verify_token)): 
-    if verify_admin(token):   
-        driver_list = crud_driver.get_all_driver(db)
-        if not driver_list:
-            raise HTTPException(status_code=400, detail="drivers not registered")
-        return driver_list
-    else:
-        raise HTTPException(status_code=401, detail="Unauthorized driver")
+    verify_admin(token)
+    drivers = crud_driver.get_all_driver(db)
+    return drivers or []

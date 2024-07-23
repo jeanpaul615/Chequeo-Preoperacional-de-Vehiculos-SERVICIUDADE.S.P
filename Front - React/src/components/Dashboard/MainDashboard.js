@@ -6,10 +6,10 @@ import Sidebar from "../../containers/Sidebar";
 const MainDashboard = () => {
   const [driversCount, setDriversCount] = useState(0);
   const [vehiclesCount, setVehiclesCount] = useState(0);
-  const [inspectorsCount, setInspectorsCount] = useState(0);
+  /*const [inspectorsCount, setInspectorsCount] = useState(0);
   const [dailyChecksCount, setDailyChecksCount] = useState(0);
   const [monthlyChecksCount, setMonthlyChecksCount] = useState(0);
-  const [auditedChecksCount, setAuditedChecksCount] = useState(0);
+  const [auditedChecksCount, setAuditedChecksCount] = useState(0);*/
 
   const token = localStorage.getItem("access_token");
 
@@ -29,7 +29,7 @@ const MainDashboard = () => {
       });
       setVehiclesCount(vehiclesResponse.data.length);
 
-      const inspectorsResponse = await axios.get("http://localhost:8000/api/v1/inspectors", {
+      /*const inspectorsResponse = await axios.get("http://localhost:8000/api/v1/inspectors", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -55,7 +55,7 @@ const MainDashboard = () => {
           Authorization: `Bearer ${token}`
         }
       });
-      setAuditedChecksCount(auditedChecksResponse.data.length);
+      setAuditedChecksCount(auditedChecksResponse.data.length);*/
     } catch (error) {
       Swal.fire("Error al obtener los datos:", error.message);
     }
@@ -95,26 +95,26 @@ const MainDashboard = () => {
           {/*item 4 - Diagrama de barras de chequeo realizado cada dia*/}
           <div className="flex items-center text-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
             <p className="text-2xl text-gray-400 dark:text-gray-500">
-              Cantidad de revisadores y auditores registrados: {inspectorsCount}
+              Cantidad de revisadores y auditores registrados: 
             </p>
           </div>
           <div className="grid grid-cols-3 gap-4 mb-4">
             {/*item 5 - Cantidad de chequeos realizados en el día*/}
             <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
               <p className="text-2xl text-gray-400 dark:text-gray-500">
-                Cantidad de chequeos realizados en el día: {dailyChecksCount}
+                Cantidad de chequeos realizados en el día: 
               </p>
             </div>
             {/*Item 6 - Cantidad de chequeos realizados en el mes*/}
             <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
               <p className="text-2xl text-gray-400 dark:text-gray-500">
-                Cantidad de chequeos realizados en el mes: {monthlyChecksCount}
+                Cantidad de chequeos realizados en el mes: 
               </p>
             </div>
             {/* Item 7 - Chequeos revisados y auditados*/}
             <div className="text-center flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
               <p className="text-2xl text-gray-400 dark:text-gray-500">
-                Chequeos revisados y auditados: {auditedChecksCount}
+                Chequeos revisados y auditados: 
               </p>
             </div>
           </div>
