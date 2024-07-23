@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import ExpiredSignatureError, jwt
 from sqlalchemy.orm import Session
 from app.core.password import verify_password
-from app.crud.user import get_user_by_email
+from app.crud.inspection.user import get_user_by_email
 from app.schemas.inspection.user import UserAuthenticated
 
 ALGORITHM = os.getenv("ALGORITHM")

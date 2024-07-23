@@ -12,7 +12,7 @@ class ValorVariable(Base):
     variable_id = Column(Integer, ForeignKey('variables.id_variable'), nullable=False)
     valor = Column(DECIMAL(10, 2), nullable=False)
     
-    indicador = relationship("Indicador", back_populates="valor_variables")
+    indicador = relationship("Indicator", back_populates="valor_variables")
     variable = relationship("Variable", back_populates="valor_variables")
     
 Base.metadata.create_all(bind=engine_indicators)
