@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy import Column, DateTime, String, CHAR, VARCHAR, SmallInteger
 from sqlalchemy.dialects.mysql import ENUM, SMALLINT
 from sqlalchemy.ext.declarative import declarative_base
-from app.db.session import engine
+from app.db.session import engine_inspection
 from app.schemas.vehicle import VehicleType, AreaType
 
 Base = declarative_base()
@@ -22,4 +22,4 @@ class Vehicle(Base):
     created_at = Column(DateTime, default=datetime.now, nullable=False)
     updated_at = Column(DateTime, default=None, onupdate=datetime.now)
 
-Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine_inspection)
