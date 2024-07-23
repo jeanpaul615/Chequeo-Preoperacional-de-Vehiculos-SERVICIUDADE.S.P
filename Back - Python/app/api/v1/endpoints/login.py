@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from app.schemas.token import Token
-import app.core.deps as deps
+from app.schemas.inspection.token import Token
+from app.core.deps import get_db_inspection
 import app.core.auth as auth
 from sqlalchemy.orm import Session
 
 router = APIRouter()
 
 @router.post("/login/", response_model=Token)
-def loggin_access_token(db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()):
+def loggin_access_token(db: Session = Depends(get_db_inspection), form_data: OAuth2PasswordRequestForm = Depends()):
     user = auth.authenticate_user(db=db, user=form_data)
     if not user:
         raise HTTPException(
