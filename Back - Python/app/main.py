@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from app.api.v1.endpoints import user, login
+from app.api.v1.endpoints import user, login, vehicle, driver
+from fastapi.middleware.cors import CORSMiddleware
 from app.core.deps import get_db_inspection
 
 app = FastAPI()
