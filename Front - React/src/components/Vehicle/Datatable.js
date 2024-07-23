@@ -4,6 +4,10 @@ import 'datatables.net-dt';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css';
 import Sidebar from '../../containers/Sidebar';
 import { GetVehicles } from '../../controllers/GetControllers/Vehicle';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from 'chart.js';
+
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
 const DatatableVehicles = () => {
   const tableRef = useRef();
@@ -23,10 +27,9 @@ const DatatableVehicles = () => {
     fetchData();
   }, []);
   
-
   useEffect(() => {
     const tableElement = tableRef.current;
-
+  
     const dataTable = $(tableElement).DataTable({
       data: data,
       columns: [
@@ -44,13 +47,63 @@ const DatatableVehicles = () => {
       ],
       destroy: true, // Destruye la instancia anterior antes de crear una nueva
     });
-
+  
+    // Destruir DataTable en desmontaje para evitar errores de memoria
     return () => {
       if (dataTable) {
         dataTable.destroy(false);
       }
     };
   }, [data]);
+
+  // Configura los datos de la gráfica circular
+  const chartData = () => {
+    const typeCount = data.reduce((acc, item) => {
+      acc[item.type] = (acc[item.type] || 0) + 1;
+      return acc;
+    }, {});
+
+    return {
+      labels: Object.keys(typeCount),
+      datasets: [
+        {
+          label: 'Distribución de Tipos de Vehículos',
+          data: Object.values(typeCount),
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 205, 86, 1)',
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            return `${context.label}: ${context.raw}`;
+          }
+        }
+      }
+    },
+  };
 
   return (
     <div className="flex mt-20">
@@ -85,6 +138,9 @@ const DatatableVehicles = () => {
               {/* El cuerpo de la tabla será llenado automáticamente por DataTable */}
             </tbody>
           </table>
+        </div>
+        <div className="mt-8 rounded-lg border shadow-xl h-80 w-80 p-4">
+          <Pie data={chartData()} options={chartOptions} />
         </div>
       </div>
     </div>

@@ -1,14 +1,18 @@
-import React, { useEffect,useState, useRef } from 'react';
-import $ from "jquery";
-import "datatables.net-dt";
-import "datatables.net-dt/css/dataTables.dataTables.min.css";
+import React, { useEffect, useState, useRef } from 'react';
+import $ from 'jquery';
+import 'datatables.net-dt';
+import 'datatables.net-dt/css/dataTables.dataTables.min.css';
 import Sidebar from '../../containers/Sidebar';
 import { GetDrivers } from '../../controllers/GetControllers/Driver';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 const DatatableDrivers = () => {
   const tableRef = useRef();
   const [data, setData] = useState([]);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,11 +26,10 @@ const DatatableDrivers = () => {
   
     fetchData();
   }, []);
-
-
+  
   useEffect(() => {
     const tableElement = tableRef.current;
-
+  
     const dataTable = $(tableElement).DataTable({
       data: data,
       columns: [
@@ -37,9 +40,9 @@ const DatatableDrivers = () => {
         { title: 'Fecha Creación', data: 'created_at' },
         { title: 'Fecha Actualización', data: 'updated_at' },
       ],
-      // Agrega más columnas según tus datos
+      destroy: true, // Destruye la instancia anterior antes de crear una nueva
     });
-
+  
     // Destruir DataTable en desmontaje para evitar errores de memoria
     return () => {
       if (dataTable) {
@@ -47,6 +50,44 @@ const DatatableDrivers = () => {
       }
     };
   }, [data]);
+
+  // Configura los datos de la gráfica
+  const chartData = {
+    labels: data.map(item => item.name), // Labels del gráfico
+    datasets: [
+      {
+        label: 'Licencia Hasta',
+        data: data.map(item => item.license_until), // Datos para la gráfica
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            return `Licencia Hasta: ${context.raw}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+      },
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
 
   return (
     <div className="flex mt-20">
@@ -76,6 +117,9 @@ const DatatableDrivers = () => {
               {/* El cuerpo de la tabla será llenado automáticamente por DataTable */}
             </tbody>
           </table>
+        </div>
+        <div className="mt-12">
+          <Bar data={chartData} options={chartOptions} />
         </div>
       </div>
     </div>
