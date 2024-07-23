@@ -13,7 +13,7 @@ class RegistroIndicador(Base):
     periodo_inicio = Column(Date, nullable=False)
     periodo_fin = Column(Date, nullable=False)
     
-    indicador = relationship("Indicador", back_populates="registro_indicadores")
+    indicador = relationship("Indicator", back_populates="registro_indicadores")
     
     
 Base.metadata.create_all(bind=engine_indicators)
