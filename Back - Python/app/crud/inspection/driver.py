@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from app.models.driver import Driver
+from app.models.inspection.driver import Driver
 
 def get_all_driver(db: Session):
     try:

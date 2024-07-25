@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from app.models.vehicle import Vehicle
+from app.models.inspection.vehicle import Vehicle
 
 def get_all_vehicle(db: Session):
     try:

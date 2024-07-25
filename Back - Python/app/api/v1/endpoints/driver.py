@@ -2,8 +2,8 @@ import json
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.crud import driver as crud_driver
-from app.schemas.driver import Driver
+from app.crud.inspection import driver as crud_driver
+from app.schemas.inspection.driver import Driver
 from app.core.deps import get_db_inspection
 from app.core.auth import verify_token, verify_admin
 

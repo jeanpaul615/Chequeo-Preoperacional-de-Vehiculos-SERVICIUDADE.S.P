@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Sidebar from '../../../containers/Sidebar';
 import InspectionCompactador from '../EstadoV1/InspectionCompactador';
 import InspectionInstrumentos from '../EstadoV1/InspectionInstrumentos';
 import InspectionLlantas from '../EstadoV1/InspectionLlantas';
@@ -56,7 +57,8 @@ export default function ContainerInspection({ formData, handleChange }) {
   const [selectedGroupId, setSelectedGroupId] = useState(null);
 
   return (
-    <div>
+    <div> 
+      <Sidebar />
       <div className="grid grid-cols-1 gap-4">
         {componentGroups.map((group) => (
           <motion.div

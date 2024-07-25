@@ -2,8 +2,8 @@ import json
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.crud import vehicle as crud_vehicule
-from app.schemas.vehicle import Vehicle
+from app.crud.inspection import vehicle as crud_vehicule
+from app.schemas.inspection.vehicle import Vehicle
 from app.core.deps import get_db_inspection
 from app.core.auth import verify_token, verify_admin
 

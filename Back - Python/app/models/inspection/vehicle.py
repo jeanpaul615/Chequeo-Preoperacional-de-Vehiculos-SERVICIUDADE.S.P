@@ -3,7 +3,7 @@ from sqlalchemy import Column, DateTime, String, CHAR, VARCHAR, SmallInteger
 from sqlalchemy.dialects.mysql import ENUM, SMALLINT
 from sqlalchemy.ext.declarative import declarative_base
 from app.db.session import engine_inspection
-from app.schemas.vehicle import VehicleType, AreaType
+from app.schemas.inspection.vehicle import VehicleType, AreaType
 
 Base = declarative_base()
 
