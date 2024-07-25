@@ -1,11 +1,11 @@
+# app/models/vehicle.py
 from datetime import datetime
 from sqlalchemy import Column, DateTime, String, CHAR, VARCHAR, SmallInteger
 from sqlalchemy.dialects.mysql import ENUM, SMALLINT
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from app.db.base import Base  # Use Base from app.db.base
 from app.db.session import engine_inspection
 from app.schemas.inspection.vehicle import VehicleType, AreaType
-
-Base = declarative_base()
 
 class Vehicle(Base):
     __tablename__ = "vehicle"
@@ -21,5 +21,6 @@ class Vehicle(Base):
     seguro_extracontractual_until = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.now, nullable=False)
     updated_at = Column(DateTime, default=None, onupdate=datetime.now)
+
 
 Base.metadata.create_all(bind=engine_inspection)

@@ -16,8 +16,6 @@ class User(Base):
     status = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.now(), nullable=False)
     updated_at = Column(DateTime, default=None, onupdate=datetime.now())
-    
-    # Define the relationship with Driver
-    drivers = relationship("Driver", back_populates="user")
+
 
 Base.metadata.create_all(bind=engine_inspection)

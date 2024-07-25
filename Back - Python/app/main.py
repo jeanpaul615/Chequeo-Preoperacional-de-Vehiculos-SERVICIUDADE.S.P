@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api.v1.endpoints import user, login, vehicle, driver
+from app.api.v1.endpoints import user, login, vehicle, driver, inspection
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.deps import get_db_inspection
 
@@ -17,6 +17,7 @@ app.add_middleware(
 app.include_router(user.router, prefix="/api/v1", tags=["users"])
 app.include_router(vehicle.router, prefix="/api/v1", tags=["vehicle"])
 app.include_router(driver.router, prefix="/api/v1", tags=["driver"])
+app.include_router(inspection.router, prefix="/api/v1", tags=["inspection"])
 app.include_router(login.router, prefix="/api/v1", tags=["login"])
 
 

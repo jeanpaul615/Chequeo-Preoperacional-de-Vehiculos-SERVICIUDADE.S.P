@@ -3,6 +3,8 @@ from datetime import datetime
 from sqlalchemy import Column, DateTime, ForeignKey, String, SmallInteger
 from sqlalchemy.orm import relationship
 from app.db.base import Base
+from app.db.session import engine_inspection
+from app.models.inspection.user import User
 
 class Driver(Base):
     __tablename__ = "driver"
@@ -14,6 +16,5 @@ class Driver(Base):
     seguridad_social_until = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=None, onupdate=datetime.utcnow)
-    
-    # Define the relationship with User
-    user = relationship("User", back_populates="drivers")
+
+Base.metadata.create_all(bind=engine_inspection)
