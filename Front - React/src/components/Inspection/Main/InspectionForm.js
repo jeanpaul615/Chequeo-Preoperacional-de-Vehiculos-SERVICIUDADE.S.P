@@ -104,7 +104,7 @@ const InspectionForm = () => {
       <form onSubmit={handleSubmit}>
         <Container formData={formData} handleChange={handleChange} />
       </form>
-      <button id="submit" type="submit" className="mt-4 p-2 bg-blue-500 text-white rounded"> Guardar</button>
+      <button id="submit" type="submit" className="md:ml-32 mt-4 p-2 bg-blue-500 text-white rounded"> Guardar</button>
     </div>
   );
 };

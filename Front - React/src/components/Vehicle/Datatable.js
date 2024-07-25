@@ -6,7 +6,7 @@ import Sidebar from '../../containers/Sidebar';
 import { GetVehicles } from '../../controllers/GetControllers/Vehicle';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from 'chart.js';
-
+import Navbar from '../../containers/Navbar';
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
 const DatatableVehicles = () => {
@@ -109,14 +109,7 @@ const DatatableVehicles = () => {
     <div className="flex mt-20">
       <Sidebar />
       <div className="flex-1 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
-        <div className="justify-center items-center flex mb-8">
-          <h2 className="relative text-center text-3xl font-extrabold text-blue-500">
-            VEHÍCULOS
-          </h2>
-          <h2 className="absolute pl-1 text-center text-3xl font-extrabold text-orange-400">
-            VEHÍCULOS
-          </h2>
-        </div>
+      <Navbar Title={"Vehículos"}/>
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <table ref={tableRef} className="display w-full table-auto border-collapse">
             <thead className="bg-gray-800 text-white">

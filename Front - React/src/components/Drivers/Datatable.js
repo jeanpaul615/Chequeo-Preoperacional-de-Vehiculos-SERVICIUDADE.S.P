@@ -6,6 +6,7 @@ import Sidebar from '../../containers/Sidebar';
 import { GetDrivers } from '../../controllers/GetControllers/Driver';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import Navbar from '../../containers/Navbar';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
@@ -93,14 +94,7 @@ const DatatableDrivers = () => {
     <div className="flex mt-20">
       <Sidebar />
       <div className="flex-1 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
-        <div className="justify-center items-center flex mb-8">
-          <h2 className="relative text-center text-3xl font-extrabold text-blue-500">
-            CONDUCTORES
-          </h2>
-          <h2 className="absolute pl-1 text-center text-3xl font-extrabold text-orange-400">
-            CONDUCTORES
-          </h2>
-        </div>
+        <Navbar Title={"Conductores"}/>
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <table ref={tableRef} className="display w-full table-auto border-collapse">
             <thead className="bg-gray-800 text-white">

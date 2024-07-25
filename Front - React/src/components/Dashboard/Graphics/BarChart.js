@@ -21,6 +21,7 @@ const BarChart = ({ data }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false, // Permite que el gráfico ajuste su tamaño basado en el contenedor
     plugins: {
       legend: {
         position: 'top',
@@ -63,8 +64,10 @@ const BarChart = ({ data }) => {
   };
 
   return (
-    <div className="bg-white border border-gray-300 rounded-lg -m-3">
-      <Bar data={chartData} options={options} width={320} height={52} />
+    <div className="bg-white border border-gray-300 rounded-lg p-4">
+      <div className="w-full h-64"> {/* Ajusta la altura aquí según tus necesidades */}
+        <Bar data={chartData} options={options} />
+      </div>
     </div>
   );
 };

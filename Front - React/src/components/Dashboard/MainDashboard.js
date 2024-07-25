@@ -3,6 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Sidebar from "../../containers/Sidebar";
 import DashboardStats from "./DashboardStats";
+import Navbar from "../../containers/Navbar"; // Asegúrate de ajustar la ruta según tu estructura de carpetas
 
 const MainDashboard = () => {
   const [driversCount, setDriversCount] = useState(0);
@@ -92,6 +93,8 @@ const MainDashboard = () => {
 
       setVehicleTypes(types);
       setVehicleDependencies(dependencies);
+
+
     } catch (error) {
       Swal.fire("Error al obtener los datos:", error.message);
     }
@@ -106,6 +109,7 @@ const MainDashboard = () => {
     <div>
       <Sidebar />
       <div className="p-4 sm:ml-64">
+        <Navbar Title={"Dashboard"} />
         <div className="p-4 border-2 border-gray-200 border-dashed text-center rounded-lg dark:border-gray-700">
           <DashboardStats
             driversCount={driversCount}

@@ -7,25 +7,26 @@ export const Auth = async (authData) => {
   try {
     // Formatear authData como x-www-form-urlencoded
     const formData = qs.stringify(authData);
-
     const response = await axios.post('http://localhost:8000/api/v1/login', formData, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded' // Especificar el tipo de contenido como x-www-form-urlencoded
       }
     });
 
-    // Suponiendo que el token está en la respuesta y se llama 'token'
-    const access_token = response.data.access_token;
+    const { access_token, email } = response.data;
+
     if (access_token) {
-      localStorage.setItem('access_token', access_token); // Guarda el token en el localStorage
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('user_email', email);
+
       Swal.fire('Autenticación exitosa', 'Has iniciado sesión correctamente.', 'success');
+      return { access_token, email };
     } else {
       Swal.fire('Error al autenticar', 'No se recibió un token válido.', 'error');
+      return null;
     }
-
-    return response.data; // Devuelve los datos de la respuesta, si es necesario
   } catch (error) {
-    // Muestra un mensaje de error claro
     Swal.fire('Error al autenticar', error.response?.data?.message || 'Ocurrió un error durante la autenticación.', 'error');
+    return null;
   }
 }

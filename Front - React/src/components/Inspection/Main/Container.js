@@ -13,6 +13,7 @@ import InspectionConductor from '../EstadoV3/InspectionConductor';
 import InspectionLuces from '../EstadoV3/InspectionLuces';
 import InspectionVehicule from '../DriverVehicule/InspectionVehicule';
 import InspectionDriver from '../DriverVehicule/InspectionDriver';
+import Navbar from '../../../containers/Navbar';
 
 const componentGroups = [
   {
@@ -59,7 +60,8 @@ export default function ContainerInspection({ formData, handleChange }) {
   return (
     <div> 
       <Sidebar />
-      <div className="grid grid-cols-1 gap-4">
+      <div className="md:pl-32 grid grid-cols-1 gap-4">
+      <Navbar Title={"Inspección Preoperacional"}/>
         {componentGroups.map((group) => (
           <motion.div
             key={group.id}
@@ -76,7 +78,7 @@ export default function ContainerInspection({ formData, handleChange }) {
         {selectedGroupId && (
           <motion.div
             layoutId={selectedGroupId}
-            className="fixed inset-0 bg-white p-8 z-50 overflow-auto"
+            className="md:pl-32 fixed inset-0 bg-white p-8 z-50 overflow-auto"
           >
             <div>
               <h3 className="text-xl font-semibold mb-4">

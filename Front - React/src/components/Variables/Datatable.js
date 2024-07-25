@@ -3,6 +3,7 @@ import $ from 'jquery';
 import 'datatables.net-dt';
 import 'datatables.net-responsive-dt';
 import Sidebar from "../../containers/Sidebar";
+import Navbar from "../../containers/Navbar";
 
 const DataTableVariables = () => {
   useEffect(() => {
@@ -19,14 +20,7 @@ const DataTableVariables = () => {
 
   return (
     <div className="pt-12 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
-      <div className="justify-center items-center flex mb-8">
-        <h2 className="relative text-center md:text-4xl text-2xl font-extrabold text-blue-500">
-          VARIABLES REGISTRADAS
-        </h2>
-        <h2 className="absolute pl-0.5 text-center md:text-4xl text-2xl font-extrabold text-orange-400">
-          VARIABLES REGISTRADAS
-        </h2>
-      </div>
+      <Navbar Title={"Variables"}/>
       <Sidebar />
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <table id="example" className="display w-full table-auto border-collapse">
