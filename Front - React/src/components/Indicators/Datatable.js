@@ -19,7 +19,7 @@ const DataTableIndicators = () => {
   }, []);
 
   return (
-    <div className="pt-12 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
+    <div className="pt-8 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
       <Navbar Title={"Indicadores"} />
       <Sidebar />
       <div className="bg-white shadow-md rounded-lg overflow-hidden">

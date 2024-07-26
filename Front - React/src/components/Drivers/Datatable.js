@@ -91,7 +91,7 @@ const DatatableDrivers = () => {
   };
 
   return (
-    <div className="flex mt-20">
+    <div className="flex mt-8">
       <Sidebar />
       <div className="flex-1 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
         <Navbar Title={"Conductores"}/>
