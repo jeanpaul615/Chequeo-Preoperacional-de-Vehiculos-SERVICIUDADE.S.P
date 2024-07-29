@@ -78,7 +78,7 @@ const BarChartYear = ({ data }) => {
   };
 
   return (
-      <div className="items-center justify-center flex rounded-lg border shadow-xl h-48 w-full p-4 bg-white"> {/* Ajusta la altura aquí según tus necesidades */}
+      <div className="items-center justify-center flex rounded-lg border shadow-xl md:h-44 w-full p-4 bg-white"> {/* Ajusta la altura aquí según tus necesidades */}
         <Bar data={chartData} options={options} />
       </div>
   );

@@ -1,22 +1,36 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, Tooltip, ArcElement, CategoryScale, LinearScale } from 'chart.js';
-ChartJS.register(Tooltip, ArcElement, CategoryScale, LinearScale);
+import { Chart as ChartJS, Tooltip, ArcElement } from 'chart.js';
+ChartJS.register(Tooltip, ArcElement);
 
-const PieChart = ({ data }) => {
-
-  // Configura los datos de la gráfica circular
+const PieChartUser = ({ data }) => {
+  // Count the occurrences of each role
   const chartData = () => {
-    const typeCount = data.reduce((acc, item) => {
-      acc[item.type] = (acc[item.type] || 0) + 1;
+    if (!Array.isArray(data) || data.length === 0) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            data: [],
+            backgroundColor: [],
+            borderColor: [],
+            borderWidth: 1,
+          },
+        ],
+      };
+    }
+
+    const roleCount = data.reduce((acc, item) => {
+      const role = item.role || 'Unknown';
+      acc[role] = (acc[role] || 0) + 1;
       return acc;
     }, {});
 
     return {
-      labels: Object.keys(typeCount),
+      labels: Object.keys(roleCount),
       datasets: [
         {
-          data: Object.values(typeCount),
+          data: Object.values(roleCount),
           backgroundColor: [
             'rgba(75, 192, 192, 0.2)',
             'rgba(255, 159, 64, 0.2)',
@@ -41,15 +55,15 @@ const PieChart = ({ data }) => {
     responsive: true,
     plugins: {
       legend: {
-        display: false,
+        display: false, // Hide the legend
       },
       tooltip: {
         callbacks: {
-          label: function(context) {
+          label: function (context) {
             return `${context.label}: ${context.raw}`;
-          }
-        }
-      }
+          },
+        },
+      },
     },
   };
 
@@ -60,4 +74,4 @@ const PieChart = ({ data }) => {
   );
 };
 
-export default PieChart;
+export default PieChartUser;

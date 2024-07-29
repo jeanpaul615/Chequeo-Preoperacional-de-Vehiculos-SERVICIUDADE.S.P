@@ -60,7 +60,7 @@ export default function ContainerInspection({ formData, handleChange }) {
   return (
     <div> 
       <Sidebar />
-      <div className="w-full grid grid-cols-1 gap-4 md:ml-36">
+      <div className="w-full grid grid-cols-1 gap-4 md:ml-36 md:pr-12">
       <Navbar Title={"Inspección Preoperacional"}/>
         {componentGroups.map((group) => (
           <motion.div
