@@ -157,7 +157,7 @@ export default function ContainerInspection({ formData, handleChange }) {
               </div>
               <div className="relative z-10 flex items-center justify-center w-full h-full p-4">
                 <motion.h3
-                  className="text-lg md:text-xl font-bold text-white bg-black bg-opacity-60 p-2 rounded-lg shadow-md"
+                  className="text-lg md:text-xl font-normal text-white bg-black bg-opacity-60 p-2 rounded-lg shadow-md"
                   whileHover={{ scale: 1.1, color: "#E85120" }} // Cambia el color en hover
                   transition={{ type: "spring", stiffness: 300 }}
                 >

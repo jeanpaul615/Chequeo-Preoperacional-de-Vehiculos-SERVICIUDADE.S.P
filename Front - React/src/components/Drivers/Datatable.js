@@ -4,11 +4,7 @@ import 'datatables.net-dt';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css';
 import Sidebar from '../../containers/Sidebar';
 import { GetDrivers } from '../../controllers/GetControllers/Driver';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import Navbar from '../../containers/Navbar';
-
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 const DatatableDrivers = () => {
   const tableRef = useRef();
@@ -18,7 +14,6 @@ const DatatableDrivers = () => {
     const fetchData = async () => {
       try {
         const result = await GetDrivers();
-        console.log(result); // Verifica la estructura de los datos
         setData(result); // Establece los datos en el estado
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -41,7 +36,17 @@ const DatatableDrivers = () => {
         { title: 'Fecha Creación', data: 'created_at' },
         { title: 'Fecha Actualización', data: 'updated_at' },
       ],
+      responsive: true,
       destroy: true, // Destruye la instancia anterior antes de crear una nueva
+      scrollX: true, // Habilita el desplazamiento horizontal
+      columnDefs: [
+        { width: '10%', targets: 0 }, // Ajusta el ancho de la primera columna (ID conductor)
+        { width: '20%', targets: 1 }, // Ajusta el ancho de la segunda columna (Nombre)
+        { width: '15%', targets: 2 }, // Ajusta el ancho de la tercera columna (Licencia)
+        { width: '20%', targets: 3 }, // Ajusta el ancho de la cuarta columna (Seguridad Social)
+        { width: '15%', targets: 4 }, // Ajusta el ancho de la quinta columna (Fecha Creación)
+        { width: '15%', targets: 5 }, // Ajusta el ancho de la sexta columna (Fecha Actualización)
+      ],
     });
   
     // Destruir DataTable en desmontaje para evitar errores de memoria
@@ -52,68 +57,27 @@ const DatatableDrivers = () => {
     };
   }, [data]);
 
-  // Configura los datos de la gráfica
-  const chartData = {
-    labels: data.map(item => item.name), // Labels del gráfico
-    datasets: [
-      {
-        label: 'Licencia Hasta',
-        data: data.map(item => item.license_until), // Datos para la gráfica
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            return `Licencia Hasta: ${context.raw}`;
-          }
-        }
-      }
-    },
-    scales: {
-      x: {
-        beginAtZero: true,
-      },
-      y: {
-        beginAtZero: true,
-      },
-    },
-  };
-
   return (
-    <div className="flex mt-8">
+    <div className="flex flex-col md:flex-row mt-8">
       <Sidebar />
-      <div className="flex-1 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
-        <Navbar Title={"Conductores"}/>
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+      <div className="flex-1 md:ml-72 ml-4 text-sm md:mr-5 mr-5 overflow-x-auto">
+        <Navbar Title={"Conductores"} />
+        <div className="bg-white shadow-md rounded-lg overflow-x-auto">
           <table ref={tableRef} className="display w-full table-auto border-collapse">
             <thead className="bg-gray-800 text-white">
               <tr>
-                <th className="px-4 py-2">ID conductor</th>
-                <th className="px-4 py-2">Nombre</th>
-                <th className="px-4 py-2">Licencia</th>
-                <th className="px-4 py-2">Seguridad Social</th>
-                <th className="px-4 py-2">Fecha Creación</th>
-                <th className="px-4 py-2">Fecha Actualización</th>
+                <th className="px-2 py-1">ID conductor</th>
+                <th className="px-2 py-1">Nombre</th>
+                <th className="px-2 py-1">Licencia</th>
+                <th className="px-2 py-1">Seguridad Social</th>
+                <th className="px-2 py-1">Fecha Creación</th>
+                <th className="px-2 py-1">Fecha Actualización</th>
               </tr>
             </thead>
             <tbody className="bg-white text-gray-700">
               {/* El cuerpo de la tabla será llenado automáticamente por DataTable */}
             </tbody>
           </table>
-        </div>
-        <div className="mt-12">
-          <Bar data={chartData} options={chartOptions} />
         </div>
       </div>
     </div>
