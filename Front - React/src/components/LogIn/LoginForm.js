@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
-import { Auth } from "../../controllers/PostControllers/Auth"; // Ajusta la ruta según sea necesario
+import { Auth } from "../../controllers/AuthControllers/Auth"; // Ajusta la ruta según sea necesario
 
 function LoginForm() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false); // Cambiado a false para ocultar la contraseña
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: ""
@@ -28,12 +28,17 @@ function LoginForm() {
     try {
       const response = await Auth(formData);
       console.log("Respuesta de login:", response);
-      if(response)
+
+      // Verifica que la respuesta tenga la propiedad 'access_token'
+      if (response && response.access_token) {
         navigate("/dashboard");
-      else
+      } else {
+        setError("Token de acceso no recibido");
         navigate("/");
+      }
 
     } catch (error) {
+      console.error("Error durante el inicio de sesión:", error);
       setError(error.message || "Error al iniciar sesión");
     }
   };
@@ -49,7 +54,7 @@ function LoginForm() {
             Usuario:
           </label>
           <input
-            type="username"
+            type="text" // Corrige el tipo de input
             name="username"
             value={formData.username}
             onChange={handleChange}
@@ -100,7 +105,7 @@ function LoginForm() {
           INGRESAR
         </button>
         <div className="text-right mt-4">
-          <a href="/login" className="text-sm">
+          <a href="/register" className="text-sm">
             <span className="text-black italic">No tienes una cuenta?</span>{" "}
             <span className="text-orange-600 font-bold">Registrarse</span>
           </a>

@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import $ from 'jquery';
 import 'datatables.net-dt';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css';
-import Sidebar from '../../containers/Sidebar';
-import { GetVehicles } from '../../controllers/GetControllers/Vehicle';
-import Navbar from '../../containers/Navbar';
+import Sidebar from '../../../containers/Sidebar';
+import { GetVehicles } from '../../../controllers/DashboardControllers/Vehicle';
+import Navbar from '../../../containers/Navbar';
 
 // Función para formatear la fecha
 const formatDate = (dateString) => {

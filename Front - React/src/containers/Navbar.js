@@ -5,8 +5,7 @@ const Navbar = ({ Title }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user_email');
+    localStorage.removeItem("access_token");
     navigate('/'); // Redirige a la página de inicio de sesión
   };
 

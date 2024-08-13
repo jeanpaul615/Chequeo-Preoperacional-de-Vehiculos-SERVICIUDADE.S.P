@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Sidebar from "../../../containers/Sidebar";
+import Sidebar from "../../../../containers/Sidebar";
 import InspectionCompactador from "../EstadoV2/InspectionCompactador";
 import InspectionInstrumentos from "../EstadoV2/InspectionInstrumentos";
 import InspectionLlantas from "../EstadoV2/InspectionLlantas";
@@ -12,12 +12,12 @@ import InspectionRevisionInterna from "../EstadoV1/InspectionRevisionInterna";
 import InspectionLuces from "../EstadoV1/InspectionLuces";
 import InspectionVehicule from "../DriverVehicule/InspectionVehicule";
 import InspectionDriver from "../DriverVehicule/InspectionDriver";
-import Navbar from "../../../containers/Navbar";
+import Navbar from "../../../../containers/Navbar";
 // Importación de imágenes
-import Conductor from "../../../assets/conductor2.jpg";
-import Luces from "../../../assets/lucesvidrios.jpg";
-import Llantas from "../../../assets/llantas.jpg";
-import Vial from "../../../assets/kitseguridad.jpg";
+import Conductor from "../../../../assets/CheckInspection/conductor2.jpg";
+import Luces from "../../../../assets/CheckInspection/lucesvidrios.jpg";
+import Llantas from "../../../../assets/CheckInspection/llantas.jpg";
+import Vial from "../../../../assets/CheckInspection/kitseguridad.jpg";
 import Swal from "sweetalert2";
 
 // Define paths para las imágenes usadas en los grupos de componentes

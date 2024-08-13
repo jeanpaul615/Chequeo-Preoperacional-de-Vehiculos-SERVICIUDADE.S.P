@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import $ from 'jquery';
 import 'datatables.net-dt';
 import 'datatables.net-responsive-dt';
-import Sidebar from "../../containers/Sidebar";
-import Navbar from "../../containers/Navbar";
+import Sidebar from "../../../containers/Sidebar";
+import Navbar from "../../../containers/Navbar";
 import InputModal from './InputModal'; // Import the new modal component
 
 const DataTableIndicators = () => {

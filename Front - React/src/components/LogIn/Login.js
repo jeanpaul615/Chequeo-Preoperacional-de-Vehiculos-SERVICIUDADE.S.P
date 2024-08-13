@@ -1,8 +1,8 @@
 import React from "react";
 import LoginForm from "./LoginForm";
-import imageLogin from "./imagelogin.png";
-import bannerserviciudad from "./banner-serviciudad.png";
-import logoserviciudad from "./logo-serviciudad.png";
+import imageLogin from "../../assets/Login/imagelogin.png";
+import bannerserviciudad from "../../assets/Navbar/banner-serviciudad.png";
+import logoserviciudad from "../../assets/Login/logo-serviciudad.png";
 
 function Login() {
   return (

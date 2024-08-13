@@ -12,7 +12,7 @@
     "datatables.net": "^2.0.8",
     "datatables.net-dt": "^2.0.8",
     "datatables.net-responsive-dt": "^3.0.2",
-    "framer-motion": "^11.2.12",
+    "framer-motion": "^11.3.24",
     "heroicons": "^2.1.4",
     "jquery": "^3.7.1",
     "react": "^18.3.1",

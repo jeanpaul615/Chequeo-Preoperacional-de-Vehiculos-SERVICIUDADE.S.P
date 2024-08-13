@@ -2,9 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import $ from 'jquery';
 import 'datatables.net-dt';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css';
-import Sidebar from '../../containers/Sidebar';
-import { GetDrivers } from '../../controllers/GetControllers/Driver';
-import Navbar from '../../containers/Navbar';
+import Sidebar from '../../../containers/Sidebar';
+import { GetDrivers } from '../../../controllers/DashboardControllers/Driver';
+import Navbar from '../../../containers/Navbar';
 
 const DatatableDrivers = () => {
   const tableRef = useRef();
@@ -30,6 +30,7 @@ const DatatableDrivers = () => {
       data: data,
       columns: [
         { title: 'ID conductor', data: 'driver_id' },
+        {title: 'ID Usuario', data: 'user_id'},
         { title: 'Nombre', data: 'name' },
         { title: 'Licencia', data: 'license_until' },
         { title: 'Seguridad Social', data: 'seguridad_social_until' },
@@ -67,6 +68,7 @@ const DatatableDrivers = () => {
             <thead className="bg-gray-800 text-white">
               <tr>
                 <th className="px-2 py-1">ID conductor</th>
+                <th className="px-2 py-1">ID Usuario</th>
                 <th className="px-2 py-1">Nombre</th>
                 <th className="px-2 py-1">Licencia</th>
                 <th className="px-2 py-1">Seguridad Social</th>

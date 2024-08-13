@@ -11,6 +11,7 @@ export const GetDrivers = async () => {
         'Authorization': `Bearer ${token}` // Agrega el token al encabezado de la solicitud
       }
     });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     Swal.fire('Error al obtener los vehículos:', error.message);

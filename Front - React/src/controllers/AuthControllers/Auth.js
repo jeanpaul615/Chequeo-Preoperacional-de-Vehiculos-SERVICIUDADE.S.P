@@ -17,7 +17,6 @@ export const Auth = async (authData) => {
 
     if (access_token) {
       localStorage.setItem('access_token', access_token);
-      localStorage.setItem('user_email', email);
 
       Swal.fire('Autenticación exitosa', 'Has iniciado sesión correctamente.', 'success');
       return { access_token, email };

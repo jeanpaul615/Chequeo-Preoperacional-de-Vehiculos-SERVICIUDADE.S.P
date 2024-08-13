@@ -1,5 +1,5 @@
 import React from "react";
-import Sidebar from "../../../containers/Sidebar";
+import Sidebar from "../../../../containers/Sidebar";
 
 const today = new Date().toISOString().split('T')[0];
 

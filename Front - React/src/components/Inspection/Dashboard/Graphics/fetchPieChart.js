@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PieChart from './PieChart'; // Asegúrate de usar la ruta correcta
-import { GetVehicles } from '../../../controllers/GetControllers/Vehicle';
+import { GetVehicles } from '../../../../controllers/DashboardControllers/Vehicle';
 
 const FetchPieChart = () => {
   const [data, setData] = useState([]);

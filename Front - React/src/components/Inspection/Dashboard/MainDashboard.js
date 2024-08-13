@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import Sidebar from "../../containers/Sidebar";
+import Sidebar from "../../../containers/Sidebar";
 import DashboardStats from "./DashboardStats";
-import Navbar from "../../containers/Navbar"; // Ajusta la ruta según tu estructura de carpetas
+import Navbar from "../../../containers/Navbar"; // Ajusta la ruta según tu estructura de carpetas
 
 const MainDashboard = () => {
   const [driversCount, setDriversCount] = useState(0);
