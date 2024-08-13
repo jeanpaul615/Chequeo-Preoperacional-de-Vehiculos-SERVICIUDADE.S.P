@@ -27,8 +27,6 @@ function LoginForm() {
     e.preventDefault();
     try {
       const response = await Auth(formData);
-      console.log("Respuesta de login:", response);
-
       // Verifica que la respuesta tenga la propiedad 'access_token'
       if (response && response.access_token) {
         navigate("/dashboard");

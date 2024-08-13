@@ -1,19 +1,18 @@
 from typing import Generator
 from app.db.session import SessionLocal_inspection, SessionLocal_indicators
 
-"""conexión a la base de datos de inspecciones"""
+"""Conexión a la base de datos de inspecciones"""
 def get_db_inspection() -> Generator:
+    db = SessionLocal_inspection()  # Crear una instancia de sesión
     try:
-        yield SessionLocal_inspection()
+        yield db  # Pasar la sesión al consumidor
     finally:
-        SessionLocal_inspection().close()
-        
-"""conexión a la base de datos de indicadores"""
-def get_db_indicators() -> Generator:
-    try:
-        yield SessionLocal_indicators()
-    finally:
-        SessionLocal_indicators().close()
+        db.close()  # Cerrar la misma instancia de sesión
 
-        
-        
+"""Conexión a la base de datos de indicadores"""
+def get_db_indicators() -> Generator:
+    db = SessionLocal_indicators()  # Crear una instancia de sesión
+    try:
+        yield db  # Pasar la sesión al consumidor
+    finally:
+        db.close()  # Cerrar la misma instancia de sesión
