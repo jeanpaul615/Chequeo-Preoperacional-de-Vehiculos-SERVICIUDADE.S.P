@@ -7,11 +7,18 @@ const PieChart = ({ data }) => {
 
   // Configura los datos de la gráfica circular
   const chartData = () => {
+    if (!Array.isArray(data)) {
+      return {
+        labels: [],
+        datasets: [],
+      };
+    }
+  
     const typeCount = data.reduce((acc, item) => {
       acc[item.type] = (acc[item.type] || 0) + 1;
       return acc;
     }, {});
-
+  
     return {
       labels: Object.keys(typeCount),
       datasets: [
@@ -36,6 +43,7 @@ const PieChart = ({ data }) => {
       ],
     };
   };
+  
 
   const chartOptions = {
     responsive: true,
