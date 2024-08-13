@@ -6,7 +6,7 @@ const token = localStorage.getItem('access_token'); // O sessionStorage.getItem(
 
 export const GetInspection = async () => {
   try {
-    const response = await axios.get('http://localhost:8000/api/v1/inspection', {
+    const response = await axios.get('http://localhost:8000/api/v1/inspection/', {
       headers: {
         'Authorization': `Bearer ${token}` // Agrega el token al encabezado de la solicitud
       }

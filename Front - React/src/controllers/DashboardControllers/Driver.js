@@ -6,12 +6,11 @@ const token = localStorage.getItem('access_token'); // O sessionStorage.getItem(
 
 export const GetDrivers = async () => {
   try {
-    const response = await axios.get('http://localhost:8000/api/v1/drivers', {
+    const response = await axios.get('http://localhost:8000/api/v1/drivers/', {
       headers: {
         'Authorization': `Bearer ${token}` // Agrega el token al encabezado de la solicitud
       }
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     Swal.fire('Error al obtener los vehículos:', error.message);
