@@ -1,4 +1,4 @@
-const Inspection = require('../../../crud/inspection/Inspection/Inspection'); // Importa el módulo correcto
+const Inspection = require('./Inspection'); // Importa el módulo correcto
 
 // Controlador para obtener todos los vehículos
 const getAllInspection = (req, res) => {

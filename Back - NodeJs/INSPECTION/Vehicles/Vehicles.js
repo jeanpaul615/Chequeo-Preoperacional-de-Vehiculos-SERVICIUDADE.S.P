@@ -1,8 +1,8 @@
-const db = require('../../../config/db/connectioninspeccion');
+const db = require('../../config/db/connectioninspeccion');
 
-const Users = {
-    getAllUsers: (callback) => {
-        const query = 'SELECT * FROM user'; 
+const Vehicle = {
+    getAllVehicles: (callback) => {
+        const query = 'SELECT * FROM vehicle'; 
 
         db.query(query, (err, results) => {
             if (err) {
@@ -14,4 +14,4 @@ const Users = {
     },
 };
 
-module.exports = Users;
+module.exports = Vehicle;

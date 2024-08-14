@@ -1,4 +1,4 @@
-const db = require('../../../config/db/connectioninspeccion');
+const db = require('.././../config/db/connectioninspeccion');
 const jwt = require('jsonwebtoken');
 
 const Login = {

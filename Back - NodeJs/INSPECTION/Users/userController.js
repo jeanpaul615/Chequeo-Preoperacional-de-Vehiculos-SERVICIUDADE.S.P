@@ -1,4 +1,4 @@
-const Users = require('../../../crud/inspection/Users/Users'); // Importa el módulo correcto
+const Users = require('./Users'); // Importa el módulo correcto
 
 // Controlador para obtener todos los vehículos
 const getAllUsers = (req, res) => {

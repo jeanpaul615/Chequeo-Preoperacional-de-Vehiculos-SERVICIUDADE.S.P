@@ -23,23 +23,23 @@ app.get('/', (req, res) => {
 });
 
 //auth
-const authRoutes = require('./routes/inspeccion/Auth/authRoutes');
+const authRoutes = require('./INSPECTION/Auth/authRoutes');
 app.use('/auth', authRoutes);
 
 //vehicles
-const vehiclesRoutes = require('./routes/inspeccion/Vehicles/vehiclesRoutes');
+const vehiclesRoutes = require('./INSPECTION/Vehicles/vehiclesRoutes');
 app.use('/vehicles', vehiclesRoutes);
 
 //drivers
-const driverRoutes = require('./routes/inspeccion/Drivers/driversRoutes');
+const driverRoutes = require('./INSPECTION/Drivers/driversRoutes');
 app.use('/drivers', driverRoutes);
 
 //inspection
-const inspectionRoutes = require('./routes/inspeccion/Inspection/InspectionRoutes');
+const inspectionRoutes = require('./INSPECTION/Inspection/InspectionRoutes');
 app.use('/inspection', inspectionRoutes);
 
 //users
-const usersRoutes = require('./routes/inspeccion/Users/userRoutes');
+const usersRoutes = require('./INSPECTION/Users/userRoutes');
 app.use('/users', usersRoutes);
 
 

@@ -1,4 +1,4 @@
-const Driver = require('../../../crud/inspection/Drivers/Drivers'); // Importa el módulo correcto
+const Driver = require('./Drivers'); // Importa el módulo correcto
 
 // Controlador para obtener todos los vehículos
 const getAllDrivers = (req, res) => {
