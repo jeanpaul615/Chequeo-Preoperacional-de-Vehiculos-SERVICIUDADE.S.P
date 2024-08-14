@@ -25,7 +25,7 @@ const MainDashboard = () => {
           return;
         }
         const response = await axios.get(
-          "http://localhost:8000/api/v1/inspection/",
+          "http://localhost:8000/inspection",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -73,21 +73,21 @@ const MainDashboard = () => {
 
     const fetchData = async () => {
       try {
-        const driversResponse = await axios.get("http://localhost:8000/api/v1/drivers/", {
+        const driversResponse = await axios.get("http://localhost:8000/drivers", {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
         setDriversCount(driversResponse.data.length);
 
-        const vehiclesResponse = await axios.get("http://localhost:8000/api/v1/vehicles/", {
+        const vehiclesResponse = await axios.get("http://localhost:8000/vehicles", {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
         setVehiclesCount(vehiclesResponse.data.length);
 
-        const inspectionResponse = await axios.get("http://localhost:8000/api/v1/inspection/", {
+        const inspectionResponse = await axios.get("http://localhost:8000/inspection", {
           headers: {
             Authorization: `Bearer ${token}`
           }

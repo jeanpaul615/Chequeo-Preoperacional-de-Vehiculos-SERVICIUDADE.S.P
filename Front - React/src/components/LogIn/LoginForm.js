@@ -7,7 +7,7 @@ function LoginForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: ""
   });
   const [error, setError] = useState(null);
@@ -53,8 +53,8 @@ function LoginForm() {
           </label>
           <input
             type="text" // Corrige el tipo de input
-            name="username"
-            value={formData.username}
+            name="email"
+            value={formData.email}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded-full border-blue-700 focus:outline-none focus:border-gray-300"
             required
