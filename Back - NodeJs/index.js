@@ -38,6 +38,10 @@ app.use('/drivers', driverRoutes);
 const inspectionRoutes = require('./routes/inspeccion/Inspection/InspectionRoutes');
 app.use('/inspection', inspectionRoutes);
 
+//users
+const usersRoutes = require('./routes/inspeccion/Users/userRoutes');
+app.use('/users', usersRoutes);
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
