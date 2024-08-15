@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PieChartUser from './PieChartUser';
-import { GetUsers } from '../../../../controllers/DashboardControllers/Users';
+import { GetUsers } from '../../../../controllers/Inspection/DashboardControllers/Users';
 
 const FetchPieChartUser = () => {
   const [data, setData] = useState([]);

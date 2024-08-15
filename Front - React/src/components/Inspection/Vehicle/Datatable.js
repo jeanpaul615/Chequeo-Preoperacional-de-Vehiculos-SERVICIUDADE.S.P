@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'datatables.net-dt';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css';
 import Sidebar from '../../../containers/Sidebar';
-import { GetVehicles } from '../../../controllers/DashboardControllers/Vehicle';
+import { GetVehicles } from '../../../controllers/Inspection/DashboardControllers/Vehicle';
 import Navbar from '../../../containers/Navbar';
 
 // Función para formatear la fecha

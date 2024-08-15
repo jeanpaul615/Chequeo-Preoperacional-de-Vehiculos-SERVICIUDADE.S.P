@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'datatables.net-dt';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css';
 import Sidebar from '../../../containers/Sidebar';
-import { GetDrivers } from '../../../controllers/DashboardControllers/Driver';
+import { GetDrivers } from '../../../controllers/Inspection/DashboardControllers/Driver';
 import Navbar from '../../../containers/Navbar';
 
 const DatatableDrivers = () => {

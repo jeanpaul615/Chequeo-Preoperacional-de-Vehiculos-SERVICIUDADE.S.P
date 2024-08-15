@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
-import { Auth } from "../../controllers/AuthControllers/Auth"; // Ajusta la ruta según sea necesario
+import { Auth } from "../../controllers/Inspection/AuthControllers/Auth"; // Ajusta la ruta según sea necesario
 
 function LoginForm() {
   const navigate = useNavigate();
