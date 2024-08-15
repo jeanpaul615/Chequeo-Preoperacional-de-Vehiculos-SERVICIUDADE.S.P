@@ -43,6 +43,16 @@ const usersRoutes = require('./INSPECTION/Users/userRoutes');
 app.use('/users', usersRoutes);
 
 
+//indicator
+const indicatorRoutes = require('./INDICATORS/Indicators/indicatorsRoutes');
+app.use('/indicators', indicatorRoutes);
+
+
+//variables
+const variablesRoutes = require('./INDICATORS/Variables/variablesRoutes');
+app.use('/variables', variablesRoutes);
+
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
