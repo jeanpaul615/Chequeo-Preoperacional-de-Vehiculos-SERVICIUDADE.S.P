@@ -5,29 +5,38 @@ import "datatables.net-responsive-dt";
 import Sidebar from "../../../containers/Sidebar";
 import Navbar from "../../../containers/Navbar";
 import { GetIndicators } from "../../../controllers/Indicators/Indicators/GetIndicators";
-import InputModal from "./InputModal"; // Import the new modal component
+import InputModal from "./InputModal";
+import FilterControls from "./FilterControls";
 
 const DataTableIndicators = () => {
   const tableRef = useRef();
   const [data, setData] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false); // State to control modal visibility
+  const [filteredData, setFilteredData] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedFrequency, setSelectedFrequency] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await GetIndicators();
         setData(result);
+        setFilteredData(result); // Initial filter
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, []); // Empty dependency array ensures one-time execution
+  }, []);
 
   useEffect(() => {
     const tableElement = tableRef.current;
+
+    // Initialize DataTable
     const dataTable = $(tableElement).DataTable({
-      data: data,
+      data: filteredData,
       columns: [
         { title: "ID indicador", data: "id_indicador" },
         { title: "Nombre indicador", data: "nombre_indicador" },
@@ -36,26 +45,32 @@ const DataTableIndicators = () => {
         { title: "Periodo", data: "periodo_inicio" },
       ],
       responsive: true,
-      destroy: false, // Don't destroy on initial render
       paging: true,
       searching: true,
-      ordering: true,
-      scrollX: true, // Habilita el desplazamiento horizontal
-      columnDefs: [
-        // ... column width definitions
-      ],
     });
 
-    // Populate table body with data
-    $(tableElement).DataTable().rows.add(data).draw();
-
-    // Destruir DataTable en desmontaje para evitar errores de memoria
+    // Destroy DataTable on unmount
     return () => {
       if (dataTable) {
-        dataTable.destroy(false);
+        dataTable.destroy();
       }
     };
-  }, [data]);
+  }, [filteredData]);
+
+  useEffect(() => {
+    // Filter data based on the selected month, year, and frequency
+    const filtered = data.filter((item) => {
+      const itemDate = new Date(item.periodo_inicio);
+      const itemMonth = itemDate.getMonth() + 1; // getMonth() is 0-indexed
+      const itemYear = itemDate.getFullYear();
+      return (
+        (selectedMonth ? itemMonth === parseInt(selectedMonth) : true) &&
+        (selectedYear ? itemYear === parseInt(selectedYear) : true) &&
+        (selectedFrequency ? item.frecuencia === selectedFrequency : true)
+      );
+    });
+    setFilteredData(filtered);
+  }, [selectedMonth, selectedYear, selectedFrequency, data]);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -72,16 +87,20 @@ const DataTableIndicators = () => {
         <Navbar Title={"Indicadores"} />
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <div className="p-4">
-            <button
-              onClick={openModal}
-              className="bg-green-500 text-white p-2 rounded mb-4"
-            >
-              Ingresar Datos
-            </button>
+            <FilterControls
+              selectedMonth={selectedMonth}
+              setSelectedMonth={setSelectedMonth}
+              selectedYear={selectedYear}
+              setSelectedYear={setSelectedYear}
+              selectedFrequency={selectedFrequency}
+              setSelectedFrequency={setSelectedFrequency}
+              openModal={openModal}
+            />
+
             <table
               id="example"
               className="display w-full table-auto border-collapse"
-              ref={tableRef} // Add reference for DataTable initialization
+              ref={tableRef}
             >
               <thead className="bg-gray-800 text-white">
                 <tr>

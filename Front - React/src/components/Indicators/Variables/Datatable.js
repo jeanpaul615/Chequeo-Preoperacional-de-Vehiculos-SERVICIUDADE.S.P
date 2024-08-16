@@ -1,53 +1,111 @@
-import React, { useEffect } from "react";
-import $ from 'jquery';
-import 'datatables.net-dt';
-import 'datatables.net-responsive-dt';
+import React, { useEffect, useRef, useState } from "react";
+import $ from "jquery";
+import "datatables.net-dt";
+import "datatables.net-responsive-dt";
 import Sidebar from "../../../containers/Sidebar";
 import Navbar from "../../../containers/Navbar";
+import { GetVariables } from "../../../controllers/Indicators/Variables/GetVariables";
+import FilterControls from "./FilterControls";
 
-const DataTableVariables = () => {
+const DataTableIndicators = () => {
+  const tableRef = useRef();
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+
   useEffect(() => {
-    // Verificar si la tabla ya está inicializada y destruirla si es necesario
-    if ($.fn.DataTable.isDataTable('#example')) {
-      $('#example').DataTable().destroy();
-    }
-
-    // Inicializar DataTables con responsividad
-    $('#example').DataTable({
-      responsive: true
-    });
+    const fetchData = async () => {
+      try {
+        const result = await GetVariables();
+        setData(result);
+        setFilteredData(result); // Initial filter
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
   }, []);
 
+  useEffect(() => {
+    const tableElement = tableRef.current;
+
+    // Initialize DataTable
+    const dataTable = $(tableElement).DataTable({
+      data: filteredData,
+      columns: [
+        { title: "Id variable", data: "id_variable" },
+        { title: "Nombre Variable", data: "nombre" },
+        { title: "Id Indicador Relacionado", data: "indicador_id" },
+        { title: "Nombre Indicador", data: "nombre_indicador" },
+        { title: "Valor", data: "valor" },
+        { title: "Periodo", data: "periodo" },
+
+      ],
+      responsive: true,
+      paging: true,
+      searching: true,
+    });
+
+    // Destroy DataTable on unmount
+    return () => {
+      if (dataTable) {
+        dataTable.destroy();
+      }
+    };
+  }, [filteredData]);
+
+  useEffect(() => {
+    // Filter data based on the selected month, year, and frequency
+    const filtered = data.filter((item) => {
+      const itemDate = new Date(item.periodo);
+      const itemMonth = itemDate.getMonth() + 1; // getMonth() is 0-indexed
+      const itemYear = itemDate.getFullYear();
+      return (
+        (selectedMonth ? itemMonth === parseInt(selectedMonth) : true) &&
+        (selectedYear ? itemYear === parseInt(selectedYear) : true)
+      );
+    });
+    setFilteredData(filtered);
+  }, [selectedMonth, selectedYear, data]);
+
+
   return (
-    <div className="pt-12 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
-      <Navbar Title={"Variables"}/>
+    <div>
       <Sidebar />
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <table id="example" className="display w-full table-auto border-collapse">
-          <thead className="bg-gray-800 text-white">
-            <tr>
-              <th className="px-4 py-2">Id_Variables</th>
-              <th className="px-4 py-2">Indicador Relacionado</th>
-              <th className="px-4 py-2">Variable</th>
-              <th className="px-4 py-2">Frecuencia</th>
-              <th className="px-4 py-2">Periodo</th>
-              <th className="px-4 py-2">Valor de Variable</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white text-gray-700">
-            <tr className="border-t">
-              <td className="px-4 py-2">2</td>
-              <td className="px-4 py-2">Indicador Siniestros Viales TSV</td>
-              <td className="px-4 py-2">K: Constante 1000000 Km</td>
-              <td className="px-4 py-2">Anual</td>
-              <td className="px-4 py-2">2024</td>
-              <td className="px-4 py-2">20</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="pt-8 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
+        <Navbar Title={"Indicadores"} />
+        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+          <div className="p-4">
+            <FilterControls
+              selectedMonth={selectedMonth}
+              setSelectedMonth={setSelectedMonth}
+              selectedYear={selectedYear}
+              setSelectedYear={setSelectedYear}
+            />
+
+            <table
+              id="example"
+              className="display w-full table-auto border-collapse"
+              ref={tableRef}
+            >
+              <thead className="bg-gray-800 text-white">
+                <tr>
+                  <th className="px-4 py-2">Id variable</th>
+                  <th className="px-4 py-2">Nombre Variable</th>
+                  <th className="px-4 py-2">Id Indicador Relacionado</th>
+                  <th className="px-4 py-2">Indicador Relacionado</th>
+                  <th className="px-4 py-2">Valor</th>
+                  <th className="px-4 py-2">Periodo</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white text-gray-700"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default DataTableVariables;
+export default DataTableIndicators;
