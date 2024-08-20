@@ -10,9 +10,9 @@ const FilterControls = ({
   openModal,
 }) => {
   return (
-    <div className="mb-4 flex space-x-4">
+    <div className="mb-4 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
       <select
-        className="text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+        className="text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center w-full md:w-auto"
         value={selectedMonth}
         onChange={(e) => setSelectedMonth(e.target.value)}
       >
@@ -32,7 +32,7 @@ const FilterControls = ({
       </select>
 
       <select
-        className="text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+        className="text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center w-full md:w-auto"
         value={selectedYear}
         onChange={(e) => setSelectedYear(e.target.value)}
       >
@@ -43,7 +43,7 @@ const FilterControls = ({
       </select>
 
       <select
-        className="text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+        className="text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center w-full md:w-auto"
         value={selectedFrequency}
         onChange={(e) => setSelectedFrequency(e.target.value)}
       >
@@ -54,10 +54,10 @@ const FilterControls = ({
         <option value="anual">Anual</option>
       </select>
 
-      <div className="flex-1 text-right">
+      <div className="flex-1 text-right md:text-left">
         <button
           onClick={openModal}
-          className=" bg-green-500 hover:bg-gray-800 text-white focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center border border-opacity-95"
+          className="bg-green-500 hover:bg-gray-800 text-white focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center w-full md:w-auto"
         >
           Ingresar Datos
         </button>

@@ -7,7 +7,7 @@ const FilterControls = ({
   setSelectedYear,
 }) => {
   return (
-    <div className="mb-4 flex space-x-4">
+    <div className="mb-4 flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
       <select
         className="text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
         value={selectedMonth}

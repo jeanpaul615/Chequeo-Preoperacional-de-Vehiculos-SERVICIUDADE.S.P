@@ -1,49 +1,65 @@
-import React, { useState, useEffect } from "react";
-import Modal from "react-modal";
+import React, { useState, useEffect } from 'react';
+import Modal from 'react-modal';
 import { GetIndicators } from "../../../controllers/Indicators/Indicators/GetIndicators";
+import { VariablesbyId } from "../../../controllers/Indicators/Variables/GetVariables";
+import CalculateIndicator from './CalculateIndicator'; // Make sure the path is correct
 
-const InputModal = ({
-  isOpen,
-  onRequestClose,
-  variables = ["Variable1", "Variable2", "Variable3"],
-  onSubmit,
-}) => {
-  // Inicializar el estado de las variables dinámicamente
-  const [inputs, setInputs] = useState(
-    variables.reduce((acc, variable) => {
-      acc[variable] = "";
-      return acc;
-    }, {})
-  );
-  const [indicators, setIndicators] = useState([]); // Estado para almacenar los indicadores
-  const [selectedIndicator, setSelectedIndicator] = useState(""); // Estado para el indicador seleccionado
-  const [value, setValue] = useState("");
-  const [period, setPeriod] = useState("");
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInputs((prevInputs) => ({ ...prevInputs, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Aquí puedes manejar el envío de los datos
-    console.log({ ...inputs, selectedIndicator, value, period });
-    onSubmit?.({ ...inputs, selectedIndicator, value, period }); // Llama a la función onSubmit si está definida
-    onRequestClose(); // Cierra el modal
-  };
+const InputModal = ({ isOpen, onRequestClose }) => {
+  const [variables, setVariables] = useState([]);
+  const [indicators, setIndicators] = useState([]);
+  const [selectedIndicator, setSelectedIndicator] = useState('');
+  const [inputs, setInputs] = useState({});
+  const [period, setPeriod] = useState('');
+  const [value, setValue] = useState('');
 
   useEffect(() => {
     const fetchIndicators = async () => {
       try {
         const fetchedIndicators = await GetIndicators();
-        setIndicators(fetchedIndicators); 
+        setIndicators(fetchedIndicators || []);
       } catch (error) {
-        console.error("Error fetching indicators:", error);
+        console.error('Error fetching indicators:', error);
       }
     };
+
     fetchIndicators();
   }, []);
+
+  useEffect(() => {
+    const fetchVariables = async () => {
+      if (selectedIndicator) {
+        try {
+          const indicatorId = indicators.find(ind => ind.nombre_indicador === selectedIndicator)?.id_indicador;
+          if (indicatorId) {
+            const fetchedVariables = await VariablesbyId(indicatorId);
+            setVariables(fetchedVariables || []);
+          }
+        } catch (error) {
+          console.error('Error fetching variables:', error);
+        }
+      }
+    };
+
+    fetchVariables();
+  }, [selectedIndicator, indicators]);
+
+  const handleChange = (e) => {
+    setInputs({
+      ...inputs,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCalculate = (calculatedValue) => {
+    setValue(calculatedValue);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form submitted with data:', { ...inputs, period, value });
+  };
+
+  const selectedIndicatorId = indicators.find(ind => ind.nombre_indicador === selectedIndicator)?.id_indicador;
 
   return (
     <Modal
@@ -54,117 +70,109 @@ const InputModal = ({
       contentLabel="Input Modal"
       ariaHideApp={false}
     >
-      <div className="bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-md md:max-w-4xl mx-auto">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg md:max-w-2xl mx-auto relative">
         <button
           type="button"
           onClick={onRequestClose}
-          className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-hide="default-modal"
+          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+          aria-label="Close modal"
         >
           <svg
-            className="w-3 h-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
+            className="w-6 h-6"
             fill="none"
-            viewBox="0 0 14 14"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              stroke="currentColor"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              d="M6 18L18 6M6 6l12 12"
             />
           </svg>
-          <span className="sr-only">Close modal</span>
         </button>
-        <h2 className="text-lg md:text-xl font-medium mb-3 md:mb-4 text-left">
+        <h2 className="text-2xl font-semibold mb-4 text-center">
           Registrar Indicador
         </h2>
         <form
           onSubmit={handleSubmit}
-          className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6"
+          className="space-y-6"
         >
-          {/* Columna de Variables */}
-          <div className="flex flex-col space-y-4">
-            {variables.map((variable, index) => (
-              <div key={index} className="flex flex-col">
-                <label className="mb-1 md:mb-2 text-sm md:text-base font-medium">{`${variable}:`}</label>
-                <input
-                  type="text"
-                  name={variable}
-                  value={inputs[variable] || ""}
-                  onChange={handleChange}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="space-y-4">
+              {variables.length > 0 ? (
+                variables.map((variable, index) => (
+                  <div key={index} className="flex flex-col">
+                    <label className="text-sm font-medium text-gray-700">
+                      {`${variable.nombre}:`}
+                    </label>
+                    <input
+                      type="number"
+                      name={variable.nombre}
+                      value={inputs[variable.nombre] || ""}
+                      onChange={handleChange}
+                      required
+                      className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
+                  </div>
+                ))
+              ) : (
+                <p>No hay variables</p>
+              )}
+              <CalculateIndicator
+                variables={Object.keys(inputs).map(key => ({ nombre: key, value: inputs[key] }))}
+                id_indicador={selectedIndicatorId}
+                onCalculate={handleCalculate}
+              />
+            </div>
+            <div className="space-y-4">
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">
+                  Nombre del indicador:
+                </label>
+                <select
+                  value={selectedIndicator}
+                  onChange={(e) => setSelectedIndicator(e.target.value)}
                   required
-                  className="p-1 md:p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                  className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                >
+                  <option value="">Seleccionar indicador</option>
+                  {indicators.length > 0 ? (
+                    indicators.map((indicator) => (
+                      <option key={indicator.id_indicador} value={indicator.nombre_indicador}>
+                        {indicator.nombre_indicador}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">No hay indicadores disponibles</option>
+                  )}
+                </select>
+              </div>
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">
+                  Periodo:
+                </label>
+                <input
+                  type="month"
+                  name="period"
+                  value={period}
+                  onChange={(e) => setPeriod(e.target.value)}
+                  required
+                  className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 />
               </div>
-            ))}
-            <div className="flex justify-start">
-              <button
-                type="submit"
-                className="bg-blue-500 text-white p-1 md:p-2 rounded hover:bg-blue-600 text-sm md:text-base"
-              >
-                Calcular
-              </button>
             </div>
           </div>
-
-          {/* Columna de Indicador, Valor y Periodo */}
-          <div className="flex flex-col space-y-4">
-            <div className="flex flex-col">
-              <label className="mb-1 md:mb-2 text-sm md:text-base font-medium">
-                Nombre del indicador:
-              </label>
-              <select
-                value={selectedIndicator}
-                onChange={(e) => setSelectedIndicator(e.target.value)}
-                required
-                className="p-1 md:p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
-              >
-                <option value="">Seleccionar indicador</option>
-                {indicators.map((indicator) => (
-                  <option key={indicator.id_indicador} value={indicator.nombre_indicador}>
-                    {indicator.nombre_indicador}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex flex-col">
-              <label className="mb-1 md:mb-2 text-sm md:text-base font-medium">
-                Periodo:
-              </label>
-              <input
-                type="month"
-                value={period}
-                onChange={(e) => setPeriod(e.target.value)}
-                required
-                className="p-1 md:p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="mb-1 md:mb-2 text-sm md:text-base font-medium">
-                Valor Indicador:
-              </label>
-              <input
-                type="number"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                required
-                className="p-1 md:p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
-              />
-            </div>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-200 text-sm"
+            >
+              Guardar
+            </button>
           </div>
         </form>
-        <div className="flex justify-end mt-4">
-          <button
-            type="button"
-            onClick={onRequestClose}
-            className="bg-green-500 text-white p-1 md:p-2 rounded hover:bg-green-600 text-sm md:text-base"
-          >
-            Guardar
-          </button>
-        </div>
       </div>
     </Modal>
   );

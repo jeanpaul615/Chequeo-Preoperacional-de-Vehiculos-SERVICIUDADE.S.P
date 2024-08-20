@@ -17,3 +17,19 @@ export const GetVariables = async () => {
     Swal.fire('Error al obtener los vehículos:', error.message);
   }
 }
+
+export const VariablesbyId = async (valor_indicador) => {
+  try {
+    const response = await axios.get('http://localhost:8000/variables/variablesbyid', {
+      params: { valor_indicador }, // Enviar valor_indicador como parámetro de consulta
+      headers: {
+        'Authorization': `Bearer ${token}` // Agrega el token al encabezado de la solicitud
+      }
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    Swal.fire('Error al obtener las variables:', error.message);
+  }
+}
+
