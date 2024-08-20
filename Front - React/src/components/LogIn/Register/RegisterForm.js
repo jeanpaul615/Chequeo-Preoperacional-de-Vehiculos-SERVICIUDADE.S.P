@@ -1,18 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
-import { Auth } from "../../../controllers/Inspection/AuthControllers/Auth"; // Ajusta la ruta según sea necesario
+import { Register } from "../../../controllers/Inspection/RegisterControllers/Register"; // Ajusta la ruta según sea necesario
 
 function RegisterForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    license_until: "",
-    seguridad_social: "",
     email: "",
     password: "",
-    role: "conductor",
   });
   const [error, setError] = useState(null);
 
@@ -30,10 +27,24 @@ function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await Auth(formData);
-      console.log("Respuesta de registro:", response);
+      const response = await Register(formData);
       if (response) {
-        navigate("/");
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Registro de Usuario Exitoso."
+        });    
+        navigate("/")
       } else {
         setError("Error al registrarse");
       }
@@ -48,50 +59,6 @@ function RegisterForm() {
         NUEVO USUARIO
       </h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="pl-2 text-sm block text-gray-700 italic font-bold">
-            Nombre Completo:
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-full border-blue-700 focus:outline-none focus:border-gray-300"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="pl-2 text-sm block text-gray-700 italic font-bold">
-            Vigencia de la Licencia:
-          </label>
-          <input
-            type="date"
-            name="license_until"
-            value={formData.license_until}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-full border-blue-700 focus:outline-none focus:border-gray-300"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="pl-2 text-sm block text-gray-700 italic font-bold">
-            Seguro Social:
-          </label>
-          <select
-            name="seguridad_social"
-            value={formData.seguridad_social}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-full border-blue-700 focus:outline-none focus:border-gray-300"
-            required
-          >
-            <option value="" disabled>
-              Selecciona una opción
-            </option>
-            <option value="value1">Si</option>
-            <option value="value2">No</option>
-          </select>
-        </div>
         <div className="mb-4">
           <label className="pl-2 text-sm block text-gray-700 italic font-bold">
             Correo Electrónico:

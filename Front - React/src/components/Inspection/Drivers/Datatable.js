@@ -63,6 +63,12 @@ const DatatableDrivers = () => {
       <Sidebar />
       <div className="flex-1 md:ml-72 ml-4 text-sm md:mr-5 mr-5 overflow-x-auto">
         <Navbar Title={"Conductores"} />
+        <button
+          className="bg-green-500 hover:bg-gray-800 text-white focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center w-full md:w-auto"
+        >
+          Nuevo Conductor
+        </button>
+
         <div className="bg-white shadow-md rounded-lg overflow-x-auto">
           <table ref={tableRef} className="display w-full table-auto border-collapse">
             <thead className="bg-gray-800 text-white">
