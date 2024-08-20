@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
+/**
+ * CalculateIndicator Component
+ * El componente CalculateIndicator funciona como un container para todas las operaciones que realizan
+ * entre variables para darle un valor al indicador, tambien retorna el valor al componente que le solicita la operación 
+ *
+ */
 const CalculateIndicator = ({ variables, id_indicador, onCalculate }) => {
   const [result, setResult] = useState('');
 

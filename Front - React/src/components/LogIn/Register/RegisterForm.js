@@ -4,6 +4,13 @@ import Swal from "sweetalert2";
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
 import { Register } from "../../../controllers/Inspection/RegisterControllers/Register"; // Ajusta la ruta según sea necesario
 
+/**
+ * RegisterForm Component
+ * El componente RegisterForm se encarga de manejar la estructura del formulario, 
+ * ademas de enviar el submit a la api de la consulta para guardar un nuevo usuario,
+ * tambien redirije a el componente login
+ *
+ */
 function RegisterForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);

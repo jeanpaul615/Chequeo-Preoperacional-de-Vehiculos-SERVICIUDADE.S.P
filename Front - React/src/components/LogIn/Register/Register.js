@@ -3,6 +3,13 @@ import RegisterForm from "./RegisterForm";
 import bannerserviciudad from "../../../assets/Navbar/banner-serviciudad.png";
 import registerimg from "../../../assets/Register/register.png";
 
+
+/**
+ * Register Component
+ * 
+ * El componente Register se encarga de darle estructura a todo la vista de registrar un usuario nuevo.
+ *
+ */
 function Register() {
   return (
     <div className="bg-gray-300 min-h-screen flex flex-col">

@@ -4,6 +4,12 @@ import imageLogin from "../../assets/Login/imagelogin.png";
 import bannerserviciudad from "../../assets/Navbar/banner-serviciudad.png";
 import logoserviciudad from "../../assets/Login/logo-serviciudad.png";
 
+/**
+ * Login Component
+ * 
+ * El componente Login se encarga de darle estructura a todo la vista de la autenticación.
+ *
+ */
 function Login() {
   return (
     <div className="bg-gray-300 min-h-screen flex flex-col">

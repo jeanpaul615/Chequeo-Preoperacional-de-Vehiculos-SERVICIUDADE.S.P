@@ -2,6 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * SideBar Component
+
+ * El componente Sidebar es un componente reutilizable, se utiliza en diferentes estructuras y diferentes 
+ * conjuntos de mas componentes.
+ *
+
+ */
 function Sidebar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showVariables, setShowVariables] = useState(false);

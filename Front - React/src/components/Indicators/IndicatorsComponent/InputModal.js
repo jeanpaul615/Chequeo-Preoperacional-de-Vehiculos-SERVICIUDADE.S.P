@@ -4,9 +4,16 @@ import { GetIndicators } from "../../../controllers/Indicators/Indicators/GetInd
 import { VariablesbyId } from "../../../controllers/Indicators/Variables/GetVariables";
 import { NewVariables } from "../../../controllers/Indicators/Variables/NewVariables";
 import { NewIndicators } from "../../../controllers/Indicators/Indicators/NewIndicators";
-
 import CalculateIndicator from "./CalculateIndicator"; // Make sure the path is correct
 import Swal from "sweetalert2";
+
+/**
+ * InputModal Component
+ * El componente InputModal se encarga de desplegar un form el cual permite elegir un indicador,
+ * listar las variables relacionadas, mostrar el valor del indicador y su periodicidad.
+ * -Hace un fetch para traer los indicadores, tambien trae las variables
+ * -Hace el llamado del consumo de la API para agregar las variables y indicadores a la base de datos.
+ */
 
 const InputModal = ({ isOpen, onRequestClose }) => {
   const [variables, setVariables] = useState([]);

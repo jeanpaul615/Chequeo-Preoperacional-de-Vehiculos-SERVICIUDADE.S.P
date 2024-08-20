@@ -1,5 +1,11 @@
 import React from "react";
 
+
+/**
+ * FilterControls Component
+ * El componente FilterControls se encarga de filtrar la tabla, en base a el Mes, Año, Periodicidad del indicador,
+ *  ademas de manejar el boton que el boton que despliega el form para ingresar nuevos datos.
+ */
 const FilterControls = ({
   selectedMonth,
   setSelectedMonth,

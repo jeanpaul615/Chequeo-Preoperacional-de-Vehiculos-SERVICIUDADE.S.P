@@ -1,5 +1,9 @@
 import React from "react";
 
+/**
+ * FilterControls Component
+ * El componente FilterControls se encarga de filtrar la tabla, en base a el Mes, Año
+ */
 const FilterControls = ({
   selectedMonth,
   setSelectedMonth,

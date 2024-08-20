@@ -7,7 +7,14 @@ import Navbar from "../../../containers/Navbar";
 import { GetVariables } from "../../../controllers/Indicators/Variables/GetVariables";
 import FilterControls from "./FilterControls";
 
-const DataTableIndicators = () => {
+
+/**
+ * DatatableVariable Component
+ * Este componente es el encargado de mostrar las variables, ademas de llamar el componente que trae los botones
+ * para filtrar los datos de la tabla.
+ *
+ */
+const DataTableVariable = () => {
   const tableRef = useRef();
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -121,4 +128,4 @@ const DataTableIndicators = () => {
   );
 };
 
-export default DataTableIndicators;
+export default DataTableVariable;

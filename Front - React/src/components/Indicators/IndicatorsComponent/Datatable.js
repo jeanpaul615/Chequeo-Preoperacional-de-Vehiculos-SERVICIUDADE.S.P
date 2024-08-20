@@ -8,6 +8,13 @@ import { GetIndicators } from "../../../controllers/Indicators/Indicators/GetInd
 import InputModal from "./InputModal";
 import FilterControls from "./FilterControls";
 
+/**
+ * DatatableIndicators Component
+ * Este componente es el encargado de mostrar los indicadores, ademas de llamar el componente que trae los botones
+ * para filtrar los datos de la tabla, tiene un boton que tiene enlazado un modal para agregar registros de indicadores
+ *
+ */
+
 const DataTableIndicators = () => {
   const tableRef = useRef();
   const [data, setData] = useState([]);
@@ -21,9 +28,9 @@ const DataTableIndicators = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await GetIndicators();
+        const result = await GetIndicators();//Trae los indicadores para mostrarlos en la tabla
         setData(result);
-        setFilteredData(result); // Initial filter
+        setFilteredData(result); //Filtro incial
       } catch (error) {
         console.error("Error fetching data:", error);
       }

@@ -3,6 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
 import { Auth } from "../../controllers/Inspection/AuthControllers/Auth"; // Ajusta la ruta según sea necesario
 
+/**
+ * LoginForm Component
+ * El componente LoginForm se encarga de manejar la estructura del formulario, 
+ * ademas de enviar el submit de la autenticación, tambien redirije a el componente principal
+ *
+ */
 function LoginForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);

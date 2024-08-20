@@ -6,6 +6,10 @@ import Sidebar from '../../../containers/Sidebar';
 import { GetDrivers } from '../../../controllers/Inspection/DashboardControllers/Driver';
 import Navbar from '../../../containers/Navbar';
 
+/**
+ * DatatableDrivers Component
+ * El componente FilterControls se encarga de mostrar los conductores registrado
+ */
 const DatatableDrivers = () => {
   const tableRef = useRef();
   const [data, setData] = useState([]);
