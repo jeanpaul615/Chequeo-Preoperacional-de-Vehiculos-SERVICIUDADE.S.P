@@ -26,7 +26,6 @@ export const VariablesbyId = async (valor_indicador) => {
         'Authorization': `Bearer ${token}` // Agrega el token al encabezado de la solicitud
       }
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     Swal.fire('Error al obtener las variables:', error.message);

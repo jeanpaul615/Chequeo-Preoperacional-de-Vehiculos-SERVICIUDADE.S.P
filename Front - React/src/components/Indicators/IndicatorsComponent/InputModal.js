@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
+import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
 import { GetIndicators } from "../../../controllers/Indicators/Indicators/GetIndicators";
 import { VariablesbyId } from "../../../controllers/Indicators/Variables/GetVariables";
-import CalculateIndicator from './CalculateIndicator'; // Make sure the path is correct
+import { NewVariables } from "../../../controllers/Indicators/Variables/NewVariables";
+import { NewIndicators } from "../../../controllers/Indicators/Indicators/NewIndicators";
+
+import CalculateIndicator from "./CalculateIndicator"; // Make sure the path is correct
+import Swal from "sweetalert2";
 
 const InputModal = ({ isOpen, onRequestClose }) => {
   const [variables, setVariables] = useState([]);
   const [indicators, setIndicators] = useState([]);
-  const [selectedIndicator, setSelectedIndicator] = useState('');
+  const [selectedIndicator, setSelectedIndicator] = useState("");
   const [inputs, setInputs] = useState({});
-  const [period, setPeriod] = useState('');
-  const [value, setValue] = useState('');
+  const [period, setPeriod] = useState("");
+  // eslint-disable-next-line
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     const fetchIndicators = async () => {
@@ -18,7 +23,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
         const fetchedIndicators = await GetIndicators();
         setIndicators(fetchedIndicators || []);
       } catch (error) {
-        console.error('Error fetching indicators:', error);
+        console.error("Error fetching indicators:", error);
       }
     };
 
@@ -29,13 +34,15 @@ const InputModal = ({ isOpen, onRequestClose }) => {
     const fetchVariables = async () => {
       if (selectedIndicator) {
         try {
-          const indicatorId = indicators.find(ind => ind.nombre_indicador === selectedIndicator)?.id_indicador;
+          const indicatorId = indicators.find(
+            (ind) => ind.nombre_indicador === selectedIndicator
+          )?.id_indicador;
           if (indicatorId) {
             const fetchedVariables = await VariablesbyId(indicatorId);
             setVariables(fetchedVariables || []);
           }
         } catch (error) {
-          console.error('Error fetching variables:', error);
+          console.error("Error fetching variables:", error);
         }
       }
     };
@@ -54,12 +61,71 @@ const InputModal = ({ isOpen, onRequestClose }) => {
     setValue(calculatedValue);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted with data:', { ...inputs, period, value });
+
+    if (!selectedIndicator || !period) {
+      return Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor, selecciona un indicador y un periodo.",
+      });
+    }
+
+    try {
+      // Preparar datos para enviar
+      const requests = Object.keys(inputs).map(async (variableName) => {
+        const variable = variables.find((v) => v.nombre === variableName);
+        if (variable) {
+          const variableId = variable.id_variable;
+          const valor = inputs[variableName];
+
+          // Enviar datos de la variable al servidor
+          await NewVariables({
+            indicador_id: selectedIndicatorId,
+            variable_id: variableId,
+            valor: valor,
+            periodo: period,
+          });
+        }
+      });
+
+      // Esperar que todas las solicitudes se completen
+      await Promise.all(requests);
+
+      // También puedes enviar el indicador si es necesario
+      await NewIndicators({
+        indicador_id: selectedIndicatorId,
+        valor: value,
+        periodo_inicio: period,
+      });
+
+      Swal.fire({
+        icon: "success",
+        title: "Éxito",
+        text: "Los datos se han guardado correctamente.",
+      });
+
+      // Limpiar el formulario
+      setInputs({});
+      setSelectedIndicator("");
+      setPeriod("");
+      setValue("");
+
+      onRequestClose();
+    } catch (error) {
+      console.error("Error al guardar datos:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se logró insertar la variable o el indicador.",
+      });
+    }
   };
 
-  const selectedIndicatorId = indicators.find(ind => ind.nombre_indicador === selectedIndicator)?.id_indicador;
+  const selectedIndicatorId = indicators.find(
+    (ind) => ind.nombre_indicador === selectedIndicator
+  )?.id_indicador;
 
   return (
     <Modal
@@ -95,10 +161,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
         <h2 className="text-2xl font-semibold mb-4 text-center">
           Registrar Indicador
         </h2>
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6"
-        >
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-4">
               {variables.length > 0 ? (
@@ -121,7 +184,10 @@ const InputModal = ({ isOpen, onRequestClose }) => {
                 <p>No hay variables</p>
               )}
               <CalculateIndicator
-                variables={Object.keys(inputs).map(key => ({ nombre: key, value: inputs[key] }))}
+                variables={Object.keys(inputs).map((key) => ({
+                  nombre: key,
+                  value: inputs[key],
+                }))}
                 id_indicador={selectedIndicatorId}
                 onCalculate={handleCalculate}
               />
@@ -140,7 +206,10 @@ const InputModal = ({ isOpen, onRequestClose }) => {
                   <option value="">Seleccionar indicador</option>
                   {indicators.length > 0 ? (
                     indicators.map((indicator) => (
-                      <option key={indicator.id_indicador} value={indicator.nombre_indicador}>
+                      <option
+                        key={indicator.id_indicador}
+                        value={indicator.nombre_indicador}
+                      >
                         {indicator.nombre_indicador}
                       </option>
                     ))
@@ -151,10 +220,10 @@ const InputModal = ({ isOpen, onRequestClose }) => {
               </div>
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-700">
-                  Periodo:
+                  Fecha de Inicio:
                 </label>
                 <input
-                  type="month"
+                  type="date"
                   name="period"
                   value={period}
                   onChange={(e) => setPeriod(e.target.value)}
