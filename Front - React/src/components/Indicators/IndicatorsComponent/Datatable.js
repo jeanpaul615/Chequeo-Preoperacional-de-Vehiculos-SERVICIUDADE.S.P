@@ -42,7 +42,22 @@ const DataTableIndicators = () => {
         { title: "Nombre indicador", data: "nombre_indicador" },
         { title: "Frecuencia", data: "frecuencia" },
         { title: "Valor", data: "valor" },
-        { title: "Periodo", data: "periodo_inicio" },
+        {
+          title: "Periodo",
+          data: "periodo_inicio",
+          render: function (data, type, row) {
+            // Asumiendo que la fecha viene en formato "YYYY-MM-DD" o similar
+            if (data) {
+              const date = new Date(data);
+              const year = date.getFullYear();
+              const month = String(date.getMonth() + 1).padStart(2, "0"); // Añade 1 porque los meses van de 0 a 11
+              const day = String(date.getDate()).padStart(2, "0");
+
+              return `${year}/${month}/${day}`;
+            }
+            return data;
+          },
+        },
       ],
       responsive: true,
       paging: true,

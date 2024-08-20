@@ -39,8 +39,22 @@ const DataTableIndicators = () => {
         { title: "Id Indicador Relacionado", data: "indicador_id" },
         { title: "Nombre Indicador", data: "nombre_indicador" },
         { title: "Valor", data: "valor" },
-        { title: "Periodo", data: "periodo" },
+        {
+          title: "Periodo",
+          data: "periodo",
+          render: function (data, type, row) {
+            // Asumiendo que la fecha viene en formato "YYYY-MM-DD" o similar
+            if (data) {
+              const date = new Date(data);
+              const year = date.getFullYear();
+              const month = String(date.getMonth() + 1).padStart(2, "0"); // Añade 1 porque los meses van de 0 a 11
+              const day = String(date.getDate()).padStart(2, "0");
 
+              return `${year}/${month}/${day}`;
+            }
+            return data;
+          },
+        },
       ],
       responsive: true,
       paging: true,
@@ -68,7 +82,6 @@ const DataTableIndicators = () => {
     });
     setFilteredData(filtered);
   }, [selectedMonth, selectedYear, data]);
-
 
   return (
     <div>
