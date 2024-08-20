@@ -23,9 +23,31 @@ const getVariablesById = (req, res) => {
     });
 };
 
+const registerVariable = (req, res) => {
+    const {indicador_id, variable_id, valor, periodo} = req.body;
+
+    if (!indicador_id || !variable_id || !valor || !periodo ) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
+    const newVariableData = {
+        indicador_id, 
+        variable_id,
+         valor, 
+         periodo
+    };
+    Variable.NewVariableRegister(newVariableData, (err, result) => {
+        if(err){
+            console.error('Error al registrar nueva variable: ',err);
+            return res.status(500).json({error: 'Error en el servidor'});
+        }
+        res.status(201).json({message: 'Nueva variable registrada con exito', id: result.insertId})
+    });
+};
+
 
 
 
 module.exports = {
-    getAllVariables, getVariablesById
+    getAllVariables, getVariablesById, registerVariable
 };

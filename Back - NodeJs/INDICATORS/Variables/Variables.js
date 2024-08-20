@@ -1,6 +1,7 @@
 const db = require('../../config/db/connectionindicators');
 
 const Variables = {
+  // Obtener todas las variables
   getAllVariables: (callback) => {
     const query = `
       SELECT 
@@ -13,24 +14,43 @@ const Variables = {
       FROM variables 
       INNER JOIN valor_variables ON valor_variables.variable_id = variables.id_variable
       INNER JOIN indicadores ON valor_variables.indicador_id = indicadores.id_indicador
-    `; 
+    `;
 
     db.query(query, (err, results) => {
       if (err) {
         return callback(err, null);
       }
-      callback(null, results); 
+      callback(null, results);
     });
   },
-  getVariablesById: (valor_indicador, callback) => {
+
+  // Obtener variables por ID
+  getVariablesById: (id_indicador, callback) => {
     const query = 'SELECT * FROM variables WHERE id_indicador = ?'; // Asegúrate de que el nombre de la columna sea correcto
-    db.query(query, [valor_indicador], (err, results) => {
-        if (err) {
-            return callback(err, null);
-        }
-        callback(null, results);
+    db.query(query, [id_indicador], (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, results);
     });
   },
+
+  // Registrar una nueva variable
+  NewVariableRegister: (data, callback) => {
+    const query = `
+      INSERT INTO 
+        valor_variables (indicador_id, variable_id, valor, periodo) 
+      VALUES 
+        (?, ?, ?, ?)
+    `;
+    const { indicador_id, variable_id, valor, periodo } = data;
+    db.query(query, [indicador_id, variable_id, valor, periodo], (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, results);
+    });
+  }
 };
 
 module.exports = Variables;
