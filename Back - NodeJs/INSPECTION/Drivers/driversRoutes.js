@@ -4,5 +4,7 @@ const driverController = require('./driverController'); // Asegúrate de que la 
 
 // Ruta para obtener todos los vehículos
 router.get('/', driverController.getAllDrivers);
+router.post('/createdriver', driverController.DriverRegister);
+
 
 module.exports = router;

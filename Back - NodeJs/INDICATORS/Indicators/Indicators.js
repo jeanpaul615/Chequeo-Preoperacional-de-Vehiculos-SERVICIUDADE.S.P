@@ -35,7 +35,7 @@ const Indicator = {
             }
             callback(null, results);
         });
-    }
+    },
 };
 
 module.exports = Indicator;
