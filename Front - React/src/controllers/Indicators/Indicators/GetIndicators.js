@@ -16,3 +16,18 @@ export const GetIndicators = async () => {
     Swal.fire('Error al obtener los vehículos:', error.message);
   }
 }
+
+
+
+export const GetNameIndicators = async () => {
+  try {
+    const response = await axios.get('http://localhost:8000/indicators/getindicators', {
+      headers: {
+        'Authorization': `Bearer ${token}` // Agrega el token al encabezado de la solicitud
+      }
+    });
+    return response.data;
+  } catch (error) {
+    Swal.fire('Error al obtener los indicadores:', error.message);
+  }
+}

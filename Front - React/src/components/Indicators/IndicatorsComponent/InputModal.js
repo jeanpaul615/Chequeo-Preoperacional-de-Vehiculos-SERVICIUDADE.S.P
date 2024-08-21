@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
-import { GetIndicators } from "../../../controllers/Indicators/Indicators/GetIndicators";
+import { GetNameIndicators } from "../../../controllers/Indicators/Indicators/GetIndicators";
 import { VariablesbyId } from "../../../controllers/Indicators/Variables/GetVariables";
 import { NewVariables } from "../../../controllers/Indicators/Variables/NewVariables";
 import { NewIndicators } from "../../../controllers/Indicators/Indicators/NewIndicators";
@@ -29,7 +29,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
   useEffect(() => {
     const fetchIndicators = async () => {
       try {
-        const fetchedIndicators = await GetIndicators();
+        const fetchedIndicators = await GetNameIndicators();
         setIndicators(fetchedIndicators || []);
       } catch (error) {
         console.error("Error fetching indicators:", error);
@@ -72,81 +72,119 @@ const InputModal = ({ isOpen, onRequestClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!selectedIndicatorId || !period) {
-        return Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "Por favor, selecciona un indicador y un periodo.",
-        });
+      return Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor, selecciona un indicador y un periodo.",
+      });
     }
-
+  
+    // Obtener la periodicidad del indicador seleccionado
+    const indicator = indicators.find(
+      (ind) => ind.id_indicador === selectedIndicatorId
+    );
+    const periodicidad = indicator ? indicator.frecuencia : "";
+  
+    // Extraer el mes y año de la fecha seleccionada
+    const periodDate = new Date(period);
+    const selectedMonth = periodDate.getMonth() + 1; // +1 porque getMonth() es 0-indexado
+  
+    // Validar la fecha según la periodicidad
+    const isValidDate = (periodicidad) => {
+      switch (periodicidad) {
+        case "anual":
+          // Solo enero para anual
+          return selectedMonth === 1; // Solo enero
+        case "semestral":
+          return selectedMonth === 6 || selectedMonth === 12; // Solo junio y diciembre
+        case "trimestral":
+          return [3, 6, 9, 12].includes(selectedMonth); // Solo marzo, junio, septiembre, diciembre
+        case "mensual":
+          return true; // Todos los meses
+        default:
+          return false; // Periodicidad no válida
+      }
+    };
+  
+    if (!isValidDate(periodicidad)) {
+      return Swal.fire({
+        icon: "error",
+        title: "Fecha Inválida",
+        html: `La fecha seleccionada no es válida para un indicador de periodicidad <strong>${periodicidad}</strong>.<br><br>
+          Si es anual: <strong>Enero</strong><br>
+          Si es semestral: <strong>Junio-Diciembre</strong><br>
+          Si es trimestral: <strong>Marzo, Junio, Septiembre, Diciembre</strong>`,
+      });
+    }
+  
     try {
-        // Verificar si el indicador ya existe para el período seleccionado
-        const existingIndicator = await VerifyIndicator({
-            indicador_id: selectedIndicatorId,
-            periodo_inicio: period,
+      // Verificar si el indicador ya existe para el período seleccionado
+      const existingIndicator = await VerifyIndicator({
+        indicador_id: selectedIndicatorId,
+        periodo_inicio: periodDate.toISOString().split('T')[0], // Formato YYYY-MM-DD
+      });
+  
+      if (existingIndicator && existingIndicator.exists) {
+        // Si el indicador ya existe, mostrar una alerta y no proceder con el submit
+        return Swal.fire({
+          icon: "warning",
+          title: "Indicador Existente",
+          text: "El indicador ya está registrado para el período seleccionado.",
         });
-
-        if (existingIndicator && existingIndicator.exists) {
-            // Si el indicador ya existe, mostrar una alerta y no proceder con el submit
-            return Swal.fire({
-                icon: "warning",
-                title: "Indicador Existente",
-                text: "El indicador ya está registrado para el período seleccionado.",
-            });
+      }
+  
+      // Preparar datos para enviar
+      const requests = Object.keys(inputs).map(async (variableName) => {
+        const variable = variables.find((v) => v.nombre === variableName);
+        if (variable) {
+          const variableId = variable.id_variable;
+          const valor = inputs[variableName];
+  
+          // Enviar datos de la variable al servidor
+          await NewVariables({
+            indicador_id: selectedIndicatorId,
+            variable_id: variableId,
+            valor: valor,
+            periodo: period,
+          });
         }
-
-        // Preparar datos para enviar
-        const requests = Object.keys(inputs).map(async (variableName) => {
-            const variable = variables.find((v) => v.nombre === variableName);
-            if (variable) {
-                const variableId = variable.id_variable;
-                const valor = inputs[variableName];
-
-                // Enviar datos de la variable al servidor
-                await NewVariables({
-                    indicador_id: selectedIndicatorId,
-                    variable_id: variableId,
-                    valor: valor,
-                    periodo: period,
-                });
-            }
-        });
-
-        // Esperar que todas las solicitudes se completen
-        await Promise.all(requests);
-
-        // También puedes enviar el indicador si es necesario
-        await NewIndicators({
-            indicador_id: selectedIndicatorId,
-            valor: value,
-            periodo_inicio: period,
-        });
-
-        Swal.fire({
-            icon: "success",
-            title: "Éxito",
-            text: "Los datos se han guardado correctamente.",
-        });
-
-        // Limpiar el formulario
-        setInputs({});
-        setSelectedIndicator("");
-        setPeriod("");
-        setValue("");
-
-        onRequestClose();
+      });
+  
+      // Esperar que todas las solicitudes se completen
+      await Promise.all(requests);
+  
+      // También puedes enviar el indicador si es necesario
+      await NewIndicators({
+        indicador_id: selectedIndicatorId,
+        valor: value,
+        periodo_inicio: periodDate.toISOString().split('T')[0], // Formato YYYY-MM-DD
+      });
+  
+      Swal.fire({
+        icon: "success",
+        title: "Éxito",
+        text: "Los datos se han guardado correctamente.",
+      });
+  
+      // Limpiar el formulario
+      setInputs({});
+      setSelectedIndicator("");
+      setPeriod("");
+      setValue("");
+  
+      onRequestClose();
     } catch (error) {
-        console.error("Error al guardar datos:", error);
-        Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No se logró insertar la variable o el indicador.",
-        });
+      console.error("Error al guardar datos:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se logró insertar la variable o el indicador.",
+      });
     }
-};  
-
+  };
+  
 
   const selectedIndicatorId = indicators.find(
     (ind) => ind.nombre_indicador === selectedIndicator
@@ -235,7 +273,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
                         key={indicator.id_indicador}
                         value={indicator.nombre_indicador}
                       >
-                        {indicator.nombre_indicador}
+                        {`${indicator.nombre_indicador} (${indicator.frecuencia})`}
                       </option>
                     ))
                   ) : (
