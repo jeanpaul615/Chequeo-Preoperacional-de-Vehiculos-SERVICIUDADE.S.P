@@ -20,6 +20,7 @@ const Indicator = {
             callback(null, results);
         });
     },
+
     NewIndicatorRegister: (data, callback) => {
         const query = `
             INSERT INTO 
@@ -36,6 +37,27 @@ const Indicator = {
             callback(null, results);
         });
     },
+
+    VerifyIndicator: (data, callback) => {
+        const query = `
+            SELECT 
+                * 
+            FROM 
+                registro_indicadores 
+            WHERE 
+                indicador_id = ? AND periodo_inicio = ?
+        `;
+        
+        const { indicador_id, periodo_inicio } = data;
+        db.query(query, [indicador_id, periodo_inicio], (err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            // Si hay resultados, significa que el indicador ya existe
+            const exists = results.length > 0;
+            callback(null, exists);
+        });
+    }
 };
 
 module.exports = Indicator;

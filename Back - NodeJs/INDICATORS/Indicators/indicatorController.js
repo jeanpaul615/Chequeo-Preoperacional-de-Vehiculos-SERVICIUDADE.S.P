@@ -33,9 +33,34 @@ const registerIndicator = (req, res) => {
     });
 };
 
+const VerifyIndicator = (req, res) => {
+    const { indicador_id, periodo_inicio } = req.body;
+
+    if (!indicador_id || !periodo_inicio) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
+    const newIndicatorData = {
+        indicador_id,
+        periodo_inicio
+    };
+
+    Indicator.VerifyIndicator(newIndicatorData, (err, exists) => {
+        if (err) {
+            console.error('Error al verificar indicador:', err);
+            return res.status(500).json({ error: 'Error en el servidor' });
+        }
+
+        if (exists) {
+            return res.status(200).json({ message: 'Indicador existente' });
+        } else {
+            return res.status(404).json({ message: 'Indicador no encontrado' });
+        }
+    });
+};
 
 
 module.exports = {
     getAllIndicators,
-    registerIndicator
+    registerIndicator, VerifyIndicator
 };
