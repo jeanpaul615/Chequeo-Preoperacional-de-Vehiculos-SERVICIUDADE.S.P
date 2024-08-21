@@ -4,6 +4,8 @@ import { GetIndicators } from "../../../controllers/Indicators/Indicators/GetInd
 import { VariablesbyId } from "../../../controllers/Indicators/Variables/GetVariables";
 import { NewVariables } from "../../../controllers/Indicators/Variables/NewVariables";
 import { NewIndicators } from "../../../controllers/Indicators/Indicators/NewIndicators";
+import { VerifyIndicator } from "../../../controllers/Indicators/Indicators/VerifyIndicator";
+
 import CalculateIndicator from "./CalculateIndicator"; // Make sure the path is correct
 import Swal from "sweetalert2";
 
@@ -71,64 +73,80 @@ const InputModal = ({ isOpen, onRequestClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedIndicator || !period) {
-      return Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Por favor, selecciona un indicador y un periodo.",
-      });
+    if (!selectedIndicatorId || !period) {
+        return Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Por favor, selecciona un indicador y un periodo.",
+        });
     }
 
     try {
-      // Preparar datos para enviar
-      const requests = Object.keys(inputs).map(async (variableName) => {
-        const variable = variables.find((v) => v.nombre === variableName);
-        if (variable) {
-          const variableId = variable.id_variable;
-          const valor = inputs[variableName];
-
-          // Enviar datos de la variable al servidor
-          await NewVariables({
+        // Verificar si el indicador ya existe para el período seleccionado
+        const existingIndicator = await VerifyIndicator({
             indicador_id: selectedIndicatorId,
-            variable_id: variableId,
-            valor: valor,
-            periodo: period,
-          });
+            periodo_inicio: period,
+        });
+
+        if (existingIndicator && existingIndicator.exists) {
+            // Si el indicador ya existe, mostrar una alerta y no proceder con el submit
+            return Swal.fire({
+                icon: "warning",
+                title: "Indicador Existente",
+                text: "El indicador ya está registrado para el período seleccionado.",
+            });
         }
-      });
 
-      // Esperar que todas las solicitudes se completen
-      await Promise.all(requests);
+        // Preparar datos para enviar
+        const requests = Object.keys(inputs).map(async (variableName) => {
+            const variable = variables.find((v) => v.nombre === variableName);
+            if (variable) {
+                const variableId = variable.id_variable;
+                const valor = inputs[variableName];
 
-      // También puedes enviar el indicador si es necesario
-      await NewIndicators({
-        indicador_id: selectedIndicatorId,
-        valor: value,
-        periodo_inicio: period,
-      });
+                // Enviar datos de la variable al servidor
+                await NewVariables({
+                    indicador_id: selectedIndicatorId,
+                    variable_id: variableId,
+                    valor: valor,
+                    periodo: period,
+                });
+            }
+        });
 
-      Swal.fire({
-        icon: "success",
-        title: "Éxito",
-        text: "Los datos se han guardado correctamente.",
-      });
+        // Esperar que todas las solicitudes se completen
+        await Promise.all(requests);
 
-      // Limpiar el formulario
-      setInputs({});
-      setSelectedIndicator("");
-      setPeriod("");
-      setValue("");
+        // También puedes enviar el indicador si es necesario
+        await NewIndicators({
+            indicador_id: selectedIndicatorId,
+            valor: value,
+            periodo_inicio: period,
+        });
 
-      onRequestClose();
+        Swal.fire({
+            icon: "success",
+            title: "Éxito",
+            text: "Los datos se han guardado correctamente.",
+        });
+
+        // Limpiar el formulario
+        setInputs({});
+        setSelectedIndicator("");
+        setPeriod("");
+        setValue("");
+
+        onRequestClose();
     } catch (error) {
-      console.error("Error al guardar datos:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se logró insertar la variable o el indicador.",
-      });
+        console.error("Error al guardar datos:", error);
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se logró insertar la variable o el indicador.",
+        });
     }
-  };
+};  
+
 
   const selectedIndicatorId = indicators.find(
     (ind) => ind.nombre_indicador === selectedIndicator
