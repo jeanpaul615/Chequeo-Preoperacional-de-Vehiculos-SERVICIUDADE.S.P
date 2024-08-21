@@ -1,5 +1,17 @@
 const Indicator = require('./Indicators'); // Importa el módulo correcto
 
+
+// Controlador para obtener todos los indicadores
+const getIndicators = (req, res) => {
+    Indicator.getIndicators((err, indicators) => {
+        if (err) {
+            console.error('Error al obtener indicadores:', err);
+            return res.status(500).json({ error: 'Error en el servidor' });
+        }
+        res.json(indicators);
+    });
+};
+
 // Controlador para obtener todos los indicadores
 const getAllIndicators = (req, res) => {
     Indicator.getAllIndicators((err, indicators) => {
@@ -52,15 +64,17 @@ const VerifyIndicator = (req, res) => {
         }
 
         if (exists) {
-            return res.status(200).json({ message: 'Indicador existente' });
+            return res.status(200).json({ exists: true, message: 'Indicador existente' });
         } else {
-            return res.status(404).json({ message: 'Indicador no encontrado' });
+            return res.status(200).json({ exists: false, message: 'Indicador no encontrado' });
         }
     });
 };
 
-
 module.exports = {
+    getIndicators,
     getAllIndicators,
-    registerIndicator, VerifyIndicator
+    registerIndicator, 
+    VerifyIndicator
 };
+
