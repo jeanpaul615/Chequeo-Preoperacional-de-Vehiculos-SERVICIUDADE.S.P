@@ -7,6 +7,11 @@ router.get('/', indicatorController.getAllIndicators);
 router.get('/getindicators', indicatorController.getIndicators);
 router.post('/register', indicatorController.registerIndicator);
 router.post('/verifyindicator', indicatorController.VerifyIndicator);
+router.post('/updateindicator', indicatorController.UpdateIndicator);
+router.post('/deleteindicator', indicatorController.DeleteIndicator);
+router.post('/updatefrequencyindicator', indicatorController.UpdateFrequencyIndicator);
+
+
 
 
 module.exports = router;
