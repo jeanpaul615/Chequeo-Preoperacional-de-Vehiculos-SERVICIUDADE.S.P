@@ -152,7 +152,7 @@ const CalculateIndicator = ({ variables, id_indicador, onCalculate }) => {
       <button
         type="button"
         onClick={handleCalculate}
-        className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-300 text-sm md:text-base"
+        className="hover:text-black text-white bg-blue-600 hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-3 py-2 text-center inline-flex items-center me-2 mb-2"
       >
         Calcular
       </button>

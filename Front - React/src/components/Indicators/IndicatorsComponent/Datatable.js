@@ -7,12 +7,14 @@ import Navbar from "../../../containers/Navbar";
 import { GetIndicators } from "../../../controllers/Indicators/Indicators/GetIndicators";
 import InputModal from "./InputModal";
 import FilterControls from "./FilterControls";
+import ModalUpdate from "./ModalUpdate";
+import { DeleteIndicator } from "../../../controllers/Indicators/Indicators/DeleteIndicator";
+import Swal from "sweetalert2";
 
 /**
  * DatatableIndicators Component
- * Este componente es el encargado de mostrar los indicadores, ademas de llamar el componente que trae los botones
- * para filtrar los datos de la tabla, tiene un boton que tiene enlazado un modal para agregar registros de indicadores
- *
+ * This component is responsible for displaying indicators, and it also includes a component that provides buttons
+ * to filter the table data. It has a button linked to a modal for adding indicator records.
  */
 
 const DataTableIndicators = () => {
@@ -20,6 +22,8 @@ const DataTableIndicators = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalUpdateIsOpen, setModalUpdateIsOpen] = useState(false);
+  const [selectedIndicator, setSelectedIndicator] = useState(null);
 
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
@@ -28,9 +32,9 @@ const DataTableIndicators = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await GetIndicators();//Trae los indicadores para mostrarlos en la tabla
+        const result = await GetIndicators(); // Fetch indicators to display in the table
         setData(result);
-        setFilteredData(result); //Filtro incial
+        setFilteredData(result); // Initial filter
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -45,24 +49,37 @@ const DataTableIndicators = () => {
     const dataTable = $(tableElement).DataTable({
       data: filteredData,
       columns: [
-        { title: "ID indicador", data: "id_indicador" },
-        { title: "Nombre indicador", data: "nombre_indicador" },
+        { title: "ID Indicador", data: "id_indicador" },
+        { title: "Nombre Indicador", data: "nombre_indicador" },
         { title: "Frecuencia", data: "frecuencia" },
         { title: "Valor", data: "valor" },
         {
           title: "Periodo",
           data: "periodo_inicio",
-          render: function (data, type, row) {
-            // Asumiendo que la fecha viene en formato "YYYY-MM-DD" o similar
+          render: function (data) {
             if (data) {
               const date = new Date(data);
               const year = date.getFullYear();
-              const month = String(date.getMonth() + 1).padStart(2, "0"); // Añade 1 porque los meses van de 0 a 11
+              const month = String(date.getMonth() + 1).padStart(2, "0");
               const day = String(date.getDate()).padStart(2, "0");
 
               return `${year}/${month}/${day}`;
             }
             return data;
+          },
+        },
+        {
+          title: "Opciones",
+          data: null,
+          render: function (data, type, row) {
+            return `
+              <button type="button" class="hover:text-white bg-gray-100 hover:bg-blue-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2" data-id="${row.id_indicador}">
+                Actualizar
+              </button>
+              <button type="button" class="hover:text-white bg-gray-100 hover:bg-red-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2" data-id="${row.id_indicador}">
+                Eliminar
+              </button>
+            `;
           },
         },
       ],
@@ -71,19 +88,57 @@ const DataTableIndicators = () => {
       searching: true,
     });
 
+    $(tableElement).on("click", "button", function () {
+      const id = $(this).data("id");
+      const action = $(this).text().trim();
+
+      const row = data.find((item) => item.id_indicador === id);
+
+      console.log("Selected row data:", row); // Log row data to check its structure
+
+      if (action === "Actualizar") {
+        setSelectedIndicator(row);
+        setModalUpdateIsOpen(true);
+      } else if (action === "Eliminar") {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminar!',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            if (row) {
+              DeleteIndicator(row).then((response) => {
+                if (response) {
+                  window.location.reload();
+                }
+              });
+            } else {
+              Swal.fire("Error", "No se encontró el dato para eliminar.", "error");
+            }
+          }
+        });
+      }
+    });
+
     // Destroy DataTable on unmount
     return () => {
       if (dataTable) {
         dataTable.destroy();
       }
     };
+    // eslint-disable-next-line
   }, [filteredData]);
 
   useEffect(() => {
     // Filter data based on the selected month, year, and frequency
     const filtered = data.filter((item) => {
       const itemDate = new Date(item.periodo_inicio);
-      const itemMonth = itemDate.getMonth() + 1; // getMonth() is 0-indexed
+      const itemMonth = itemDate.getMonth() + 1;
       const itemYear = itemDate.getFullYear();
       return (
         (selectedMonth ? itemMonth === parseInt(selectedMonth) : true) &&
@@ -100,6 +155,7 @@ const DataTableIndicators = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
+    // Clear form
   };
 
   return (
@@ -118,7 +174,6 @@ const DataTableIndicators = () => {
               setSelectedFrequency={setSelectedFrequency}
               openModal={openModal}
             />
-
             <table
               id="example"
               className="display w-full table-auto border-collapse"
@@ -131,14 +186,21 @@ const DataTableIndicators = () => {
                   <th className="px-4 py-2">Frecuencia</th>
                   <th className="px-4 py-2">Valor</th>
                   <th className="px-4 py-2">Periodo</th>
+                  <th className="px-4 py-2">Opciones</th>
                 </tr>
               </thead>
-              <tbody className="bg-white text-gray-700"></tbody>
+              <tbody></tbody>
             </table>
           </div>
         </div>
-        <InputModal isOpen={modalIsOpen} onRequestClose={closeModal} />
       </div>
+
+      <InputModal isOpen={modalIsOpen} onRequestClose={closeModal} />
+      <ModalUpdate
+          isOpen={modalUpdateIsOpen}
+          onRequestClose={() => setModalUpdateIsOpen(false)}
+          indicator={selectedIndicator}
+        />
     </div>
   );
 };

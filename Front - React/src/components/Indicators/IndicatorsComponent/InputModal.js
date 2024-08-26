@@ -5,7 +5,6 @@ import { VariablesbyId } from "../../../controllers/Indicators/Variables/GetVari
 import { NewVariables } from "../../../controllers/Indicators/Variables/NewVariables";
 import { NewIndicators } from "../../../controllers/Indicators/Indicators/NewIndicators";
 import { VerifyIndicator } from "../../../controllers/Indicators/Indicators/VerifyIndicator";
-
 import CalculateIndicator from "./CalculateIndicator"; // Make sure the path is correct
 import Swal from "sweetalert2";
 
@@ -81,6 +80,13 @@ const InputModal = ({ isOpen, onRequestClose }) => {
       });
     }
   
+    if (!value) {
+      return Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor, calcula el indicador antes de guardar.",
+      });
+    }
     // Obtener la periodicidad del indicador seleccionado
     const indicator = indicators.find(
       (ind) => ind.id_indicador === selectedIndicatorId
@@ -88,27 +94,37 @@ const InputModal = ({ isOpen, onRequestClose }) => {
     const periodicidad = indicator ? indicator.frecuencia : "";
   
     // Extraer el mes y año de la fecha seleccionada
-    const periodDate = new Date(period);
-    const selectedMonth = periodDate.getMonth() + 1; // +1 porque getMonth() es 0-indexado
+    const periodDate = new Date(period); // Suponiendo que 'period' es una cadena en formato 'YYYY-MM-DD'
+  
+    // Ajustar la fecha para evitar problemas de zona horaria
+    const adjustedDate = new Date(Date.UTC(
+      periodDate.getUTCFullYear(),
+      periodDate.getUTCMonth(),
+      periodDate.getUTCDate()
+    ));
+  
+    const selectedMonth = adjustedDate.getUTCMonth() + 1; // +1 porque getUTCMonth() devuelve 0 para enero, 1 para febrero, etc.
   
     // Validar la fecha según la periodicidad
     const isValidDate = (periodicidad) => {
       switch (periodicidad) {
-        case "anual":
-          // Solo enero para anual
-          return selectedMonth === 1; // Solo enero
-        case "semestral":
-          return selectedMonth === 6 || selectedMonth === 12; // Solo junio y diciembre
-        case "trimestral":
-          return [3, 6, 9, 12].includes(selectedMonth); // Solo marzo, junio, septiembre, diciembre
         case "mensual":
           return true; // Todos los meses
+        case "trimestral":
+          return [3, 6, 9, 12].includes(selectedMonth); // Solo marzo, junio, septiembre, diciembre
+        case "semestral":
+          return selectedMonth === 6 || selectedMonth === 12; // Solo junio y diciembre
+        case "anual":
+          return selectedMonth === 1; // Solo enero para anual
+  
         default:
           return false; // Periodicidad no válida
       }
     };
   
     if (!isValidDate(periodicidad)) {
+
+  
       return Swal.fire({
         icon: "error",
         title: "Fecha Inválida",
@@ -120,18 +136,18 @@ const InputModal = ({ isOpen, onRequestClose }) => {
     }
   
     try {
-      // Verificar si el indicador ya existe para el período seleccionado
+      // Verificar si el indicador ya existe en cualquier día del mes seleccionado
       const existingIndicator = await VerifyIndicator({
         indicador_id: selectedIndicatorId,
-        periodo_inicio: periodDate.toISOString().split('T')[0], // Formato YYYY-MM-DD
+        periodo_inicio: period,
       });
   
-      if (existingIndicator && existingIndicator.exists) {
+      if (existingIndicator.exists === true) {
         // Si el indicador ya existe, mostrar una alerta y no proceder con el submit
         return Swal.fire({
           icon: "warning",
           title: "Indicador Existente",
-          text: "El indicador ya está registrado para el período seleccionado.",
+          text: "El indicador ya está registrado para el mes seleccionado.",
         });
       }
   
@@ -159,9 +175,8 @@ const InputModal = ({ isOpen, onRequestClose }) => {
       await NewIndicators({
         indicador_id: selectedIndicatorId,
         valor: value,
-        periodo_inicio: periodDate.toISOString().split('T')[0], // Formato YYYY-MM-DD
+        periodo_inicio: adjustedDate.toISOString().split("T")[0], // Formato YYYY-MM-DD
       });
-  
       Swal.fire({
         icon: "success",
         title: "Éxito",
@@ -173,7 +188,6 @@ const InputModal = ({ isOpen, onRequestClose }) => {
       setSelectedIndicator("");
       setPeriod("");
       setValue("");
-  
       onRequestClose();
     } catch (error) {
       console.error("Error al guardar datos:", error);
@@ -199,7 +213,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
       contentLabel="Input Modal"
       ariaHideApp={false}
     >
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg md:max-w-2xl mx-auto relative">
+      <div className="bg-white p-6 rounded-md shadow-lg w-full max-w-lg md:max-w-2xl mx-auto relative">
         <button
           type="button"
           onClick={onRequestClose}
@@ -221,9 +235,10 @@ const InputModal = ({ isOpen, onRequestClose }) => {
             />
           </svg>
         </button>
-        <h2 className="text-2xl font-semibold mb-4 text-center">
+        <h2 className="text-lg font-semibold mb-4 text-center">
           Registrar Indicador
         </h2>
+        <hr className="border-gray-400 opacity-50 pt-2 my-4" />
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-4">
@@ -231,7 +246,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
                 variables.map((variable, index) => (
                   <div key={index} className="flex flex-col">
                     <label className="text-sm font-medium text-gray-700">
-                      {`${variable.nombre}:`}
+                      {`${variable.nombre} (*):`}
                     </label>
                     <input
                       type="number"
@@ -239,12 +254,12 @@ const InputModal = ({ isOpen, onRequestClose }) => {
                       value={inputs[variable.nombre] || ""}
                       onChange={handleChange}
                       required
-                      className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                      className="w-full px-2 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150 bg-gray-50 text-gray-700 text-sm"
                     />
                   </div>
                 ))
               ) : (
-                <p>No hay variables</p>
+                <p className="font-semibold">No hay variables</p>
               )}
               <CalculateIndicator
                 variables={Object.keys(inputs).map((key) => ({
@@ -258,13 +273,13 @@ const InputModal = ({ isOpen, onRequestClose }) => {
             <div className="space-y-4">
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-700">
-                  Nombre del indicador:
+                  Nombre del indicador (*):
                 </label>
                 <select
                   value={selectedIndicator}
                   onChange={(e) => setSelectedIndicator(e.target.value)}
                   required
-                  className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="text-sm w-full px-2 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150 bg-gray-50 text-gray-700"
                 >
                   <option value="">Seleccionar indicador</option>
                   {indicators.length > 0 ? (
@@ -283,7 +298,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
               </div>
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-700">
-                  Fecha de Inicio:
+                  Fecha de Inicio (*):
                 </label>
                 <input
                   type="date"
@@ -291,7 +306,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
                   value={period}
                   onChange={(e) => setPeriod(e.target.value)}
                   required
-                  className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="text-sm w-full px-2 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150 bg-gray-50 text-gray-700"
                 />
               </div>
             </div>
@@ -299,7 +314,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-200 text-sm"
+              className="hover:text-black text-white bg-green-600 hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-3 py-2.5 text-center inline-flex items-center me-2 mb-2"
             >
               Guardar
             </button>
