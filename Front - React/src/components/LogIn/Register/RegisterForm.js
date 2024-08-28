@@ -2,19 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
-import { Register } from "../../../controllers/Inspection/RegisterControllers/Register"; // Ajusta la ruta según sea necesario
+import { Register } from "../../../controllers/Inspection/RegisterControllers/Register";
 
-/**
- * RegisterForm Component
- * El componente RegisterForm se encarga de manejar la estructura del formulario, 
- * ademas de enviar el submit a la api de la consulta para guardar un nuevo usuario,
- * tambien redirije a el componente login
- *
- */
 function RegisterForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
+    cedula: "",
     email: "",
     password: "",
   });
@@ -31,29 +25,26 @@ function RegisterForm() {
     });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+
     try {
       const response = await Register(formData);
       if (response) {
-        const Toast = Swal.mixin({
+        Swal.fire({
+          icon: "success",
+          title: "Registro de Usuario Exitoso",
           toast: true,
           position: "top-end",
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          }
         });
-        Toast.fire({
-          icon: "success",
-          title: "Registro de Usuario Exitoso."
-        });    
-        navigate("/")
+        navigate("/");
       } else {
-        setError("Error al registrarse");
+        setError("Cedula ya registrada");
       }
     } catch (error) {
       setError(error.message || "Error al registrarse");
@@ -62,14 +53,21 @@ function RegisterForm() {
 
   return (
     <div className="p-5 rounded-lg shadow-md md:w-full w-max-w-md border-dotted border-2 border-gray-400">
-      <h2 className="md:text-xl text-orange-600 mb-6 font-extrabold">
-        NUEVO USUARIO
-      </h2>
+      <h2 className="md:text-xl text-orange-600 mb-6 font-extrabold">NUEVO USUARIO</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="pl-2 text-sm block text-gray-700 italic font-bold">
-            Correo Electrónico:
-          </label>
+          <label className="pl-2 text-sm block text-gray-700 italic font-bold">Cedula:</label>
+          <input
+            type="number"
+            name="cedula"
+            value={formData.cedula}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-full border-blue-700 focus:outline-none focus:border-gray-300"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="pl-2 text-sm block text-gray-700 italic font-bold">Correo Electrónico:</label>
           <input
             type="email"
             name="email"
@@ -80,9 +78,7 @@ function RegisterForm() {
           />
         </div>
         <div className="mb-4 relative">
-          <label className="pl-2 text-sm block text-gray-700 italic font-bold">
-            Contraseña:
-          </label>
+          <label className="pl-2 text-sm block text-gray-700 italic font-bold">Contraseña:</label>
           <input
             type={showPassword ? "text" : "password"}
             name="password"
@@ -97,15 +93,9 @@ function RegisterForm() {
             onClick={togglePasswordVisibility}
           >
             {showPassword ? (
-              <EyeOffIcon
-                className="h-6 w-6 text-gray-500 hover:text-gray-700"
-                aria-hidden="true"
-              />
+              <EyeOffIcon className="h-6 w-6 text-gray-500 hover:text-gray-700" aria-hidden="true" />
             ) : (
-              <EyeIcon
-                className="h-6 w-6 text-gray-500 hover:text-gray-700"
-                aria-hidden="true"
-              />
+              <EyeIcon className="h-6 w-6 text-gray-500 hover:text-gray-700" aria-hidden="true" />
             )}
           </button>
         </div>

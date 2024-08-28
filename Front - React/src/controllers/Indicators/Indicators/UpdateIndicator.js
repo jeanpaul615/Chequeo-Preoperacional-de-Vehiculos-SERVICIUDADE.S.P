@@ -5,6 +5,7 @@ const token = localStorage.getItem("access_token");
 
 export const UpdateIndicator = async (data) => {
   try {
+    console.log(data);
     const response = await axios.post(
       "http://localhost:8000/indicators/updateindicator",
       {

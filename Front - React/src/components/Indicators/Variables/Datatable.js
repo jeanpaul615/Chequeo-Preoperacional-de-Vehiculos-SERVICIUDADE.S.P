@@ -64,9 +64,18 @@ const DataTableVariable = () => {
         },
       ],
       responsive: true,
-      paging: true,
-      searching: true,
+      destroy: true,
+      scrollX: true,
+      columnDefs: [
+        { width: "5%", targets: 0 }, 
+        { width: "10%", targets: 1 }, 
+        { width: "5%", targets: 2 }, 
+        { width: "10%", targets: 3 }, 
+        { width: "5%", targets: 4 }, 
+        { width: "5%", targets: 5 }
+      ],
     });
+  
 
     // Destroy DataTable on unmount
     return () => {
@@ -109,17 +118,17 @@ const DataTableVariable = () => {
               className="display w-full table-auto border-collapse"
               ref={tableRef}
             >
-              <thead className="bg-gray-800 text-white">
+              <thead className="bg-gray-800 text-white text-left">
                 <tr>
                   <th className="px-4 py-2">Id variable</th>
                   <th className="px-4 py-2">Nombre Variable</th>
                   <th className="px-4 py-2">Id Indicador Relacionado</th>
                   <th className="px-4 py-2">Indicador Relacionado</th>
                   <th className="px-4 py-2">Valor</th>
-                  <th className="px-4 py-2">Periodo</th>
+                  <th className="">Periodo</th>
                 </tr>
               </thead>
-              <tbody className="bg-white text-gray-700"></tbody>
+              <tbody className="text-left bg-white text-gray-600 font-medium"></tbody>
             </table>
           </div>
         </div>

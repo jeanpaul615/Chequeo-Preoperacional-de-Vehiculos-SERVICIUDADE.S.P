@@ -11,12 +11,6 @@ import ModalUpdate from "./ModalUpdate";
 import { DeleteIndicator } from "../../../controllers/Indicators/Indicators/DeleteIndicator";
 import Swal from "sweetalert2";
 
-/**
- * DatatableIndicators Component
- * This component is responsible for displaying indicators, and it also includes a component that provides buttons
- * to filter the table data. It has a button linked to a modal for adding indicator records.
- */
-
 const DataTableIndicators = () => {
   const tableRef = useRef();
   const [data, setData] = useState([]);
@@ -49,6 +43,7 @@ const DataTableIndicators = () => {
     const dataTable = $(tableElement).DataTable({
       data: filteredData,
       columns: [
+        { title: "ID Registro", data: "id_registro" },
         { title: "ID Indicador", data: "id_indicador" },
         { title: "Nombre Indicador", data: "nombre_indicador" },
         { title: "Frecuencia", data: "frecuencia" },
@@ -73,10 +68,10 @@ const DataTableIndicators = () => {
           data: null,
           render: function (data, type, row) {
             return `
-              <button type="button" class="hover:text-white bg-gray-100 hover:bg-blue-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2" data-id="${row.id_indicador}">
+              <button type="button" class="hover:text-white bg-gray-100 hover:bg-blue-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2" data-id="${row.id_registro}" data-periodo="${row.periodo_inicio}">
                 Actualizar
               </button>
-              <button type="button" class="hover:text-white bg-gray-100 hover:bg-red-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2" data-id="${row.id_indicador}">
+              <button type="button" class="hover:text-white bg-gray-100 hover:bg-red-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2" data-id="${row.id_registro}">
                 Eliminar
               </button>
             `;
@@ -84,31 +79,40 @@ const DataTableIndicators = () => {
         },
       ],
       responsive: true,
-      paging: true,
-      searching: true,
+      destroy: true,
+      scrollX: true,
+      columnDefs: [
+        { width: "5%", targets: 0 }, 
+        { width: "5%", targets: 1 }, 
+        { width: "10%", targets: 2 }, 
+        { width: "1%", targets: 3 }, 
+        { width: "1%", targets: 4 }, 
+        { width: "5%", targets: 5 },
+        { width: "5%", targets: 6 },
+
+      ],
     });
 
     $(tableElement).on("click", "button", function () {
       const id = $(this).data("id");
+
       const action = $(this).text().trim();
 
-      const row = data.find((item) => item.id_indicador === id);
-
-      console.log("Selected row data:", row); // Log row data to check its structure
+      const row = data.find((item) => item.id_registro === id);
 
       if (action === "Actualizar") {
-        setSelectedIndicator(row);
+        setSelectedIndicator({ ...row }); 
         setModalUpdateIsOpen(true);
       } else if (action === "Eliminar") {
         Swal.fire({
-          title: '¿Estás seguro?',
+          title: "¿Estás seguro?",
           text: "No podrás revertir esto!",
-          icon: 'warning',
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Sí, eliminar!',
-          cancelButtonText: 'Cancelar'
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí, eliminar!",
+          cancelButtonText: "Cancelar",
         }).then((result) => {
           if (result.isConfirmed) {
             if (row) {
@@ -118,7 +122,11 @@ const DataTableIndicators = () => {
                 }
               });
             } else {
-              Swal.fire("Error", "No se encontró el dato para eliminar.", "error");
+              Swal.fire(
+                "Error",
+                "No se encontró el dato para eliminar.",
+                "error"
+              );
             }
           }
         });
@@ -179,7 +187,7 @@ const DataTableIndicators = () => {
               className="display w-full table-auto border-collapse"
               ref={tableRef}
             >
-              <thead className="bg-gray-800 text-white">
+              <thead className="bg-gray-800 text-white text-right">
                 <tr>
                   <th className="px-4 py-2">Id_indicador</th>
                   <th className="px-4 py-2">Nombre Indicador</th>
@@ -189,7 +197,7 @@ const DataTableIndicators = () => {
                   <th className="px-4 py-2">Opciones</th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody className="text-right bg-white text-gray-600 font-medium"></tbody>
             </table>
           </div>
         </div>
@@ -197,10 +205,10 @@ const DataTableIndicators = () => {
 
       <InputModal isOpen={modalIsOpen} onRequestClose={closeModal} />
       <ModalUpdate
-          isOpen={modalUpdateIsOpen}
-          onRequestClose={() => setModalUpdateIsOpen(false)}
-          indicator={selectedIndicator}
-        />
+        isOpen={modalUpdateIsOpen}
+        onRequestClose={() => setModalUpdateIsOpen(false)}
+        indicator={selectedIndicator}
+      />
     </div>
   );
 };

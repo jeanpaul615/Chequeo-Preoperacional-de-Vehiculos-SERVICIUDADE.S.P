@@ -83,7 +83,7 @@ const ModalUpdate = ({ isOpen, onRequestClose, indicator }) => {
   if (!isOpen) return null;
 
   const filteredKeys = Object.keys(formData).filter(
-    (key) => key !== "Estado" && key !== "nombre_indicador"
+    (key) => key !== "Estado" && key !== "nombre_indicador" && key !== "id_registro"
   );
 
   return (
@@ -138,7 +138,7 @@ const ModalUpdate = ({ isOpen, onRequestClose, indicator }) => {
                 />
               ) : key === "frecuencia" ? (
                 <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-700 cursor-not-allowed"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-700"
                   value={formData[key] || ""}
                   name={key}
                   required

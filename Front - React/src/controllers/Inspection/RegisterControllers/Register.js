@@ -19,9 +19,9 @@ export const Register = async (registerData) => {
     return response.data;
   } catch (error) {
     Swal.fire(
-      "Error al autenticar",
+      "Error al registrar",
       error.response?.data?.message ||
-        "Ocurrió un error durante la autenticación.",
+        "Ocurrió un error durante el registro.",
       "error"
     );
     return null;

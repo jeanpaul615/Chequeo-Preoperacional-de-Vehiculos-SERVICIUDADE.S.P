@@ -37,7 +37,6 @@ function LoginForm() {
       if (response && response.access_token) {
         navigate("/dashboard");
       } else {
-        setError("Token de acceso no recibido");
         navigate("/");
       }
 
