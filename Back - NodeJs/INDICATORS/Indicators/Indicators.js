@@ -19,7 +19,7 @@ const Indicator = {
   getAllIndicators: (callback) => {
     const query = `
             SELECT 
-                id_indicador, nombre_indicador, frecuencia, valor, periodo_inicio 
+                id_registro, id_indicador, nombre_indicador, frecuencia, valor, periodo_inicio 
             FROM 
                 indicadores 
             INNER JOIN 

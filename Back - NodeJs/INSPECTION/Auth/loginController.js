@@ -1,17 +1,28 @@
 const Login = require('./Login');
 
 exports.register = (req, res) => {
-    const { email, password, role, status } = req.body;
+    const { cedula, email, password, role, status } = req.body;
 
-    if (!email || !password) {
+    if (!cedula || !email || !password) {
         return res.status(400).json({ message: 'Todos los campos son obligatorios' });
     }
 
-    Login.register({ email, password, role, status }, (err, result) => {
+    // Verificar si la cédula ya existe
+    Login.checkCedula(cedula, (err, exists) => {
         if (err) {
             return res.status(500).json({ message: 'Error en el servidor' });
         }
-        res.status(201).json({ message: 'Usuario registrado exitosamente' });
+        if (exists) {
+            return res.status(409).json({ message: 'La cédula ya está registrada' });
+        }
+
+        // Registrar el nuevo usuario si la cédula no existe
+        Login.register({ cedula, email, password, role, status }, (err, result) => {
+            if (err) {
+                return res.status(500).json({ message: 'Error en el servidor' });
+            }
+            res.status(201).json({ message: 'Usuario registrado exitosamente' });
+        });
     });
 };
 

@@ -2,9 +2,18 @@ const db = require('.././../config/db/connectioninspeccion');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-
 const User = {
-    register: ({ email, password }, callback) => {
+    checkCedula: (cedula, callback) => {
+        const checkCedulaQuery = 'SELECT * FROM user WHERE cedula = ?';
+        db.query(checkCedulaQuery, [cedula], (err, result) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, result.length > 0); // Retorna true si la cédula existe
+        });
+    },
+
+    register: ({ cedula, email, password }, callback) => {
         // Verificar si el email ya está registrado
         const checkUserQuery = 'SELECT * FROM user WHERE email = ?';
         db.query(checkUserQuery, [email], (err, result) => {
@@ -22,8 +31,8 @@ const User = {
                 }
 
                 // Insertar el nuevo usuario en la base de datos con status = 1 y role = 'USER'
-                const insertUserQuery = 'INSERT INTO user (email, password, role, status) VALUES (?, ?, ?, ?)';
-                db.query(insertUserQuery, [email, hashedPassword, 'CONDUCTOR', 1], (err, result) => {
+                const insertUserQuery = 'INSERT INTO user (cedula, email, password, role, status) VALUES (?, ?, ?, ?, ?)';
+                db.query(insertUserQuery, [cedula, email, hashedPassword, 'CONDUCTOR', 1], (err, result) => {
                     if (err) {
                         return callback(err, null);
                     }
@@ -32,6 +41,7 @@ const User = {
             });
         });
     },
+
     login: (email, password, callback) => {
         const consult = 'SELECT * FROM user WHERE email = ?';
 

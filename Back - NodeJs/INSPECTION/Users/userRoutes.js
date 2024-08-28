@@ -4,5 +4,9 @@ const usersController = require('./userController'); // Asegúrate de que la rut
 
 // Ruta para obtener todos los vehículos
 router.get('/', usersController.getAllUsers);
+router.get('/getuser', usersController.getUsers);
+router.put('/updateuser', usersController.UpdateUser);
+router.post('/deleteuser', usersController.DeleteUser);
+
 
 module.exports = router;
