@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost
--- Tiempo de generación: 18-07-2024 a las 22:29:05
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 29-08-2024 a las 02:11:48
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `indicadores` (
   `id_indicador` int(10) UNSIGNED NOT NULL,
-  `nombre` varchar(100) NOT NULL,
+  `nombre_indicador` varchar(100) NOT NULL,
   `frecuencia` enum('anual','semestral','trimestral','mensual') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -37,7 +37,7 @@ CREATE TABLE `indicadores` (
 -- Volcado de datos para la tabla `indicadores`
 --
 
-INSERT INTO `indicadores` (`id_indicador`, `nombre`, `frecuencia`) VALUES
+INSERT INTO `indicadores` (`id_indicador`, `nombre_indicador`, `frecuencia`) VALUES
 (1, 'Indicador Siniestros Viales TSV', 'anual'),
 (2, 'Riesgos de seguridad vial identificados RSVI', 'anual'),
 (3, 'Gestion de Riesgos Viales GRV', 'anual'),
@@ -48,7 +48,10 @@ INSERT INTO `indicadores` (`id_indicador`, `nombre`, `frecuencia`) VALUES
 (8, 'Inspecciones Diarias preoperacionales IDP', 'mensual'),
 (9, 'Cumplimiento plan de mantenimiento preventivo de vehículos CPMPV', 'trimestral'),
 (10, 'Cumplimiento Plan de formación en seguridad vial CPFSV', 'anual'),
-(11, 'Cobertura Plan de formación en seguridad vial CPFSV', 'anual');
+(11, 'Cobertura Plan de formación en seguridad vial CPFSV', 'anual'),
+(12, 'Costo Siniestros Viales Por Nivel De Perdida', 'trimestral'),
+(13, 'No conformidades auditorias Cerradas\r\n', 'anual'),
+(14, 'Exceso de jornadas laborales\r\n', 'mensual');
 
 -- --------------------------------------------------------
 
@@ -60,26 +63,20 @@ CREATE TABLE `registro_indicadores` (
   `id_registro` int(10) UNSIGNED NOT NULL,
   `indicador_id` int(10) UNSIGNED NOT NULL,
   `valor` decimal(10,2) NOT NULL,
-  `periodo_inicio` date NOT NULL,
-  `periodo_fin` date NOT NULL
+  `periodo_inicio` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `registro_indicadores`
 --
 
-INSERT INTO `registro_indicadores` (`id_registro`, `indicador_id`, `valor`, `periodo_inicio`, `periodo_fin`) VALUES
-(1, 1, 8.87, '2024-01-01', '2024-12-31'),
-(2, 2, -4.00, '2024-01-01', '2024-12-31'),
-(3, 3, 2.00, '2024-01-01', '2024-12-31'),
-(4, 4, 82.61, '2024-01-01', '2024-06-30'),
-(5, 5, 0.00, '2024-01-01', '2024-06-30'),
-(6, 6, 44.44, '2024-01-01', '2024-06-30'),
-(7, 7, 0.59, '2024-01-01', '2024-01-31'),
-(8, 8, 46.81, '2024-01-01', '2024-01-31'),
-(9, 9, 58.82, '2024-01-01', '2024-03-31'),
-(10, 10, 100.00, '2024-01-01', '2024-12-31'),
-(11, 11, 63.19, '2024-01-01', '2024-12-31');
+INSERT INTO `registro_indicadores` (`id_registro`, `indicador_id`, `valor`, `periodo_inicio`) VALUES
+(17, 1, 10.00, '2025-01-07'),
+(18, 1, 10.00, '2026-01-06'),
+(19, 1, 10.00, '2027-01-01'),
+(20, 1, 10.00, '2024-01-01'),
+(21, 1, 10.00, '2021-01-01'),
+(22, 1, 12.00, '2020-01-01');
 
 -- --------------------------------------------------------
 
@@ -91,37 +88,81 @@ CREATE TABLE `valor_variables` (
   `id_valor` int(10) UNSIGNED NOT NULL,
   `indicador_id` int(10) UNSIGNED NOT NULL,
   `variable_id` int(10) UNSIGNED NOT NULL,
-  `valor` decimal(10,2) NOT NULL
+  `valor` decimal(10,2) NOT NULL,
+  `periodo` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `valor_variables`
 --
 
-INSERT INTO `valor_variables` (`id_valor`, `indicador_id`, `variable_id`, `valor`) VALUES
-(1, 1, 1, 10.00),
-(2, 1, 2, 1000000.00),
-(3, 1, 3, 1128000.00),
-(4, 2, 4, 22.00),
-(5, 2, 5, 26.00),
-(6, 3, 6, 4.00),
-(7, 3, 7, 6.00),
-(8, 4, 8, 19.00),
-(9, 4, 9, 23.00),
-(10, 5, 10, 0.00),
-(11, 5, 11, 0.00),
-(12, 6, 12, 20.00),
-(13, 6, 13, 45.00),
-(14, 7, 14, 4.00),
-(15, 8, 15, 680.00),
-(16, 8, 16, 22.00),
-(17, 8, 17, 47.00),
-(18, 9, 18, 20.00),
-(19, 9, 19, 34.00),
-(20, 10, 20, 5.00),
-(21, 10, 21, 5.00),
-(22, 11, 22, 206.00),
-(23, 11, 23, 326.00);
+INSERT INTO `valor_variables` (`id_valor`, `indicador_id`, `variable_id`, `valor`, `periodo`) VALUES
+(1, 1, 1, 121.00, '2025-01-01'),
+(2, 1, 2, 12.00, '2025-01-01'),
+(3, 1, 3, 10.00, '2025-01-01'),
+(4, 1, 1, 12.00, '2026-01-01'),
+(5, 1, 2, 12.00, '2026-01-01'),
+(6, 1, 3, 12.00, '2026-01-01'),
+(7, 1, 1, 12.00, '2027-01-01'),
+(8, 1, 2, 12.00, '2027-01-01'),
+(9, 1, 3, 12.00, '2027-01-01'),
+(10, 1, 1, 12.00, '2024-01-01'),
+(11, 1, 2, 12.00, '2024-01-01'),
+(12, 1, 3, 12.00, '2024-01-01'),
+(13, 1, 1, 12.00, '2024-01-01'),
+(14, 1, 2, 12.00, '2024-01-01'),
+(15, 1, 3, 12.00, '2024-01-01'),
+(16, 1, 1, 12.00, '2025-01-01'),
+(17, 1, 2, 12.00, '2025-01-01'),
+(18, 1, 3, 12.00, '2025-01-01'),
+(19, 1, 1, 12.00, '2026-01-01'),
+(20, 1, 2, 12.00, '2026-01-01'),
+(21, 1, 3, 12.00, '2026-01-01'),
+(22, 1, 1, 12.00, '2023-01-01'),
+(23, 1, 3, 12.00, '2023-01-01'),
+(24, 1, 2, 12.00, '2023-01-01'),
+(25, 1, 1, 12.00, '2024-01-01'),
+(26, 1, 2, 12.00, '2024-01-01'),
+(27, 1, 3, 12.00, '2024-01-01'),
+(28, 1, 1, 1.00, '2024-01-26'),
+(29, 1, 2, 12.00, '2024-01-26'),
+(30, 1, 3, 10.00, '2024-01-26'),
+(31, 1, 1, 12.00, '2024-07-31'),
+(32, 1, 2, 12.00, '2024-07-31'),
+(33, 1, 3, 12.00, '2024-07-31'),
+(34, 1, 1, 12.00, '2024-08-01'),
+(35, 1, 2, 12.00, '2024-08-01'),
+(36, 1, 3, 12.00, '2024-08-01'),
+(37, 1, 1, 12.00, '2024-09-03'),
+(38, 1, 2, 100.00, '2024-09-03'),
+(39, 1, 3, 1.00, '2024-09-03'),
+(40, 1, 1, 12.00, '2024-10-08'),
+(41, 1, 2, 1.00, '2024-10-08'),
+(42, 1, 3, 1.00, '2024-10-08'),
+(43, 1, 1, 12.00, '2024-11-11'),
+(44, 1, 2, 1.00, '2024-11-11'),
+(45, 1, 3, 1.00, '2024-11-11'),
+(46, 1, 1, 12.00, '2024-01-09'),
+(47, 1, 2, 12.00, '2024-01-09'),
+(48, 1, 3, 12.00, '2024-01-09'),
+(49, 1, 1, 12.00, '2025-01-07'),
+(50, 1, 2, 12.00, '2025-01-07'),
+(51, 1, 3, 12.00, '2025-01-07'),
+(52, 1, 1, 12.00, '2026-01-06'),
+(53, 1, 2, 12.00, '2026-01-06'),
+(54, 1, 3, 12.00, '2026-01-06'),
+(55, 1, 1, 12.00, '2027-01-01'),
+(56, 1, 2, 12.00, '2027-01-01'),
+(57, 1, 3, 12.00, '2027-01-01'),
+(58, 1, 1, 12.00, '2024-01-01'),
+(59, 1, 2, 12.00, '2024-01-01'),
+(60, 1, 3, 12.00, '2024-01-01'),
+(61, 1, 1, 12.00, '2021-01-01'),
+(62, 1, 2, 12.00, '2021-01-01'),
+(63, 1, 3, 12.00, '2021-01-01'),
+(64, 1, 1, 12.00, '2020-01-01'),
+(65, 1, 2, 12.00, '2020-01-01'),
+(66, 1, 3, 12.00, '2020-01-01');
 
 -- --------------------------------------------------------
 
@@ -132,38 +173,43 @@ INSERT INTO `valor_variables` (`id_valor`, `indicador_id`, `variable_id`, `valor
 CREATE TABLE `variables` (
   `id_variable` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(50) NOT NULL,
-  `codigo` varchar(10) NOT NULL,
-  `descripcion` text NOT NULL
+  `id_indicador` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `variables`
 --
 
-INSERT INTO `variables` (`id_variable`, `nombre`, `codigo`, `descripcion`) VALUES
-(1, 'Siniestros Viales', 'SV', 'Número de siniestros viales en el período (fatal, heridos, leves, graves, choques simples)'),
-(2, 'Constante K', 'K', 'Constante de 1,000,000 Km'),
-(3, 'Cantidad de Kilómetros', 'KM', 'Número de kilómetros recorridos por período, promedio de toda la flota'),
-(4, 'Riesgos Identificados (Inicio Año)', 'RI(ia)', 'Cantidad de riesgos identificados al inicio del año'),
-(5, 'Riesgos Identificados (Fin Año)', 'RI(fa)', 'Cantidad de riesgos identificados al final del año'),
-(6, 'Riesgos Viales Alto Valor (Inicio Año)', 'RVA(ia)', 'Cantidad de riesgos viales de alto valor identificados al inicio del año'),
-(7, 'Riesgos Viales Alto Valor (Fin Año)', 'RVA(fa)', 'Cantidad de riesgos viales de alto valor identificados al final del año'),
-(8, 'Metas Alcanzadas', 'MA', 'Número de metas alcanzadas o logradas en el PESV por período'),
-(9, 'Total Metas Proyectadas', 'TM', 'Total de metas proyectadas'),
-(10, 'Actividades Ejecutadas Plan', 'AEPlan', 'Número de actividades ejecutadas en el plan anual de trabajo por semestre'),
-(11, 'Actividades Programadas Plan', 'APPlan', 'Número total de actividades programadas en el plan anual de trabajo PESV por semestre'),
-(12, 'Vehículos Incluidos Programa', '#VIP', 'Número de vehículos incluidos en el programa de gestión de la velocidad (propios, terceros o contratados) utilizados permanentemente'),
-(13, 'Vehículos Desplazamientos Mes', '#VDL', 'Número de vehículos utilizados para desplazamientos por mes'),
-(14, 'Desplazamientos Laborales Exceso Velocidad', '#DLEV', 'Número diario de desplazamientos laborales con exceso de velocidad (casos en los que se superó el límite definido por la empresa) por mes'),
-(15, 'Total Desplazamientos Laborales', '#TDL', 'Número total de desplazamientos laborales por mes'),
-(16, 'Vehículos Inspeccionados Diariamente', '#VID', 'Número de vehículos inspeccionados diariamente'),
-(17, 'Vehículos Trabajando Diariamente', '#TV', 'Número de vehículos que trabajan diariamente'),
-(18, 'Mantenimiento Ejecutado', 'MEV', 'Número de actividades de mantenimiento preventivo ejecutadas por trimestre'),
-(19, 'Mantenimiento Programado', 'MPV', 'Número total de actividades de mantenimiento preventivo programadas por trimestre'),
-(20, 'Capacitaciones Seguridad Vial Ejecutadas', 'CESV', 'Número de capacitaciones en seguridad vial ejecutadas en el período'),
-(21, 'Capacitaciones Seguridad Vial Programadas', 'CPSV', 'Número de capacitaciones programadas en seguridad vial'),
-(22, 'Colaboradores Capacitados Seguridad Vial', 'NCCSV', 'Número de colaboradores capacitados en seguridad vial'),
-(23, 'Colaboradores Totales', 'CT', 'Número total de colaboradores de la empresa');
+INSERT INTO `variables` (`id_variable`, `nombre`, `id_indicador`) VALUES
+(1, 'Siniestros Viales', 1),
+(2, 'Constante K', 1),
+(3, 'Cantidad de Kilómetros', 1),
+(4, 'Riesgos Identificados (Inicio Año)', 2),
+(5, 'Riesgos Identificados (Fin Año)', 2),
+(6, 'Riesgos Viales Alto Valor (Inicio Año)', 3),
+(7, 'Riesgos Viales Alto Valor (Fin Año)', 3),
+(8, 'Metas Alcanzadas', 4),
+(9, 'Total Metas Proyectadas', 4),
+(10, 'Actividades Ejecutadas Plan de Trabajo', 5),
+(11, 'Actividades Programadas Plan de Trabajo', 5),
+(12, 'Vehículos Incluidos Programa de Gestion', 6),
+(13, 'Vehículos Desplazamientos Mes', 6),
+(14, 'Desplazamientos Laborales Exceso Velocidad', 7),
+(15, 'Total Desplazamientos Laborales', 7),
+(16, 'Vehículos Inspeccionados Diariamente', 8),
+(17, 'Vehículos Trabajando Diariamente', 8),
+(18, 'Mantenimiento Ejecutado', 9),
+(19, 'Mantenimiento Programado', 9),
+(20, 'Capacitaciones Seguridad Vial Ejecutadas', 10),
+(21, 'Capacitaciones Seguridad Vial Programadas', 10),
+(22, 'Colaboradores Capacitados Seguridad Vial', 11),
+(23, 'Colaboradores Totales', 11),
+(24, 'Costos Directos Siniestros Viales ', 12),
+(25, 'Costos Indirectos Siniestros Viales', 12),
+(26, 'Numero De Conformidades Identificadas', 13),
+(27, 'Numero Conformidades Gestionadas y Cerradas', 13),
+(28, 'Numero De Dias Excedidos Al Mes', 14),
+(29, 'Total De Dias Trabajados Al Mes', 14);
 
 --
 -- Índices para tablas volcadas
@@ -194,7 +240,8 @@ ALTER TABLE `valor_variables`
 -- Indices de la tabla `variables`
 --
 ALTER TABLE `variables`
-  ADD PRIMARY KEY (`id_variable`);
+  ADD PRIMARY KEY (`id_variable`),
+  ADD KEY `fk_indicador` (`id_indicador`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -204,25 +251,25 @@ ALTER TABLE `variables`
 -- AUTO_INCREMENT de la tabla `indicadores`
 --
 ALTER TABLE `indicadores`
-  MODIFY `id_indicador` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_indicador` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `registro_indicadores`
 --
 ALTER TABLE `registro_indicadores`
-  MODIFY `id_registro` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_registro` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `valor_variables`
 --
 ALTER TABLE `valor_variables`
-  MODIFY `id_valor` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_valor` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT de la tabla `variables`
 --
 ALTER TABLE `variables`
-  MODIFY `id_variable` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_variable` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- Restricciones para tablas volcadas
@@ -240,6 +287,12 @@ ALTER TABLE `registro_indicadores`
 ALTER TABLE `valor_variables`
   ADD CONSTRAINT `valor_variables_ibfk_1` FOREIGN KEY (`indicador_id`) REFERENCES `indicadores` (`id_indicador`),
   ADD CONSTRAINT `valor_variables_ibfk_2` FOREIGN KEY (`variable_id`) REFERENCES `variables` (`id_variable`);
+
+--
+-- Filtros para la tabla `variables`
+--
+ALTER TABLE `variables`
+  ADD CONSTRAINT `fk_indicador` FOREIGN KEY (`id_indicador`) REFERENCES `indicadores` (`id_indicador`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
