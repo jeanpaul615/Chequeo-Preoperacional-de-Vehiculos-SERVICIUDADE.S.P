@@ -19,7 +19,7 @@ export const UpdateDriver = async (data) => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
           },
         }
       ),
@@ -33,7 +33,7 @@ export const UpdateDriver = async (data) => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
           },
         }
       ),

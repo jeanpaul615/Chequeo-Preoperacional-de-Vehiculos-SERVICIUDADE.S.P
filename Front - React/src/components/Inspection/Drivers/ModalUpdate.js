@@ -110,6 +110,7 @@ const ModalUpdate = ({ isOpen, onRequestClose, driver }) => {
                   onChange={handleChange}
                   className="md:text-base text-xs w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-700"
                 >
+                  <option value=" ">Seleccione una opción</option>
                   <option value="1">Activo</option>
                   <option value="0">Inactivo</option>
                 </select>
