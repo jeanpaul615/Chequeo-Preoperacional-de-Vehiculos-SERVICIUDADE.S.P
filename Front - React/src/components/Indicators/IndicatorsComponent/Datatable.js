@@ -9,6 +9,7 @@ import InputModal from "./InputModal";
 import FilterControls from "./FilterControls";
 import ModalUpdate from "./ModalUpdate";
 import { DeleteIndicator } from "../../../controllers/Indicators/Indicators/DeleteIndicator";
+import ContainerStats from "./Stats/ContainerStats";
 import Swal from "sweetalert2";
 
 const DataTableIndicators = () => {
@@ -17,6 +18,7 @@ const DataTableIndicators = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalUpdateIsOpen, setModalUpdateIsOpen] = useState(false);
+  const [modalStatsIsOpen, setModalStatsIsOpen] = useState(false);
   const [selectedIndicator, setSelectedIndicator] = useState(null);
 
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -82,14 +84,13 @@ const DataTableIndicators = () => {
       destroy: true,
       scrollX: true,
       columnDefs: [
-        { width: "5%", targets: 0 }, 
-        { width: "5%", targets: 1 }, 
-        { width: "10%", targets: 2 }, 
-        { width: "1%", targets: 3 }, 
-        { width: "1%", targets: 4 }, 
+        { width: "5%", targets: 0 },
+        { width: "5%", targets: 1 },
+        { width: "10%", targets: 2 },
+        { width: "1%", targets: 3 },
+        { width: "1%", targets: 4 },
         { width: "5%", targets: 5 },
         { width: "5%", targets: 6 },
-
       ],
     });
 
@@ -101,7 +102,7 @@ const DataTableIndicators = () => {
       const row = data.find((item) => item.id_registro === id);
 
       if (action === "Actualizar") {
-        setSelectedIndicator({ ...row }); 
+        setSelectedIndicator({ ...row });
         setModalUpdateIsOpen(true);
       } else if (action === "Eliminar") {
         Swal.fire({
@@ -160,6 +161,13 @@ const DataTableIndicators = () => {
   const openModal = () => {
     setModalIsOpen(true);
   };
+  const HandleStatsOpen = () => {
+    setModalStatsIsOpen(true);
+  };
+
+  const HandleStatsClose = () => {
+    setModalStatsIsOpen(false);
+  };
 
   const closeModal = () => {
     setModalIsOpen(false);
@@ -171,6 +179,26 @@ const DataTableIndicators = () => {
       <Sidebar />
       <div className="pt-8 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
         <Navbar Title={"Indicadores"} />
+        <div className="flex justify-end items-center gap-4">
+          <button
+            onClick={HandleStatsOpen}
+            className="select-none font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 px-4 rounded-lg bg-gradient-to-tr from-gray-900 to-gray-800 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85] flex items-center gap-3"
+            type="button"
+          >
+            <svg
+              className="w-5 h-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="#ffffff"
+                d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64L0 400c0 44.2 35.8 80 80 80l400 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L80 416c-8.8 0-16-7.2-16-16L64 64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"
+              />
+            </svg>
+            Ver estadísticas
+          </button>
+        </div>
+
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <div className="p-4">
             <FilterControls
@@ -209,6 +237,12 @@ const DataTableIndicators = () => {
         onRequestClose={() => setModalUpdateIsOpen(false)}
         indicator={selectedIndicator}
       />
+      {modalStatsIsOpen && (
+        <ContainerStats
+          closeModal={HandleStatsClose}
+          indicators={data} // Pass the entire data to the modal
+        />
+      )}
     </div>
   );
 };
