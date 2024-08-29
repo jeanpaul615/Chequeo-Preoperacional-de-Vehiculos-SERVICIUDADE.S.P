@@ -8,20 +8,27 @@ exports.register = (req, res) => {
     }
 
     // Verificar si la cédula ya existe
-    Login.checkCedula(cedula, (err, exists) => {
+    Login.checkCedula(cedula, (err, cedulaExists) => {
         if (err) {
             return res.status(500).json({ message: 'Error en el servidor' });
         }
-        if (exists) {
+        if (cedulaExists) {
             return res.status(409).json({ message: 'La cédula ya está registrada' });
         }
 
-        // Registrar el nuevo usuario si la cédula no existe
-        Login.register({ cedula, email, password, role, status }, (err, result) => {
-            if (err) {
-                return res.status(500).json({ message: 'Error en el servidor' });
+        // Verificar si el email ya existe
+        Login.checkEmail(email, (err, emailExists) => {
+            if (emailExists) {
+                return res.status(409).json({ message: 'El email ya está registrado' });
             }
-            res.status(201).json({ message: 'Usuario registrado exitosamente' });
+
+            // Registrar el nuevo usuario si la cédula y el email no existen
+            Login.register({ cedula, email, password, role, status }, (err, result) => {
+                if (err) {
+                    return res.status(500).json({ message: 'Error en el servidor' });
+                }
+                res.status(201).json({ message: 'Usuario registrado exitosamente' });
+            });
         });
     });
 };

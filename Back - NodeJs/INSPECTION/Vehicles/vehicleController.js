@@ -7,7 +7,7 @@ const getAllVehicles = (req, res) => {
             console.error('Error al obtener vehículos:', err);
             return res.status(500).json({ error: 'Error en el servidor' });
         }
-        res.json(vehicles);
+        return res.json(vehicles);
     });
 };
 
@@ -15,57 +15,45 @@ const getAllVehicles = (req, res) => {
 const createVehicle = (req, res) => {
     const newVehicle = req.body;
     Vehicle.createVehicle(newVehicle, (err, result) => {
-
         if (err) {
             console.error('Error al crear vehículo:', err);
             return res.status(500).json({ error: 'Error en el servidor' });
         }
-        res.status(201).json({ message: 'Vehículo creado con éxito', vehicleId: result.insertId });
+        return res.status(201).json({ message: 'Vehículo creado con éxito', vehicleId: result.insertId });
     });
 };
 
-// Controlador para crear un nuevo vehículo
+// Controlador para actualizar un vehículo
 const updateVehicle = (req, res) => {
-    const newVehicle = req.body;
-    Vehicle.updateVehicle(newVehicle, (err, result) => {
-
+    const updatedVehicle = req.body;
+    Vehicle.updateVehicle(updatedVehicle, (err, result) => {
         if (err) {
-            console.error('Error al crear vehículo:', err);
+            console.error('Error al actualizar vehículo:', err);
             return res.status(500).json({ error: 'Error en el servidor' });
         }
-        res.status(201).json({ message: 'Vehículo creado con éxito', vehicleId: result.insertId });
+        return res.status(200).json({ message: 'Vehículo actualizado con éxito', affectedRows: result.affectedRows });
     });
 };
 
+// Controlador para eliminar un vehículo
 const DeleteVehicle = (req, res) => {
     const { vehicle_id } = req.body;
   
-    if(!vehicle_id){
-        res.status(401).json({ error: "Todos los campos son obligatorios" });
-    }
-    const DeleteVehicleData = {
-        vehicle_id
+    if (!vehicle_id) {
+        return res.status(400).json({ error: "El ID del vehículo es obligatorio" });
     }
   
-    Vehicle.DeleteVehicle(DeleteVehicleData, (err, result) => {
-        if(err){
-            console.error("Error al eliminar el vehiculo:", err);
+    Vehicle.DeleteVehicle({ vehicle_id }, (err, result) => {
+        if (err) {
+            console.error("Error al eliminar el vehículo:", err);
             return res.status(500).json({ error: "Error en el servidor" });
         }
-      
-          res
-            .status(200)
-            .json({
-              message: "Vehiculo eliminado con éxito",
-              affectedRows: result.affectedRows,
-            });
-  
+        return res.status(200).json({
+            message: "Vehículo eliminado con éxito",
+            affectedRows: result.affectedRows,
+        });
     });
-  }
-
-
-
-
+};
 
 module.exports = {
     getAllVehicles,

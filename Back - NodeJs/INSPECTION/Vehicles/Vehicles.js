@@ -12,7 +12,14 @@ const Vehicle = {
     },
 
     createVehicle: (newVehicle, callback) => {
-        const query = 'INSERT INTO vehicle (type, license_plate, brand, area, soat_until, rtm_until, seguro_contractual_until, seguro_extracontractual_until, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())';
+        const query = `
+            INSERT INTO vehicle (
+                type, license_plate, brand, area, 
+                soat_until, rtm_until, 
+                seguro_contractual_until, seguro_extracontractual_until, 
+                created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`;
+        
         const values = [
             newVehicle.type,
             newVehicle.license_plate,
@@ -23,6 +30,7 @@ const Vehicle = {
             newVehicle.seguro_contractual_until,
             newVehicle.seguro_extracontractual_until
         ];
+        
         db.query(query, values, (err, results) => {
             if (err) {
                 return callback(err, null);
@@ -39,6 +47,7 @@ const Vehicle = {
             seguro_contractual_until = ?, seguro_extracontractual_until = ?, 
             updated_at = NOW()
         WHERE vehicle_id = ?`;
+        
         const values = [
             updateVehicle.type,
             updateVehicle.license_plate,
@@ -50,6 +59,7 @@ const Vehicle = {
             updateVehicle.seguro_extracontractual_until,
             updateVehicle.vehicle_id
         ];
+        
         db.query(query, values, (err, results) => {
             if (err) {
                 return callback(err, null);
@@ -59,20 +69,16 @@ const Vehicle = {
     },
 
     DeleteVehicle: (data, callback) => {
-        // Define las consultas para eliminar registros de ambas tablas
         const query = `DELETE FROM vehicle WHERE vehicle_id = ?`;
-      
         const { vehicle_id } = data;
       
-        // Primero elimina de la tabla 'driver'
         db.query(query, [vehicle_id], (err, results) => {
-          if (err) {
-            return callback(err, null);
-          }
+            if (err) {
+                return callback(err, null);
+            }
             callback(null, results);
-          });
-        },
-      
+        });
+    },
 };
 
 module.exports = Vehicle;

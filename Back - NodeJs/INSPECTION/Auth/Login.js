@@ -13,31 +13,30 @@ const User = {
         });
     },
 
-    register: ({ cedula, email, password }, callback) => {
-        // Verificar si el email ya está registrado
-        const checkUserQuery = 'SELECT * FROM user WHERE email = ?';
-        db.query(checkUserQuery, [email], (err, result) => {
+    checkEmail: (email, callback) => {
+        const checkEmailQuery = 'SELECT * FROM user WHERE email = ?';
+        db.query(checkEmailQuery, [email], (err, result) => {
             if (err) {
                 return callback(err, null);
             }
-            if (result.length > 0) {
-                return callback(null, { error: 'El email ya está registrado' });
+            callback(null, result.length > 0); // Retorna true si el email existe
+        });
+    },
+
+    register: ({ cedula, email, password }, callback) => {
+        // Cifrar la contraseña
+        bcrypt.hash(password, 10, (err, hashedPassword) => {
+            if (err) {
+                return callback(err, null);
             }
 
-            // Cifrar la contraseña
-            bcrypt.hash(password, 10, (err, hashedPassword) => {
+            // Insertar el nuevo usuario en la base de datos con status = 1 y role = 'CONDUCTOR'
+            const insertUserQuery = 'INSERT INTO user (cedula, email, password, role, status) VALUES (?, ?, ?, ?, ?)';
+            db.query(insertUserQuery, [cedula, email, hashedPassword, 'CONDUCTOR', 1], (err, result) => {
                 if (err) {
                     return callback(err, null);
                 }
-
-                // Insertar el nuevo usuario en la base de datos con status = 1 y role = 'USER'
-                const insertUserQuery = 'INSERT INTO user (cedula, email, password, role, status) VALUES (?, ?, ?, ?, ?)';
-                db.query(insertUserQuery, [cedula, email, hashedPassword, 'CONDUCTOR', 1], (err, result) => {
-                    if (err) {
-                        return callback(err, null);
-                    }
-                    callback(null, { message: 'Usuario registrado exitosamente', userId: result.insertId });
-                });
+                callback(null, { message: 'Usuario registrado exitosamente', userId: result.insertId });
             });
         });
     },
