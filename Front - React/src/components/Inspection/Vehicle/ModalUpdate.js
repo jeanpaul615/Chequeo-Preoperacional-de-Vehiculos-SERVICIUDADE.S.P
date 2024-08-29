@@ -49,7 +49,8 @@ const ModalUpdate = ({ isOpen, onClose, vehicle }) => {
           text: "Los datos del vehículo se han actualizado correctamente.",
         });
         onClose(); 
-      } else {
+        window.location.reload();
+        } else {
         throw new Error("Error al actualizar el vehículo");
       }
     } catch (error) {
@@ -151,13 +152,17 @@ const ModalUpdate = ({ isOpen, onClose, vehicle }) => {
               )}
             </div>
           ))}
-          <button
-            type="submit"
-            className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm px-4 py-2 text-center transition ease-in-out duration-150"
-          >
-            Actualizar
-          </button>
+  <div className="col-span-2 flex justify-center mt-4">
+    <button
+      type="submit"
+      className="py-3 px-4 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm transition ease-in-out duration-150"
+    >
+      Actualizar
+    </button>
+  </div>
+
         </form>
+
       </div>
     </div>
   );

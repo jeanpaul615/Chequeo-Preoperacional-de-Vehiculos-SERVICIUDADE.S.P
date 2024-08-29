@@ -8,7 +8,7 @@ import ModalNewVehicle from './ModalNewVehicle';
 import ModalUpdate from './ModalUpdate';
 import Swal from 'sweetalert2';
 import { GetVehicles } from '../../../controllers/Inspection/DashboardControllers/Vehicle';
-import {DeleteVehicle} from '../../../controllers/Inspection/VehicleControllers/DeleteVehicle';
+import { DeleteVehicle } from '../../../controllers/Inspection/VehicleControllers/DeleteVehicle';
 
 // Función para formatear la fecha
 const formatDate = (dateString) => {
@@ -92,10 +92,10 @@ const DatatableVehicles = () => {
           data: null,
           render: function (data, type, row) {
             return `
-              <button type="button" class="btn-update  hover:bg-blue-600 text-blue-600 hover:text-white border border-gray-200 rounded-full text-sm px-2 py-1 me-2 mb-2">
+              <button type="button" class="btn-update  hover:text-white bg-gray-100 hover:bg-blue-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2">
                 Actualizar
               </button>
-              <button type="button" class="btn-delete  hover:bg-red-600 text-red-600 hover:text-white border border-gray-200 rounded-full text-sm px-2 py-1 me-2 mb-2">
+              <button type="button" class="btn-delete  hover:text-white bg-gray-100 hover:bg-red-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2">
                 Eliminar
               </button>
             `;
@@ -134,9 +134,11 @@ const DatatableVehicles = () => {
             cancelButtonText: "Cancelar",
           }).then((result) => {
             if (result.isConfirmed) {
+              console.log(rowData.vehicle_id);
               DeleteVehicle(rowData.vehicle_id).then((response) => {
                 if (response) {
-                  dataTable.ajax.reload(); // Refresca la tabla en lugar de recargar la página
+                  // Actualiza el estado local para reflejar los cambios en la tabla
+                  setData(prevData => prevData.filter(item => item.vehicle_id !== rowData.vehicle_id));
                 }
               }).catch(error => console.error('Error deleting vehicle:', error));
             }

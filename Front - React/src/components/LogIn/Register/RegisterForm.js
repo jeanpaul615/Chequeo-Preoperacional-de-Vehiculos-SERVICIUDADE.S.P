@@ -31,25 +31,28 @@ function RegisterForm() {
     setError(null);
 
     try {
-      const response = await Register(formData);
-      if (response) {
-        Swal.fire({
-          icon: "success",
-          title: "Registro de Usuario Exitoso",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-        });
-        navigate("/");
-      } else {
-        setError("Cedula ya registrada");
-      }
+        const response = await Register(formData);
+
+        if (response && response.status === 201) {  // Asumiendo que el código 201 indica éxito
+            Swal.fire({
+                icon: "success",
+                title: "Registro de Usuario Exitoso",
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+            navigate("/");
+        } else if (response && response.status === 409) {  // Código 409 para conflicto (cedula ya registrada)
+            setError("Cédula ya registrada");
+        } else {
+            setError("Error desconocido al registrarse");
+        }
     } catch (error) {
-      setError(error.message || "Error al registrarse");
+        setError(error.response?.data?.message || "Error al registrarse"); // Manejo de errores más detallado
     }
-  };
+};
 
   return (
     <div className="p-5 rounded-lg shadow-md md:w-full w-max-w-md border-dotted border-2 border-gray-400">

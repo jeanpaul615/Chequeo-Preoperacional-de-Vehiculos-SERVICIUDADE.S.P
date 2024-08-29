@@ -24,7 +24,7 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const newVehicleData = await NewVehicle(formData);
       if (newVehicleData) {
@@ -34,7 +34,9 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
           icon: 'success',
           confirmButtonText: 'OK'
         });
-        onClose(); // Cierra el modal si la operación fue exitosa
+
+        onClose();
+        window.location.reload();
       }
     } catch (error) {
       Swal.fire({
@@ -45,6 +47,7 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
       });
     }
   };
+  
 
   return (
     <div
