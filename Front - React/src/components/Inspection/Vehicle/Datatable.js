@@ -47,113 +47,113 @@ const DatatableVehicles = () => {
   }, []);
 
   useEffect(() => {
-    const tableElement = tableRef.current;
-
-    const dataTable = $(tableElement).DataTable({
-      data: data,
-      columns: [
-        { title: 'ID vehiculo', data: 'vehicle_id' },
-        { title: 'Tipo', data: 'type' },
-        { title: 'Placa', data: 'license_plate' },
-        { title: 'Marca', data: 'brand' },
-        { title: 'Area', data: 'area' },
-        {
-          title: 'Vigencia Soat',
-          data: 'soat_until',
-          render: (data) => formatDate(data),
-        },
-        {
-          title: 'Vigencia RTM',
-          data: 'rtm_until',
-          render: (data) => formatDate(data),
-        },
-        {
-          title: 'Seguro Contractual',
-          data: 'seguro_contractual_until',
-          render: (data) => formatDate(data),
-        },
-        {
-          title: 'Seguro Extracontractual',
-          data: 'seguro_extracontractual_until',
-          render: (data) => formatDate(data),
-        },
-        {
-          title: 'Fecha Creación',
-          data: 'created_at',
-          render: (data) => formatDate(data),
-        },
-        {
-          title: 'Fecha Actualización',
-          data: 'updated_at',
-          render: (data) => formatDate(data),
-        },
-        {
-          title: "Opciones",
-          data: null,
-          render: function (data, type, row) {
-            return `
-              <button type="button" class="btn-update  hover:text-white bg-gray-100 hover:bg-blue-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2">
-                Actualizar
-              </button>
-              <button type="button" class="btn-delete  hover:text-white bg-gray-100 hover:bg-red-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2">
-                Eliminar
-              </button>
-            `;
+    if (data.length > 0) {  // Verificar si hay datos antes de inicializar la tabla
+      const tableElement = tableRef.current;
+  
+      const dataTable = $(tableElement).DataTable({
+        data: data,
+        columns: [
+          { title: 'ID vehiculo', data: 'vehicle_id' },
+          { title: 'Tipo', data: 'type' },
+          { title: 'Placa', data: 'license_plate' },
+          { title: 'Marca', data: 'brand' },
+          { title: 'Area', data: 'area' },
+          {
+            title: 'Vigencia Soat',
+            data: 'soat_until',
+            render: (data) => formatDate(data),
           },
-        },
-      ],
-      responsive: true,
-      destroy: true,
-      paging: true,
-      searching: true,
-      ordering: true,
-      scrollX: true,
-      columnDefs: [
-        { width: '8%', targets: 0 },
-        { width: '10%', targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
-      ],
-    });
-
-    // Handle button clicks
-    $(tableElement).on('click', 'button', function () {
-      const button = $(this);
-      const rowData = dataTable.row(button.closest('tr')).data();
-
-      if (rowData) {
-        if (button.hasClass('btn-update')) {
-          handleEditClick(rowData);
-        } else if (button.hasClass('btn-delete')) {
-          Swal.fire({
-            title: "¿Estás seguro?",
-            text: "No podrás revertir esto!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Sí, eliminar!",
-            cancelButtonText: "Cancelar",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              console.log(rowData.vehicle_id);
-              DeleteVehicle(rowData.vehicle_id).then((response) => {
-                if (response) {
-                  // Actualiza el estado local para reflejar los cambios en la tabla
-                  setData(prevData => prevData.filter(item => item.vehicle_id !== rowData.vehicle_id));
-                }
-              }).catch(error => console.error('Error deleting vehicle:', error));
-            }
-          });
+          {
+            title: 'Vigencia RTM',
+            data: 'rtm_until',
+            render: (data) => formatDate(data),
+          },
+          {
+            title: 'Seguro Contractual',
+            data: 'seguro_contractual_until',
+            render: (data) => formatDate(data),
+          },
+          {
+            title: 'Seguro Extracontractual',
+            data: 'seguro_extracontractual_until',
+            render: (data) => formatDate(data),
+          },
+          {
+            title: 'Fecha Creación',
+            data: 'created_at',
+            render: (data) => formatDate(data),
+          },
+          {
+            title: 'Fecha Actualización',
+            data: 'updated_at',
+            render: (data) => formatDate(data),
+          },
+          {
+            title: "Opciones",
+            data: null,
+            render: function (data, type, row) {
+              return `
+                <button type="button" class="btn-update  hover:text-white bg-gray-100 hover:bg-blue-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2">
+                  Actualizar
+                </button>
+                <button type="button" class="btn-delete  hover:text-white bg-gray-100 hover:bg-red-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2">
+                  Eliminar
+                </button>
+              `;
+            },
+          },
+        ],
+        responsive: true,
+        destroy: true,
+        paging: true,
+        searching: true,
+        ordering: true,
+        scrollX: true,
+        columnDefs: [
+          { width: '8%', targets: 0 },
+          { width: '10%', targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+        ],
+      });
+  
+      // Handle button clicks
+      $(tableElement).on('click', 'button', function () {
+        const button = $(this);
+        const rowData = dataTable.row(button.closest('tr')).data();
+  
+        if (rowData) {
+          if (button.hasClass('btn-update')) {
+            handleEditClick(rowData);
+          } else if (button.hasClass('btn-delete')) {
+            Swal.fire({
+              title: "¿Estás seguro?",
+              text: "No podrás revertir esto!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Sí, eliminar!",
+              cancelButtonText: "Cancelar",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                DeleteVehicle(rowData.vehicle_id).then((response) => {
+                  if (response) {
+                    setData(prevData => prevData.filter(item => item.vehicle_id !== rowData.vehicle_id));
+                  }
+                }).catch(error => console.error('Error deleting vehicle:', error));
+              }
+            });
+          }
         }
-      }
-    });
-
-    return () => {
-      if ($.fn.DataTable.isDataTable(tableElement)) {
-        $(tableElement).DataTable().destroy();
-      }
-    };
+      });
+  
+      return () => {
+        if ($.fn.DataTable.isDataTable(tableElement)) {
+          $(tableElement).DataTable().destroy();
+        }
+      };
+    }
     // eslint-disable-next-line
-  }, [data]);
+  }, [data]);  
 
   const openUpdateModal = (vehicle) => {
     setSelectedVehicle(vehicle);
