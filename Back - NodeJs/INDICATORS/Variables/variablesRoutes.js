@@ -4,6 +4,7 @@ const variablesController = require('./variableController');
 
 // Ruta para obtener todos los indicadores
 router.get('/', variablesController.getAllVariables);
+router.get('/getvariables', variablesController.getVariables);
 router.get('/variablesbyid', variablesController.getVariablesById);
 router.post('/register', variablesController.registerVariable);
 

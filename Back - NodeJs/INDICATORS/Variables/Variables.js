@@ -24,6 +24,20 @@ const Variables = {
     });
   },
 
+
+    getVariables: (callback) => {
+      const query = `
+        SELECT * FROM variables 
+      `;
+  
+      db.query(query, (err, results) => {
+        if (err) {
+          return callback(err, null);
+        }
+        callback(null, results);
+      });
+    },
+
   // Obtener variables por ID
   getVariablesById: (id_indicador, callback) => {
     const query = 'SELECT * FROM variables WHERE id_indicador = ?'; // Asegúrate de que el nombre de la columna sea correcto

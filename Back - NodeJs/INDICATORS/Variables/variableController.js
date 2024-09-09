@@ -11,6 +11,18 @@ const getAllVariables = (req, res) => {
     });
 };
 
+
+const getVariables = (req, res) => {
+    Variable.getVariables((err, variables) => {
+        if (err) {
+            console.error('Error al obtener variables:', err);
+            return res.status(500).json({ error: 'Error en el servidor' });
+        }
+        res.json(variables);
+    });
+};
+
+
 const getVariablesById = (req, res) => {
     const valor_indicador = req.query.valor_indicador; // Obtiene valor_indicador de los parámetros de consulta
 
@@ -49,5 +61,5 @@ const registerVariable = (req, res) => {
 
 
 module.exports = {
-    getAllVariables, getVariablesById, registerVariable
+    getAllVariables, getVariablesById, registerVariable, getVariables
 };
