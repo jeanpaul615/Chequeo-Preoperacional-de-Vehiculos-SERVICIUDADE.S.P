@@ -112,13 +112,12 @@ export default function ContainerInspection({ formData, handleChange }) {
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
         toast.onmouseleave = Swal.resumeTimer;
-      }
+      },
     });
     Toast.fire({
       icon: "success",
-      title: "Sección Guardada Correctamente!"
+      title: "Sección Guardada Correctamente!",
     });
-    
   };
 
   /**
@@ -186,7 +185,7 @@ export default function ContainerInspection({ formData, handleChange }) {
               exit={{ scale: 0.8 }}
               style={{ maxHeight: "90vh", overflowY: "auto" }}
             >
-              <div className="space-y-4">
+              <div className="space-y-4 mt-8">
                 {/* Renderiza los componentes del grupo seleccionado */}
                 {componentGroups
                   .find((group) => group.id === selectedGroupId)
@@ -198,27 +197,60 @@ export default function ContainerInspection({ formData, handleChange }) {
                     />
                   ))}
               </div>
-              <div className="flex justify-end mt-2 rounded-md shadow-sm" role="group">
+              <div
+                className="flex justify-end mt-4 rounded-md shadow-sm"
+                role="group"
+              >
                 <button
+                  onClick={handleSave}
                   type="button"
-                  onClick={handleNext}
-                  className="px-4 py-2 text-sm font-medium text-gray-900 bg-blue-500 border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+                  class="text-white bg-[#0e7424] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 me-2 mb-2"
                 >
-                  Siguiente
+                  <svg className="mr-2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path
+                      fill="#ffffff"
+                      d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-242.7c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32L64 32zm0 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-64zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                    />
+                  </svg>
+                  Guardar
                 </button>
                 <button
+                  onClick={handleNext}
                   type="button"
-                  onClick={handleSave}
-                  className="px-4 py-2 text-sm font-medium text-gray-900 bg-green-500 border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+                  class="text-white bg-[#4e84f8] focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:focus:ring-[#050708]/50 hover:bg-[#050708]/30 me-2 mb-2"
                 >
-                  Guardar
+                  Siguiente
+                  <svg
+                    className="ml-2 w-4 h-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      fill="#ffffff"
+                      d="M307 34.8c-11.5 5.1-19 16.6-19 29.2l0 64-112 0C78.8 128 0 206.8 0 304C0 417.3 81.5 467.9 100.2 478.1c2.5 1.4 5.3 1.9 8.1 1.9c10.9 0 19.7-8.9 19.7-19.7c0-7.5-4.3-14.4-9.8-19.5C108.8 431.9 96 414.4 96 384c0-53 43-96 96-96l96 0 0 64c0 12.6 7.4 24.1 19 29.2s25 3 34.4-5.4l160-144c6.7-6.1 10.6-14.7 10.6-23.8s-3.8-17.7-10.6-23.8l-160-144c-9.4-8.5-22.9-10.6-34.4-5.4z"
+                    />
+                  </svg>
                 </button>
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="px-4 py-2 text-sm font-medium text-gray-900 bg-red-500 border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+                  className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                  aria-label="Close modal"
                 >
-                  Cerrar
+                  <svg
+                    className="w-8 h-8"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
                 </button>
               </div>
             </motion.div>

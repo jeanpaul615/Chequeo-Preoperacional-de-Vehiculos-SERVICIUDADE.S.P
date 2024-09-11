@@ -1,14 +1,62 @@
+import { useEffect, useState } from "react";
 import React from "react";
+import { GetVehicles } from "../../../../controllers/Inspection/DashboardControllers/Vehicle";
+import { VehiclebyPlate } from "../../../../controllers/Inspection/VehicleControllers/VehicleByPlate";
 
-const InspectionVehicule = ({ formData, handleChange }) => {
+const InspectionVehicule = ({ formData, setFormData, handleChange }) => {
+  const [vehicles, setVehicles] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // UseEffect para traer la autocompletación de los otros campos basado en la placa
+  useEffect(() => {
+    const fetchLicense = async () => {
+      if (formData.placa) {
+        try {
+          const data = await VehiclebyPlate(formData.placa);
+          setFormData((prevData) => ({
+            ...prevData,
+            marca: data.marca,
+            dependencia: data.dependencia,
+            kilometraje: data.kilometraje,
+            soat: data.soat,
+            rtm: data.rtm,
+            seguro_contractual: data.seguro_contractual,
+            seguro_extracontractual: data.seguro_extracontractual,
+          }));
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+    fetchLicense();
+  }, [formData.placa, setFormData]);
+
+  // UseEffect para traer los datos de los vehículos
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        const data = await GetVehicles();
+        setVehicles(data); // Assuming `data` is an array of vehicles
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchVehicles();
+  }, []);
+
+  const filteredVehicles = vehicles.filter((vehicle) =>
+    vehicle.license_plate.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <fieldset className="mb-6 p-5 border rounded-lg shadow-md">
-      <h1 className="text-normal font-bold normal mb-4">Datos del Vehículo</h1>
+    <fieldset className="p-5 border rounded-lg shadow-md">
+      <h1 className="text-normal font-bold normal">Datos del Vehículo</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <div className="mb-6">
+        {/* Tipo de Vehículo */}
+        <div className="">
           <label
             htmlFor="tipo_vehiculo"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+            className="block text-sm font-medium text-gray-900 dark:text-black"
           >
             Tipo de Vehículo:
           </label>
@@ -17,7 +65,7 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             name="tipo_vehiculo"
             value={formData.tipo_vehiculo}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:font-semibold dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="bg-gray-50 font-medium border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
             required
           >
             <option value="">Seleccione el vehículo</option>
@@ -25,30 +73,46 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             <option value="VOLQUETA">Volqueta</option>
             <option value="CAMIONETA">Camioneta</option>
             <option value="MOTO">Moto</option>
-
           </select>
         </div>
-        <div className="mb-6">
+
+        {/* Placa */}
+        <div>
           <label
             htmlFor="placa"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+            className="block text-sm font-medium text-gray-900 dark:text-black"
           >
             Placa:
           </label>
           <input
             type="text"
+            placeholder="Buscar placa..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="bg-gray-50 mb-2 font-medium border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
+          />
+          <select
             id="placa"
             name="placa"
             value={formData.placa}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:font-semibold dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
             required
-          />
+          >
+            <option value="">Seleccionar Placa</option>
+            {filteredVehicles.map((vehicle) => (
+              <option key={vehicle.vehicle_id} value={vehicle.license_plate}>
+                {vehicle.license_plate}
+              </option>
+            ))}
+          </select>
         </div>
-        <div className="mb-6">
+
+        {/* Marca */}
+        <div className="">
           <label
             htmlFor="marca"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+            className="block text-sm font-medium text-gray-900 dark:text-black"
           >
             Marca:
           </label>
@@ -58,37 +122,39 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             name="marca"
             value={formData.marca}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:font-semibold dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="bg-gray-50 font-medium border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
             required
           />
         </div>
-        <div className="mb-6">
+
+        {/* Dependencia */}
+        <div className="">
           <label
             htmlFor="dependencia"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+            className="block text-sm font-medium text-gray-900 dark:text-black"
           >
             Dependencia:
           </label>
           <select
-            type="text"
             id="dependencia"
             name="dependencia"
             value={formData.dependencia}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:font-semibold dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
             required
-            >
+          >
             <option value="">Seleccione la Dependencia</option>
             <option value="ACUEDUCTO">Acueducto</option>
             <option value="ALCANTARILLADO">Alcantarillado</option>
             <option value="ASEO">Aseo</option>
-
           </select>
         </div>
-        <div className="mb-6">
+
+        {/* Kilometraje */}
+        <div className="">
           <label
             htmlFor="kilometraje"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+            className="block text-sm font-medium text-gray-900 dark:text-black"
           >
             Kilometraje:
           </label>
@@ -98,14 +164,16 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             name="kilometraje"
             value={formData.kilometraje}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:font-semibold dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
             required
           />
         </div>
-        <div className="mb-6">
+
+        {/* SOAT */}
+        <div className="">
           <label
             htmlFor="soat"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+            className="block text-sm font-medium text-gray-900 dark:text-black"
           >
             SOAT:
           </label>
@@ -115,14 +183,16 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             name="soat"
             value={formData.soat}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:font-semibold dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
             required
           />
         </div>
-        <div className="mb-6">
+
+        {/* RTM */}
+        <div className="">
           <label
             htmlFor="rtm"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+            className="block text-sm font-medium text-gray-900 dark:text-black"
           >
             RTM:
           </label>
@@ -132,14 +202,16 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             name="rtm"
             value={formData.rtm}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:font-semibold dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
             required
           />
         </div>
-        <div className="mb-6">
+
+        {/* Seguro Contractual */}
+        <div className="">
           <label
             htmlFor="seguro_contractual"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+            className="block text-sm font-medium text-gray-900 dark:text-black"
           >
             Seguro Contractual:
           </label>
@@ -149,14 +221,16 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             name="seguro_contractual"
             value={formData.seguro_contractual}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:font-semibold dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
             required
           />
         </div>
-        <div className="mb-6">
+
+        {/* Seguro Extracontractual */}
+        <div className="">
           <label
             htmlFor="seguro_extracontractual"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+            className="block text-sm font-medium text-gray-900 dark:text-black"
           >
             Seguro Extracontractual:
           </label>
@@ -166,7 +240,7 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             name="seguro_extracontractual"
             value={formData.seguro_extracontractual}
             onChange={handleChange}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:font-semibold dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
             required
           />
         </div>
@@ -174,5 +248,6 @@ const InspectionVehicule = ({ formData, handleChange }) => {
     </fieldset>
   );
 };
+
 
 export default InspectionVehicule;
