@@ -23,6 +23,17 @@ const createVehicle = (req, res) => {
     });
 };
 
+const getVehiclebyPlate = (req, res) => {
+    license_plate = req.body;
+    Vehicle.getVehiclebyPlate(license_plate, (err, result) =>{
+        if(err){
+            console.error('Error al consultar vehiculo', err);
+            return res.status(500).json({error: 'Error en el servidor'});
+        }
+        return res.status(201).json({message: 'Vehiculo Consultado correctamente',result})
+    })
+}
+
 // Controlador para actualizar un vehículo
 const updateVehicle = (req, res) => {
     const updatedVehicle = req.body;
@@ -59,5 +70,6 @@ module.exports = {
     getAllVehicles,
     createVehicle, 
     updateVehicle,
-    DeleteVehicle
+    DeleteVehicle,
+    getVehiclebyPlate
 };

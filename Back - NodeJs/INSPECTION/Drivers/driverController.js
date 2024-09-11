@@ -1,6 +1,6 @@
 const Driver = require('./Drivers'); // Importa el módulo correcto
 
-// Controlador para obtener todos los vehículos
+// Controlador para obtener todos los conductores
 const getAllDrivers = (req, res) => {
     Driver.getAllDrivers((err, Drivers) => {
         if (err) {
@@ -11,18 +11,16 @@ const getAllDrivers = (req, res) => {
     });
 };
 
+// Controlador para registrar un nuevo conductor
 const DriverRegister = (req, res) => {
-    const { user_id, name, license_until} = req.body;
+    const { user_id, name, license_until } = req.body;
 
-    if (!user_id, !name || !license_until) {
+    // Corregido el uso del operador lógico para verificar si los campos están presentes
+    if (!user_id || !name || !license_until) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    const newDriverData = {
-        user_id,
-        name,
-        license_until
-    };
+    const newDriverData = { user_id, name, license_until };
 
     Driver.NewDriverRegister(newDriverData, (err, result) => {
         if (err) {
@@ -33,35 +31,54 @@ const DriverRegister = (req, res) => {
     });
 };
 
-const UpdateDriver = (req, res) => {
-    // Limpia los datos recibidos
-    const { name, license_until, user_id } = req.body;
-  
-  
-    // Verificar si todos los campos requeridos están presentes
-    if (!name || !license_until || !user_id) {
-      return res.status(400).json({ error: "Todos los campos son obligatorios" });
+// Controlador para obtener conductor por nombre
+const GetDriverByName = (req, res) => {
+    const { driver_name } = req.body;
+
+    if (!driver_name) {
+        return res.status(400).json({ error: 'El nombre del conductor es obligatorio' });
     }
-  
-    const updateDriverData = {
-        name, license_until, user_id
-    };
-  
-    /* Llamar a UpdateDriver para hacer la consulta y 
-    posteriormente retornar un status server.*/
-    Driver.UpdateDriver(updateDriverData, (err, result) => {
-      if (err) {
-        console.error("Error al actualizar el usuario:", err);
-        return res.status(500).json({ error: "Error en el servidor" });
-      }
-  
-      res.status(200).json({
-        message: "Usuario actualizado con éxito",
-        affectedRows: result.affectedRows,
-      });
+
+    Driver.getDriverbyName({ driver_name }, (err, result) => {
+        if (err) {
+            console.error('Error al consultar el conductor:', err);
+            return res.status(500).json({ error: 'Error en el servidor' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Conductor no encontrado' });
+        }
+
+        res.status(200).json({ result });
     });
-  };
+};
+
+// Controlador para actualizar conductor
+const UpdateDriver = (req, res) => {
+    const { name, license_until, user_id } = req.body;
+
+    if (!name || !license_until || !user_id) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
+    const updateDriverData = { name, license_until, user_id };
+
+    Driver.UpdateDriver(updateDriverData, (err, result) => {
+        if (err) {
+            console.error('Error al actualizar el conductor:', err);
+            return res.status(500).json({ error: 'Error en el servidor' });
+        }
+
+        res.status(200).json({
+            message: 'Conductor actualizado con éxito',
+            affectedRows: result.affectedRows,
+        });
+    });
+};
 
 module.exports = {
-    getAllDrivers, DriverRegister, UpdateDriver
+    getAllDrivers,
+    DriverRegister,
+    GetDriverByName,
+    UpdateDriver,
 };

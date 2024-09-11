@@ -4,8 +4,10 @@ const driverController = require('./driverController'); // Asegúrate de que la 
 
 // Ruta para obtener todos los vehículos
 router.get('/', driverController.getAllDrivers);
+router.post("/driverbyname", driverController.GetDriverByName);
 router.post('/newdriver', driverController.DriverRegister);
 router.put("/updatedriver", driverController.UpdateDriver);
+
 
 
 module.exports = router;

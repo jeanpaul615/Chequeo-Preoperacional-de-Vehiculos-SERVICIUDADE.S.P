@@ -4,7 +4,7 @@ const vehicleController = require('./vehicleController');
 
 // Ruta para obtener todos los vehículos
 router.get('/', vehicleController.getAllVehicles);
-
+router.post('/vehiclebyplate', vehicleController.getVehiclebyPlate);
 // Ruta para crear un nuevo vehículo
 router.post('/newvehicle', vehicleController.createVehicle);
 router.put('/updatevehicle', vehicleController.updateVehicle);

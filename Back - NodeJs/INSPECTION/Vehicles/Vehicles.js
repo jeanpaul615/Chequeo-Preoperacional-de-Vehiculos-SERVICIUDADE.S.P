@@ -11,6 +11,18 @@ const Vehicle = {
         });
     },
 
+    getVehiclebyPlate: (data, callback) => {
+        const query = 'SELECT * FROM vehicle WHERE license_plate = ?'
+        
+        const { license_plate } = data;
+        db.query(query, [license_plate],  (err, results) => {
+            if(err){
+                return callback(err, null);
+            }
+            callback(null, results);
+        })
+    },
+
     createVehicle: (newVehicle, callback) => {
         const query = `
             INSERT INTO vehicle (
