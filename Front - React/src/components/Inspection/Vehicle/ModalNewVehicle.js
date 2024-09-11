@@ -51,11 +51,11 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
+      className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6 md:p-8"
       onClick={onClose} // Click outside should close the modal
     >
       <div
-        className="bg-white rounded-lg shadow-lg p-6 relative"
+        className="bg-white rounded-lg shadow-lg p-6 relative w-full max-w-4xl mx-auto"
         onClick={(e) => e.stopPropagation()} // Prevent event from bubbling up
       >
         <button
@@ -82,12 +82,13 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
         <div className="flex justify-center items-center mb-4">
           <span className="text-lg font-semibold">Nuevo Vehículo:</span>
         </div>
-        <hr className="border-gray-400 opacity-50 pt-2 mb-6" />
+        <hr className="border-gray-400 opacity-50 pt-2 mb-4" />
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col space-y-4">
+            {/* Input fields in rows */}
             <div className="flex flex-col md:flex-row md:space-x-4">
               <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
+                <label className="block text-medium font-medium text-gray-700">
                   Tipo (*):
                 </label>
                 <select
@@ -95,7 +96,7 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
                   value={formData.type}
                   onChange={handleChange}
                   required
-                  className="mb-4 px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+                  className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
                 >
                   <option value="">Seleccione un tipo</option>
                   <option value="RECOLECTOR">RECOLECTOR</option>
@@ -105,7 +106,7 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
                 </select>
               </div>
               <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
+                <label className="block text-medium font-medium text-gray-700">
                   Placa (*):
                 </label>
                 <input
@@ -115,13 +116,16 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
                   onChange={handleChange}
                   required
                   maxLength="6"
-                  className="mb-4 px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+                  className=" px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
                 />
               </div>
             </div>
+
+            {/* More input fields */}
+            {/* Responsive columns for md and larger */}
             <div className="flex flex-col md:flex-row md:space-x-4">
               <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
+                <label className="block text-medium font-medium text-gray-700 ">
                   Marca (*):
                 </label>
                 <input
@@ -130,18 +134,18 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
                   value={formData.brand}
                   onChange={handleChange}
                   required
-                  className="mb-4 px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+                  className="mb-2 px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
                 />
               </div>
               <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
+                <label className="block text-medium font-medium text-gray-700 ">
                   Área:
                 </label>
                 <select
                   name="area"
                   value={formData.area}
                   onChange={handleChange}
-                  className="mb-4 px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+                  className=" px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
                 >
                   <option value="">Seleccione un área</option>
                   <option value="ASEO">ASEO</option>
@@ -151,9 +155,11 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
                 </select>
               </div>
             </div>
+
+            {/* More inputs */}
             <div className="flex flex-col md:flex-row md:space-x-4">
               <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
+                <label className="block text-medium font-medium text-gray-700 ">
                   SOAT hasta (*):
                 </label>
                 <input
@@ -166,7 +172,7 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
                 />
               </div>
               <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
+                <label className="block text-medium font-medium text-gray-700">
                   RTM hasta (*):
                 </label>
                 <input
@@ -179,34 +185,8 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
                 />
               </div>
             </div>
-            <div className="flex flex-col md:flex-row md:space-x-4">
-              <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
-                  Seguro Contractual hasta (*):
-                </label>
-                <input
-                  type="date"
-                  name="seguro_contractual_until"
-                  value={formData.seguro_contractual_until}
-                  onChange={handleChange}
-                  required
-                  className="mb-4 px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
-                />
-              </div>
-              <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
-                  Seguro Extracontractual hasta (*):
-                </label>
-                <input
-                  type="date"
-                  name="seguro_extracontractual_until"
-                  value={formData.seguro_extracontractual_until}
-                  onChange={handleChange}
-                  required
-                  className="mb-4 px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
-                />
-              </div>
-            </div>
+
+            {/* Buttons */}
             <button
               type="submit"
               className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm px-6 py-3 text-center transition ease-in-out duration-150"

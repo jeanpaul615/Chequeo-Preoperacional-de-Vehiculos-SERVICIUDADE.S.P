@@ -18,16 +18,14 @@ const PieChart = ({ selectedIndicator }) => {
       }
 
       const response = await GetVariablesbyIndicators(selectedIndicator);
-      console.log(response);
       if (!response || response.length === 0) {
         console.error("No variables found for selectedIndicator:", selectedIndicator);
         return;
       }
 
       const filteredVariables = response.filter(variable => Number(variable.id_indicador) === Number(selectedIndicator));
-
-     
-      console.log(filteredVariables);
+      
+      
       const chartLabels = [];
       const chartData = [];
       const chartColors = [];
@@ -51,7 +49,7 @@ const PieChart = ({ selectedIndicator }) => {
   useEffect(() => {
     if (selectedIndicator) {
       fetchVariablesData();
-    } 
+    }
     // eslint-disable-next-line
   }, [selectedIndicator]);
 
@@ -65,7 +63,9 @@ const PieChart = ({ selectedIndicator }) => {
     ],
   };
 
-  return <Pie data={data} />;
+  return (
+      <Pie data={data} />
+  );
 };
 
 export default PieChart;

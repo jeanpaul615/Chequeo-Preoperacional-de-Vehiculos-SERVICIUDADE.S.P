@@ -19,8 +19,7 @@ const DataTableIndicators = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalUpdateIsOpen, setModalUpdateIsOpen] = useState(false);
   const [modalStatsIsOpen, setModalStatsIsOpen] = useState(false);
-  const [selectedIndicator, setSelectedIndicator] = useState(null);
-
+  const [selectedIndicator, setSelectedIndicator] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedFrequency, setSelectedFrequency] = useState("");
@@ -83,6 +82,8 @@ const DataTableIndicators = () => {
       responsive: true,
       destroy: true,
       scrollX: true,
+      pagingType: "full_numbers", // Use full_numbers pagination style
+      lengthMenu: [1000, 100, 75, 50, 25, 10], // Options for rows per page
       columnDefs: [
         { width: "5%", targets: 0 },
         { width: "5%", targets: 1 },
@@ -152,11 +153,12 @@ const DataTableIndicators = () => {
       return (
         (selectedMonth ? itemMonth === parseInt(selectedMonth) : true) &&
         (selectedYear ? itemYear === parseInt(selectedYear) : true) &&
-        (selectedFrequency ? item.frecuencia === selectedFrequency : true)
+        (selectedFrequency ? item.frecuencia === selectedFrequency : true) && 
+        (selectedIndicator ? item.id_indicador === parseInt(selectedIndicator): true)
       );
     });
     setFilteredData(filtered);
-  }, [selectedMonth, selectedYear, selectedFrequency, data]);
+  }, [selectedMonth, selectedYear, selectedFrequency,selectedIndicator, data]);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -202,6 +204,9 @@ const DataTableIndicators = () => {
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <div className="p-4">
             <FilterControls
+              data={data}
+              selectedIndicator={selectedIndicator}
+              setSelectedIndicator={setSelectedIndicator}
               selectedMonth={selectedMonth}
               setSelectedMonth={setSelectedMonth}
               selectedYear={selectedYear}

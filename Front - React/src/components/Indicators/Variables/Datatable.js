@@ -20,6 +20,8 @@ const DataTableVariable = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
+  const [selectedIndicator, setSelectedIndicator] = useState("");
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,6 +68,8 @@ const DataTableVariable = () => {
       responsive: true,
       destroy: true,
       scrollX: true,
+      pagingType: "full_numbers", // Use full_numbers pagination style
+      lengthMenu: [1000, 100, 75, 50, 25, 10], // Options for rows per page
       columnDefs: [
         { width: "5%", targets: 0 }, 
         { width: "10%", targets: 1 }, 
@@ -89,15 +93,17 @@ const DataTableVariable = () => {
     // Filter data based on the selected month, year, and frequency
     const filtered = data.filter((item) => {
       const itemDate = new Date(item.periodo);
+
       const itemMonth = itemDate.getMonth() + 1; // getMonth() is 0-indexed
       const itemYear = itemDate.getFullYear();
       return (
         (selectedMonth ? itemMonth === parseInt(selectedMonth) : true) &&
-        (selectedYear ? itemYear === parseInt(selectedYear) : true)
+        (selectedYear ? itemYear === parseInt(selectedYear) : true) &&
+        (selectedIndicator ? item.indicador_id === parseInt(selectedIndicator): true) //Important change type for errors of typing, (parseInt)
       );
     });
     setFilteredData(filtered);
-  }, [selectedMonth, selectedYear, data]);
+  }, [selectedMonth, selectedYear, selectedIndicator, data]);
 
   return (
     <div>
@@ -107,6 +113,8 @@ const DataTableVariable = () => {
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <div className="p-4">
             <FilterControls
+              selectedIndicator={selectedIndicator}
+              setSelectedIndicator={setSelectedIndicator}
               selectedMonth={selectedMonth}
               setSelectedMonth={setSelectedMonth}
               selectedYear={selectedYear}

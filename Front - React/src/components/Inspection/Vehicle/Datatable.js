@@ -109,9 +109,10 @@ const DatatableVehicles = () => {
         searching: true,
         ordering: true,
         scrollX: true,
+        pagingType: "full_numbers", // Use full_numbers pagination style
+        lengthMenu: [1000, 100, 75, 50, 25, 10], // Options for rows per page
         columnDefs: [
-          { width: '8%', targets: 0 },
-          { width: '10%', targets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+          { width: '1%', targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
         ],
       });
   

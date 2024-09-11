@@ -64,18 +64,6 @@ class DataChartAmount extends React.Component {
             }
           }
         },
-        title: {
-          text: 'Cantidad de Registros por Indicador',
-          floating: false, // Asegúrate de que floating esté en false para que el título esté en la parte superior
-          offsetY: 20, // Ajusta este valor para posicionar el título en la parte superior
-          align: 'center', // Centra el título
-          style: {
-            color: '#333', // Color del texto del título
-            fontSize: '16px', // Tamaño de fuente
-            fontFamily: 'Roboto, Arial, sans-serif', // Fuente
-            fontWeight: 600, // Grosor de la fuente
-          },
-        },
         grid: {
           borderColor: '#f1f1f1', // Color del borde de la cuadrícula
           strokeDashArray: 5, // Estilo de línea de la cuadrícula
@@ -137,7 +125,7 @@ class DataChartAmount extends React.Component {
 
   render() {
     return (
-      <div className="p-6 bg-white shadow-lg rounded-lg">
+      <div className="">
         <ReactApexChart 
           options={this.state.options} 
           series={this.state.series} 

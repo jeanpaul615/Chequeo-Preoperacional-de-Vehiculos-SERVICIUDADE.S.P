@@ -86,6 +86,8 @@ const DatatableDrivers = () => {
       responsive: true,
       destroy: true,
       scrollX: true,
+      pagingType: "full_numbers", // Use full_numbers pagination style
+      lengthMenu: [1000, 100, 75, 50, 25, 10], // Options for rows per page
       columnDefs: [
         { width: "5%", targets: 0 }, 
         { width: "5%", targets: 1 }, 
