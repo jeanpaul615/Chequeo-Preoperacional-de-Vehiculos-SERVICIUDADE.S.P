@@ -21,9 +21,12 @@ const InspectionDriver = ({ formData, handleChange }) => {
             setLicenseUntil(licenseDate);
             handleChange({
               target: {
-                name: 'licencia', // Nombre del campo para actualizar el formulario
-                value: licenseDate
-              }
+                name: "licencia", // Nombre del campo para actualizar el formulario
+                value: licenseDate,
+              },
+            });
+            handleChange({
+              target: { name: "fecha", value: today },
             });
           }
         } catch (error) {
@@ -56,11 +59,16 @@ const InspectionDriver = ({ formData, handleChange }) => {
     <div className="text-flex flex-col md:flex-row md:justify-center p-4">
       <Sidebar className="md:w-1/4" />
       <fieldset className="flex-1 max-w-4xl mb-6 p-8 bg-white border border-gray-300 rounded-lg shadow-md">
-        <h1 className="text-xlxl font-bold text-gray-800">Datos del Conductor</h1>
+        <h1 className="text-xlxl font-bold text-gray-800">
+          Datos del Conductor
+        </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="fecha" className="block text-sm font-medium text-gray-900 dark:text-black">
-              Fecha:
+            <label
+              htmlFor="fecha"
+              className="block text-sm font-medium text-gray-900 dark:text-black"
+            >
+              Fecha(*):
             </label>
             <input
               type="date"
@@ -75,8 +83,11 @@ const InspectionDriver = ({ formData, handleChange }) => {
 
           {/* Buscador de conductores */}
           <div>
-            <label htmlFor="nombre_conductor" className="block text-sm font-medium text-gray-900 dark:text-black">
-              Nombre del Conductor:
+            <label
+              htmlFor="nombre_conductor"
+              className="block text-sm font-medium text-gray-900 dark:text-black"
+            >
+              Nombre del Conductor(*):
             </label>
             <input
               type="text"
@@ -103,8 +114,11 @@ const InspectionDriver = ({ formData, handleChange }) => {
           </div>
 
           <div>
-            <label htmlFor="licencia" className="block text-sm font-medium text-gray-900 dark:text-black">
-              Licencia de Conducción:
+            <label
+              htmlFor="licencia"
+              className="block text-sm font-medium text-gray-900 dark:text-black"
+            >
+              Licencia de Conducción(*):
             </label>
             <input
               type="text"
@@ -119,8 +133,11 @@ const InspectionDriver = ({ formData, handleChange }) => {
           </div>
 
           <div>
-            <label htmlFor="seguridad_social" className="block text-sm font-medium text-black">
-              Seguridad Social:
+            <label
+              htmlFor="seguridad_social"
+              className="block text-sm font-medium text-black"
+            >
+              Seguridad Social(*):
             </label>
             <select
               id="seguridad_social"
@@ -131,8 +148,8 @@ const InspectionDriver = ({ formData, handleChange }) => {
               required
             >
               <option value="">¿Cuenta con seguridad social?</option>
-              <option value="1">Sí</option>
-              <option value="0">No</option>
+              <option value={today}>Sí</option>
+              <option value={today}>No</option>
             </select>
           </div>
         </div>

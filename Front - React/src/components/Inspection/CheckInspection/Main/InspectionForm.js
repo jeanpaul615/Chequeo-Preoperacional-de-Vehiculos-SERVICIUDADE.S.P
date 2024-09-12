@@ -104,11 +104,25 @@ const InspectionForm = () => {
    * @param {Event} e - El evento de cambio del campo del formulario.
    */
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+    // Verifica si el parámetro es un arreglo
+    if (Array.isArray(e)) {
+        // Si es un arreglo, procesa cada elemento
+        e.forEach(item => {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                [item.target.name]: item.target.value,
+            }));
+        });
+    } else {
+        // Si no es un arreglo, procesa un solo objeto
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [e.target.name]: e.target.value,
+        }));
+    }
+};
+
+  
 
   /**
    * Valida los campos requeridos del formulario.
@@ -163,7 +177,7 @@ const InspectionForm = () => {
     <div className="container mx-auto px-4 py-8">
       <form onSubmit={handleSubmit}>
         {/* Renderiza el contenedor que maneja la visualización del formulario */}
-        <Container formData={formData} handleChange={handleChange} />
+        <Container formData={formData} setFormData={setFormData} handleChange={handleChange} />
         <button
           type="submit"
           className="md:ml-80 mt-4 p-2 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"

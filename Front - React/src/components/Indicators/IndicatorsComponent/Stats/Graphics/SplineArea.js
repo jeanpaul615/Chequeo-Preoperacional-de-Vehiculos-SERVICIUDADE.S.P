@@ -43,7 +43,7 @@ class SplineArea extends React.Component {
                 height: 300,
               },
               legend: {
-                position: 'bottom',
+                position: "bottom",
               },
             },
           },
@@ -69,9 +69,14 @@ class SplineArea extends React.Component {
         throw new Error("Datos no válidos recibidos de GetVariables.");
       }
 
-      const filteredData = response.filter(item => Number(item.indicador_id) === Number(this.props.selectedIndicator));
+      const filteredData = response.filter(
+        (item) =>
+          Number(item.indicador_id) === Number(this.props.selectedIndicator)
+      );
       if (filteredData.length === 0) {
-        throw new Error("No se encontraron datos para el indicador seleccionado.");
+        throw new Error(
+          "No se encontraron datos para el indicador seleccionado."
+        );
       }
 
       const groupedData = this.groupDataByVariable(filteredData);
@@ -122,17 +127,17 @@ class SplineArea extends React.Component {
             height="100%"
           />
         </div>
-        <style jsx>{`
-          .chart-container {
-            width: 200%;
-          }
+        <style>{`
+    .chart-container {
+      width: 200%;
+    }
 
-          @media (max-width: 600px) {
-            .chart-container {
-              width: 100%;
-            }
-          }
-        `}</style>
+    @media (max-width: 600px) {
+      .chart-container {
+        width: 100%;
+      }
+    }
+  `}</style>
       </div>
     );
   }

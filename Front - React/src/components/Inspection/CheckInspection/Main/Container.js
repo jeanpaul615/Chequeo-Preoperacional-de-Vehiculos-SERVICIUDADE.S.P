@@ -204,7 +204,7 @@ export default function ContainerInspection({ formData, handleChange }) {
                 <button
                   onClick={handleSave}
                   type="button"
-                  class="text-white bg-[#0e7424] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 me-2 mb-2"
+                  className="text-white bg-[#0e7424] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 me-2 mb-2"
                 >
                   <svg className="mr-2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path
@@ -217,7 +217,7 @@ export default function ContainerInspection({ formData, handleChange }) {
                 <button
                   onClick={handleNext}
                   type="button"
-                  class="text-white bg-[#4e84f8] focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:focus:ring-[#050708]/50 hover:bg-[#050708]/30 me-2 mb-2"
+                  className="text-white bg-[#4e84f8] focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:focus:ring-[#050708]/50 hover:bg-[#050708]/30 me-2 mb-2"
                 >
                   Siguiente
                   <svg
