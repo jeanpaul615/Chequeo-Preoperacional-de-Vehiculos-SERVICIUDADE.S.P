@@ -30,7 +30,7 @@ const getVehiclebyPlate = (req, res) => {
             console.error('Error al consultar vehiculo', err);
             return res.status(500).json({error: 'Error en el servidor'});
         }
-        return res.status(201).json({message: 'Vehiculo Consultado correctamente',result})
+        return res.status(201).json({result})
     })
 }
 
