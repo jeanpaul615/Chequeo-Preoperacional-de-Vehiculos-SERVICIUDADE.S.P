@@ -1,12 +1,13 @@
-import DataChartComposed from "./Graphics/DataChartComposed";
-import DataChartAmount from "./Graphics/DataChartAmount";
-import PieChart from "./Graphics/PieChart";
-import HighestValue from "./Graphics/HighestValue";
-import LowestValue from "./Graphics/LowestValue"; 
-import PromValue from "./Graphics/PromValue";
-import SplineArea from "./Graphics/SplineArea";
-import MedianValue from "./Graphics/MedianValue";
+import React, { Suspense } from "react";
 
+const DataChartComposed = React.lazy(() => import("./Graphics/DataChartComposed"));
+const DataChartAmount = React.lazy(() => import("./Graphics/DataChartAmount"));
+const PieChart = React.lazy(() => import("./Graphics/PieChart"));
+const HighestValue = React.lazy(() => import("./Graphics/HighestValue"));
+const LowestValue = React.lazy(() => import("./Graphics/LowestValue"));
+const PromValue = React.lazy(() => import("./Graphics/PromValue"));
+const SplineArea = React.lazy(() => import("./Graphics/SplineArea"));
+const MedianValue = React.lazy(() => import("./Graphics/MedianValue"));
 
 const StatsModal = ({ closeModal, selectedIndicator }) => {
   return (
@@ -50,7 +51,9 @@ const StatsModal = ({ closeModal, selectedIndicator }) => {
           {/* DataChartComposed */}
           <div className="h-56 bg-gray-50 rounded-lg shadow-lg p-2">
             <h1 className="font-medium text-center">Valores del Indicador</h1>
-            <DataChartComposed selectedIndicator={selectedIndicator} />
+            <Suspense fallback={<div>Cargando gráfico...</div>}>
+              <DataChartComposed selectedIndicator={selectedIndicator} />
+            </Suspense>
           </div>
 
           {/* DataChartAmount */}
@@ -58,7 +61,9 @@ const StatsModal = ({ closeModal, selectedIndicator }) => {
             <h1 className="font-medium text-center">
               Valores de cada Indicador (Año Actual)
             </h1>
-            <DataChartAmount selectedIndicator={selectedIndicator} />
+            <Suspense fallback={<div>Cargando gráfico...</div>}>
+              <DataChartAmount selectedIndicator={selectedIndicator} />
+            </Suspense>
           </div>
 
           {/* PieChart */}
@@ -66,7 +71,9 @@ const StatsModal = ({ closeModal, selectedIndicator }) => {
             <h1 className="font-medium text-center">
               Variables enlazadas al indicador
             </h1>
-            <PieChart selectedIndicator={selectedIndicator} />
+            <Suspense fallback={<div>Cargando gráfico...</div>}>
+              <PieChart selectedIndicator={selectedIndicator} />
+            </Suspense>
           </div>
 
           {/* Highest and Lowest Values */}
@@ -75,36 +82,43 @@ const StatsModal = ({ closeModal, selectedIndicator }) => {
               <h1 className="font-medium text-center">
                 Valor Mayor del Indicador:
               </h1>
-              <HighestValue selectedIndicator={selectedIndicator} />
+              <Suspense fallback={<div>Cargando...</div>}>
+                <HighestValue selectedIndicator={selectedIndicator} />
+              </Suspense>
             </div>
             <hr className="mt-10 border-t-2 border-gray-300 rounded-full shadow-sm"></hr>
             <div className="grid mt-4">
               <h1 className="font-medium text-center">
                 Valor Menor del Indicador:
               </h1>
-              <LowestValue selectedIndicator={selectedIndicator} />
+              <Suspense fallback={<div>Cargando...</div>}>
+                <LowestValue selectedIndicator={selectedIndicator} />
+              </Suspense>
             </div>
           </div>
+
+          {/* Promedio y Mediana */}
           <div className="h-24 bg-gray-50 rounded-lg shadow-lg p-5 grid justify-center items-center">
-              <h1 className="font-medium text-center">
-                Promedio del Indicador:
-              </h1>
+            <h1 className="font-medium text-center">Promedio del Indicador:</h1>
+            <Suspense fallback={<div>Cargando...</div>}>
               <PromValue selectedIndicator={selectedIndicator} />
-            </div>
+            </Suspense>
+          </div>
 
-            <div className="h-24 bg-gray-50 rounded-lg shadow-lg p-5 grid justify-center items-center">
-              <h1 className="font-medium text-center">
-                Mediana del Indicador:
-              </h1>
+          <div className="h-24 bg-gray-50 rounded-lg shadow-lg p-5 grid justify-center items-center">
+            <h1 className="font-medium text-center">Mediana del Indicador:</h1>
+            <Suspense fallback={<div>Cargando...</div>}>
               <MedianValue selectedIndicator={selectedIndicator} />
-            </div>
+            </Suspense>
+          </div>
 
-            <div className="h-full w-full md:col-span-2 bg-gray-50 rounded-lg shadow-lg p-5 grid justify-center items-center">
-              <h1 className="font-medium text-center">
-              Trazabilidad de Variables: 
-              </h1>
+          {/* SplineArea */}
+          <div className="h-full w-full md:col-span-2 bg-gray-50 rounded-lg shadow-lg p-5 grid justify-center items-center">
+            <h1 className="font-medium text-center">Trazabilidad de Variables:</h1>
+            <Suspense fallback={<div>Cargando gráfico...</div>}>
               <SplineArea selectedIndicator={selectedIndicator} />
-            </div>
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>

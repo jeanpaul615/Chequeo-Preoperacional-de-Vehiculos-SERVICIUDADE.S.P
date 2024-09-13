@@ -84,7 +84,7 @@ const DataTableIndicators = () => {
       destroy: true,
       scrollX: true,
       pagingType: "full_numbers", // Use full_numbers pagination style
-      lengthMenu: [1000, 100, 75, 50, 25, 10], // Options for rows per page
+      lengthMenu: [10, 25, 50, 75, 100, 1000], // Options for rows per page
       columnDefs: [
         { width: "5%", targets: 0 },
         { width: "5%", targets: 1 },
@@ -176,7 +176,6 @@ const DataTableIndicators = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
-
   };
 
   return (
@@ -243,13 +242,11 @@ const DataTableIndicators = () => {
         {" "}
         <InputModal isOpen={modalIsOpen} onRequestClose={closeModal} />{" "}
       </Suspense>
-      <Suspense fallback={<Loading />}>
         <ModalUpdate
           isOpen={modalUpdateIsOpen}
           onRequestClose={() => setModalUpdateIsOpen(false)}
           indicator={selectedIndicator}
         />
-      </Suspense>
       {modalStatsIsOpen && (
         <Suspense fallback={<Loading />}>
           <ContainerStats

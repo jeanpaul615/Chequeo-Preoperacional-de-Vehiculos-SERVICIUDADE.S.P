@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { GetIndicators } from "../../../../controllers/Indicators/Indicators/GetIndicators";
-import StatsModal from "./StatsModal";
+const StatsModal = React.lazy(() => import("./StatsModal"));
 
 const ContainerStats = ({ closeModal }) => {
   const [formData, setFormData] = useState([]); // Array to hold the list of indicators
@@ -102,10 +102,12 @@ const ContainerStats = ({ closeModal }) => {
           </button>
         </div>
         {showStatsModal && (
+          <Suspense fallback={<div>Cargando...</div>}>
           <StatsModal
             closeModal={() => setShowStatsModal(false)}
             selectedIndicator={selectedIndicator}
           />
+          </Suspense>
         )}
       </div>
     </div>
