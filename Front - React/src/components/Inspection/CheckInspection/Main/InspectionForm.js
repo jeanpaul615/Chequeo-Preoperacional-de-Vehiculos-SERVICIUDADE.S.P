@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Container from "./Container";
 import Swal from "sweetalert2";
+import Comments from "./Comments";
 
 /**
  * Componente de formulario de inspección.
@@ -8,10 +9,7 @@ import Swal from "sweetalert2";
  * Los datos del formulario se manejan mediante el estado local y se envían a un contenedor para su gestión.
  */
 const InspectionForm = () => {
-  /**
-   * Estado inicial del formulario con todos los campos establecidos en "Bien".
-   * @type {Object}
-   */
+  // Estado inicial del formulario con todos los campos establecidos en "Bien".
   const initialFormData = {
     fecha: "",
     nombre_conductor: "",
@@ -95,40 +93,23 @@ const InspectionForm = () => {
     seguro_portalon: "Bien",
   };
 
-  // Estado del formulario
   const [formData, setFormData] = useState(initialFormData);
+  const [observations, setObservations] = useState({});
 
-  /**
-   * Maneja el cambio de los campos del formulario.
-   * Actualiza el estado del formulario con el valor del campo modificado.
-   * @param {Event} e - El evento de cambio del campo del formulario.
-   */
   const handleChange = (e) => {
-    // Verifica si el parámetro es un arreglo
-    if (Array.isArray(e)) {
-        // Si es un arreglo, procesa cada elemento
-        e.forEach(item => {
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                [item.target.name]: item.target.value,
-            }));
-        });
-    } else {
-        // Si no es un arreglo, procesa un solo objeto
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            [e.target.name]: e.target.value,
-        }));
-    }
-};
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-  
+  const handleObservationChange = (e) => {
+    setObservations((prevObservations) => ({
+      ...prevObservations,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-  /**
-   * Valida los campos requeridos del formulario.
-   * Verifica si algún campo esencial está vacío.
-   * @returns {boolean} - Devuelve true si todos los campos requeridos están completos, de lo contrario, false.
-   */
   const validateForm = () => {
     const requiredFields = [
       "fecha",
@@ -160,30 +141,72 @@ const InspectionForm = () => {
     return true;
   };
 
-  /**
-   * Maneja el envío del formulario.
-   * Prevé el comportamiento por defecto del formulario.
-   * @param {Event} e - El evento de envío del formulario.
-   */
+  const generateObservations = () => {
+    let newObservations = {};
+    Object.keys(formData).forEach((key) => {
+      if (formData[key] === "Mal") {
+        newObservations[key] = observations[key] || "";
+      }
+    });
+
+    // Actualiza el estado de observaciones con las observaciones generadas
+    setObservations(newObservations);
+
+    // Verifica si todas las observaciones necesarias están diligenciadas
+    return Object.keys(newObservations).every((key) => newObservations[key]);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log(formData);
-      // Puedes agregar aquí el código para enviar los datos a una API o realizar otras acciones necesarias
+      if (generateObservations()) {
+        Swal.fire({
+          icon: "success",
+          title: "Formulario Enviado",
+          text: "El formulario se ha enviado con éxito.",
+        });
+        // Aquí puedes agregar el código para enviar los datos a una API o realizar otras acciones necesarias
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Diligencie las observaciones de cada item (Malo)",
+          text: "De no hacerlo no podrá continuar con el envío.",
+        });
+      }
     }
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <form onSubmit={handleSubmit}>
-        {/* Renderiza el contenedor que maneja la visualización del formulario */}
-        <Container formData={formData} setFormData={setFormData} handleChange={handleChange} />
-        <button
-          type="submit"
-          className="md:ml-80 mt-4 p-2 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-        >
-          Guardar
-        </button>
+    <div className="container mx-auto px-6 py-12">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <Container
+          formData={formData}
+          setFormData={setFormData}
+          handleChange={handleChange}
+          handleObservationChange={handleObservationChange}
+        />
+        <Comments
+          observations={observations}
+          handleObservationChange={handleObservationChange}
+        />
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-6 py-3 text-center transition-all duration-300 ease-in-out"
+          >
+            <svg
+              className="w-5 h-5 mr-2 inline-block"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="#ffffff"
+                d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480l0-83.6c0-4 1.5-7.8 4.2-10.8L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"
+              />
+            </svg>
+            Enviar Chequeo
+          </button>
+        </div>
       </form>
     </div>
   );

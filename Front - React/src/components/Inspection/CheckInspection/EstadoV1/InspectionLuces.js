@@ -28,7 +28,7 @@ export default function InspectionLuces({ formData, handleChange }) {
         {items.map((item) => (
           <div key={item.name}>
             <div
-              className="cursor-pointer p-2 border rounded-lg shadow-md bg-white hover:bg-gray-100"
+              className="cursor-pointer p-2 border rounded-lg shadow-md bg-white hover:bg-gray-100 font-medium text-sm"
               onClick={() => handleItemClick(item.name)}
             >
               {item.label}

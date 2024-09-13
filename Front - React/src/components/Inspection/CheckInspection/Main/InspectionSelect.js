@@ -21,12 +21,12 @@ export default function InspectionSelect({ label, name, value, handleChange }) {
         name={name} // Nombre del campo select, utilizado en la gestión de cambios
         value={value} // Valor actualmente seleccionado
         onChange={handleChange} // Función llamada cuando se selecciona una opción
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        className="bg-gray-50 border font-medium border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required // Indica que el campo es obligatorio
       >
-        <option value="Bien">Bien</option> 
-        <option value="Mal">Mal</option>
-        <option value="Noaplica">No aplica</option>
+        <option className="font-medium" value="Bien">Bien</option> 
+        <option className="font-medium" value="Mal">Mal</option>
+        <option className="font-medium" value="Noaplica">No aplica</option>
       </select>
     </div>
   );

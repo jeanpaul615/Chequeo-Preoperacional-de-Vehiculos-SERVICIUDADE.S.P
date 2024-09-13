@@ -1,16 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, lazy, Suspense } from "react";
 import $ from "jquery";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import Sidebar from "../../../containers/Sidebar";
 import Navbar from "../../../containers/Navbar";
 import { GetIndicators } from "../../../controllers/Indicators/Indicators/GetIndicators";
-import InputModal from "./InputModal";
 import FilterControls from "./FilterControls";
-import ModalUpdate from "./ModalUpdate";
 import { DeleteIndicator } from "../../../controllers/Indicators/Indicators/DeleteIndicator";
-import ContainerStats from "./Stats/ContainerStats";
 import Swal from "sweetalert2";
+import Loading from "../../../containers/Loading";
+const ContainerStats = lazy(() => import("./Stats/ContainerStats"));
+const ModalUpdate = lazy(() => import("./ModalUpdate"));
+const InputModal = lazy(() => import("./InputModal"));
 
 const DataTableIndicators = () => {
   const tableRef = useRef();
@@ -153,12 +154,14 @@ const DataTableIndicators = () => {
       return (
         (selectedMonth ? itemMonth === parseInt(selectedMonth) : true) &&
         (selectedYear ? itemYear === parseInt(selectedYear) : true) &&
-        (selectedFrequency ? item.frecuencia === selectedFrequency : true) && 
-        (selectedIndicator ? item.id_indicador === parseInt(selectedIndicator): true)
+        (selectedFrequency ? item.frecuencia === selectedFrequency : true) &&
+        (selectedIndicator
+          ? item.id_indicador === parseInt(selectedIndicator)
+          : true)
       );
     });
     setFilteredData(filtered);
-  }, [selectedMonth, selectedYear, selectedFrequency,selectedIndicator, data]);
+  }, [selectedMonth, selectedYear, selectedFrequency, selectedIndicator, data]);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -173,7 +176,7 @@ const DataTableIndicators = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
-    // Clear form
+
   };
 
   return (
@@ -236,17 +239,25 @@ const DataTableIndicators = () => {
         </div>
       </div>
 
-      <InputModal isOpen={modalIsOpen} onRequestClose={closeModal} />
-      <ModalUpdate
-        isOpen={modalUpdateIsOpen}
-        onRequestClose={() => setModalUpdateIsOpen(false)}
-        indicator={selectedIndicator}
-      />
-      {modalStatsIsOpen && (
-        <ContainerStats
-          closeModal={HandleStatsClose}
-          indicators={data} // Pass the entire data to the modal
+      <Suspense fallback={<Loading />}>
+        {" "}
+        <InputModal isOpen={modalIsOpen} onRequestClose={closeModal} />{" "}
+      </Suspense>
+      <Suspense fallback={<Loading />}>
+        <ModalUpdate
+          isOpen={modalUpdateIsOpen}
+          onRequestClose={() => setModalUpdateIsOpen(false)}
+          indicator={selectedIndicator}
         />
+      </Suspense>
+      {modalStatsIsOpen && (
+        <Suspense fallback={<Loading />}>
+          <ContainerStats
+            closeModal={HandleStatsClose}
+            indicators={data} // Pass the entire data to the modal
+          />
+          |
+        </Suspense>
       )}
     </div>
   );
