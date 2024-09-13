@@ -16,19 +16,21 @@ const Indicator = {
   },
   /*Se obtiene los indicadores haciendo un inner join,
   para poder ver reflejado el nombre y datos especificos que estan separados en varias tablas.*/
-  getAllIndicators: (callback) => {
+  // Método para obtener indicadores con paginación
+  getAllIndicatorsPaginated: (offset, limit, callback) => {
     const query = `
-            SELECT 
-                id_registro, id_indicador, nombre_indicador, frecuencia, valor, periodo_inicio 
-            FROM 
-                indicadores 
-            INNER JOIN 
-                registro_indicadores 
-            ON 
-                indicadores.id_indicador = registro_indicadores.indicador_id
-        `;
+      SELECT 
+        id_registro, id_indicador, nombre_indicador, frecuencia, valor, periodo_inicio 
+      FROM 
+        indicadores 
+      INNER JOIN 
+        registro_indicadores 
+      ON 
+        indicadores.id_indicador = registro_indicadores.indicador_id
+      LIMIT ? OFFSET ?
+    `;
 
-    db.query(query, (err, results) => {
+    db.query(query, [limit, offset], (err, results) => {
       if (err) {
         return callback(err, null);
       }
