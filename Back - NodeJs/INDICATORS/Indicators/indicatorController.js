@@ -16,7 +16,7 @@ const getIndicators = (req, res) => {
 const getAllIndicators = (req, res) => {
   // Obtén los parámetros de paginación de la solicitud
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
+  const limit = parseInt(req.query.limit) || 1000;
   const offset = (page - 1) * limit;
 
   Indicator.getAllIndicatorsPaginated(offset, limit, (err, indicators) => {

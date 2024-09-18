@@ -81,16 +81,30 @@ const Vehicle = {
     },
 
     DeleteVehicle: (data, callback) => {
-        const query = `DELETE FROM vehicle WHERE vehicle_id = ?`;
         const { vehicle_id } = data;
-      
-        db.query(query, [vehicle_id], (err, results) => {
+    
+        // Desactivar las comprobaciones de claves foráneas
+        db.query(`SET FOREIGN_KEY_CHECKS=0`, (err) => {
             if (err) {
                 return callback(err, null);
             }
-            callback(null, results);
+    
+            const query = `DELETE FROM vehicle WHERE vehicle_id = ?`;
+            db.query(query, [vehicle_id], (err, results) => {
+                // Reactivar las comprobaciones de claves foráneas
+                db.query(`SET FOREIGN_KEY_CHECKS=1`, (err2) => {
+                    if (err2) {
+                        return callback(err2, null);
+                    }
+                    if (err) {
+                        return callback(err, null);
+                    }
+                    callback(null, results);
+                });
+            });
         });
     },
+    
 };
 
 module.exports = Vehicle;

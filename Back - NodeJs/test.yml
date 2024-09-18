@@ -2,8 +2,8 @@ config:
   target: "http://localhost:8000"  # Tu endpoint API
   phases:
     - duration: 60
-      arrivalRate: 10000  # Usuarios simulados por segundo
+      arrivalRate: 1000  # Usuarios simulados por segundo
 scenarios:
   - flow:
       - get:
-          url: "/auth/login"  # Cambia este valor a la ruta que quieras probar
+          url: "/inspection/newvehiclecondition"  # Cambia este valor a la ruta que quieras probar
