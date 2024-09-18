@@ -242,11 +242,13 @@ const DataTableIndicators = () => {
         {" "}
         <InputModal isOpen={modalIsOpen} onRequestClose={closeModal} />{" "}
       </Suspense>
+      <Suspense fallback={<Loading />}>
         <ModalUpdate
           isOpen={modalUpdateIsOpen}
           onRequestClose={() => setModalUpdateIsOpen(false)}
           indicator={selectedIndicator}
         />
+        </Suspense>
       {modalStatsIsOpen && (
         <Suspense fallback={<Loading />}>
           <ContainerStats

@@ -69,7 +69,7 @@ const DataTableVariable = () => {
       destroy: true,
       scrollX: true,
       pagingType: "full_numbers", // Use full_numbers pagination style
-      lengthMenu: [1000, 100, 75, 50, 25, 10], // Options for rows per page
+      lengthMenu: [10, 25, 50, 75, 100, 1000], // Options for rows per page
       columnDefs: [
         { width: "5%", targets: 0 }, 
         { width: "10%", targets: 1 }, 

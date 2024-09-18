@@ -1,18 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
-import $ from 'jquery';
-import 'datatables.net-dt';
-import 'datatables.net-dt/css/dataTables.dataTables.min.css';
-import Sidebar from '../../../containers/Sidebar';
-import Navbar from '../../../containers/Navbar';
-import ModalNewVehicle from './ModalNewVehicle';
-import ModalUpdate from './ModalUpdate';
-import Swal from 'sweetalert2';
-import { GetVehicles } from '../../../controllers/Inspection/DashboardControllers/Vehicle';
-import { DeleteVehicle } from '../../../controllers/Inspection/VehicleControllers/DeleteVehicle';
-
+import React, { useEffect, useRef, useState } from "react";
+import $ from "jquery";
+import "datatables.net-dt";
+import "datatables.net-dt/css/dataTables.dataTables.min.css";
+import Sidebar from "../../../containers/Sidebar";
+import Navbar from "../../../containers/Navbar";
+import Swal from "sweetalert2";
+import { GetVehicles } from "../../../controllers/Inspection/DashboardControllers/Vehicle";
+import { DeleteVehicle } from "../../../controllers/Inspection/VehicleControllers/DeleteVehicle";
+import ModalNewVehicle from "./ModalNewVehicle";
+import ModalUpdate from "./ModalUpdate";  
 // Función para formatear la fecha
 const formatDate = (dateString) => {
-  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
@@ -27,7 +26,7 @@ const DatatableVehicles = () => {
     const fetchData = async () => {
       try {
         const result = await GetVehicles();
-        const formattedData = result.map(item => ({
+        const formattedData = result.map((item) => ({
           ...item,
           // No formatear las fechas aquí para que estén en formato original
           soat_until: item.soat_until,
@@ -39,7 +38,7 @@ const DatatableVehicles = () => {
         }));
         setData(formattedData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -47,45 +46,46 @@ const DatatableVehicles = () => {
   }, []);
 
   useEffect(() => {
-    if (data.length > 0) {  // Verificar si hay datos antes de inicializar la tabla
+    if (data.length > 0) {
+      // Verificar si hay datos antes de inicializar la tabla
       const tableElement = tableRef.current;
-  
+
       const dataTable = $(tableElement).DataTable({
         data: data,
         columns: [
-          { title: 'ID vehiculo', data: 'vehicle_id' },
-          { title: 'Tipo', data: 'type' },
-          { title: 'Placa', data: 'license_plate' },
-          { title: 'Marca', data: 'brand' },
-          { title: 'Area', data: 'area' },
+          { title: "ID vehiculo", data: "vehicle_id" },
+          { title: "Tipo", data: "type" },
+          { title: "Placa", data: "license_plate" },
+          { title: "Marca", data: "brand" },
+          { title: "Area", data: "area" },
           {
-            title: 'Vigencia Soat',
-            data: 'soat_until',
+            title: "Vigencia Soat",
+            data: "soat_until",
             render: (data) => formatDate(data),
           },
           {
-            title: 'Vigencia RTM',
-            data: 'rtm_until',
+            title: "Vigencia RTM",
+            data: "rtm_until",
             render: (data) => formatDate(data),
           },
           {
-            title: 'Seguro Contractual',
-            data: 'seguro_contractual_until',
+            title: "Seguro Contractual",
+            data: "seguro_contractual_until",
             render: (data) => formatDate(data),
           },
           {
-            title: 'Seguro Extracontractual',
-            data: 'seguro_extracontractual_until',
+            title: "Seguro Extracontractual",
+            data: "seguro_extracontractual_until",
             render: (data) => formatDate(data),
           },
           {
-            title: 'Fecha Creación',
-            data: 'created_at',
+            title: "Fecha Creación",
+            data: "created_at",
             render: (data) => formatDate(data),
           },
           {
-            title: 'Fecha Actualización',
-            data: 'updated_at',
+            title: "Fecha Actualización",
+            data: "updated_at",
             render: (data) => formatDate(data),
           },
           {
@@ -110,21 +110,21 @@ const DatatableVehicles = () => {
         ordering: true,
         scrollX: true,
         pagingType: "full_numbers", // Use full_numbers pagination style
-        lengthMenu: [1000, 100, 75, 50, 25, 10], // Options for rows per page
+        lengthMenu: [10, 25, 50, 75, 100, 1000], // Options for rows per page
         columnDefs: [
-          { width: '1%', targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+          { width: "1%", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
         ],
       });
-  
+
       // Handle button clicks
-      $(tableElement).on('click', 'button', function () {
+      $(tableElement).on("click", "button", function () {
         const button = $(this);
-        const rowData = dataTable.row(button.closest('tr')).data();
-  
+        const rowData = dataTable.row(button.closest("tr")).data();
+
         if (rowData) {
-          if (button.hasClass('btn-update')) {
+          if (button.hasClass("btn-update")) {
             handleEditClick(rowData);
-          } else if (button.hasClass('btn-delete')) {
+          } else if (button.hasClass("btn-delete")) {
             Swal.fire({
               title: "¿Estás seguro?",
               text: "No podrás revertir esto!",
@@ -136,17 +136,25 @@ const DatatableVehicles = () => {
               cancelButtonText: "Cancelar",
             }).then((result) => {
               if (result.isConfirmed) {
-                DeleteVehicle(rowData.vehicle_id).then((response) => {
-                  if (response) {
-                    setData(prevData => prevData.filter(item => item.vehicle_id !== rowData.vehicle_id));
-                  }
-                }).catch(error => console.error('Error deleting vehicle:', error));
+                DeleteVehicle(rowData.vehicle_id)
+                  .then((response) => {
+                    if (response) {
+                      setData((prevData) =>
+                        prevData.filter(
+                          (item) => item.vehicle_id !== rowData.vehicle_id
+                        )
+                      );
+                    }
+                  })
+                  .catch((error) =>
+                    console.error("Error deleting vehicle:", error)
+                  );
               }
             });
           }
         }
       });
-  
+
       return () => {
         if ($.fn.DataTable.isDataTable(tableElement)) {
           $(tableElement).DataTable().destroy();
@@ -154,7 +162,7 @@ const DatatableVehicles = () => {
       };
     }
     // eslint-disable-next-line
-  }, [data]);  
+  }, [data]);
 
   const openUpdateModal = (vehicle) => {
     setSelectedVehicle(vehicle);
@@ -210,22 +218,21 @@ const DatatableVehicles = () => {
                 <th className="px-2 py-1">Acciones</th>
               </tr>
             </thead>
-            <tbody className="bg-white text-gray-600 font-medium">
-            </tbody>
+            <tbody className="bg-white text-gray-600 font-medium"></tbody>
           </table>
         </div>
         {modalUpdateIsOpen && (
-          <ModalUpdate
-            isOpen={modalUpdateIsOpen}
-            onClose={closeUpdateModal}
-            vehicle={selectedVehicle}
-          />
+            <ModalUpdate
+              isOpen={modalUpdateIsOpen}
+              onClose={closeUpdateModal}
+              vehicle={selectedVehicle}
+            />
         )}
         {modalNewVehicleIsOpen && (
-          <ModalNewVehicle
-            isOpen={modalNewVehicleIsOpen}
-            onClose={closeNewVehicleModal}
-          />
+            <ModalNewVehicle
+              isOpen={modalNewVehicleIsOpen}
+              onClose={closeNewVehicleModal}
+            />
         )}
       </div>
     </div>

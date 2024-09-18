@@ -160,6 +160,7 @@ const InspectionForm = () => {
     e.preventDefault();
     if (validateForm()) {
       if (generateObservations()) {
+        
         Swal.fire({
           icon: "success",
           title: "Formulario Enviado",

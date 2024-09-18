@@ -67,7 +67,7 @@ const ModalUpdate = ({ isOpen, onClose, vehicle }) => {
       onClick={onClose} // Click outside should close the modal
     >
       <div
-        className="bg-white rounded-lg shadow-lg p-6 relative"
+        className="bg-white rounded-lg shadow-lg p-4 relative"
         onClick={(e) => e.stopPropagation()} // Prevent event from bubbling up
       >
         <button
@@ -96,14 +96,14 @@ const ModalUpdate = ({ isOpen, onClose, vehicle }) => {
             Actualizar Vehículo:
           </span>
         </div>
-        <hr className="border-gray-400 opacity-50 pt-2 mb-6" />
+        <hr className="border-gray-400 opacity-50 pt-2 mb-4" />
 
         <form
           className="grid grid-cols-1 sm:grid-cols-2 gap-6"
           onSubmit={handleSubmit}
         >
           {Object.keys(labelMap).map((key) => (
-            <div key={key} className="mb-4">
+            <div key={key} className="">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 {labelMap[key]}
               </label>

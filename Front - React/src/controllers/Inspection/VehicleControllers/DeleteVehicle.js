@@ -26,8 +26,8 @@ export const DeleteVehicle = (vehicle_id) => {
     }
   })
   .catch(error => {
-    console.error("Error details:", error.response);  // Captura y muestra los detalles del error
-    Swal.fire("Error", "No se pudo eliminar el vehículo. Revisa los detalles en la consola.", "error");
+    console.error("No se pudo eliminar el vehiculo:", error.response);  // Captura y muestra los detalles del error
+    Swal.fire("No se pudo eliminar el vehiculo", "Tiene Inspecciones Vinculadas, elimina primero las inspecciones.", "error");
     return false;
   });
 };

@@ -219,7 +219,7 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             htmlFor="seguro_contractual"
             className="block text-sm font-medium text-gray-900 dark:text-black"
           >
-            Seguro Contractual(*):
+            SeguroContractual(*):
           </label>
           <input
             type="text"
@@ -238,7 +238,7 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             htmlFor="seguro_extracontractual"
             className="block text-sm font-medium text-gray-900 dark:text-black"
           >
-            Seguro Extracontractual(*):
+            SeguroExtracontractual(*):
           </label>
           <input
             type="text"

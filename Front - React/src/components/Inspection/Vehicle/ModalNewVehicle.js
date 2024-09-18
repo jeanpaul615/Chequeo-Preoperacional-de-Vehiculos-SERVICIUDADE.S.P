@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { NewVehicle } from "../../../controllers/Inspection/VehicleControllers/NewVehicle";
-
 const ModalNewVehicle = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     type: "",
