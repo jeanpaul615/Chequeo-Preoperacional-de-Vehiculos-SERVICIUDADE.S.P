@@ -11,6 +11,16 @@ const getAllInspection = (req, res) => {
   });
 };
 
+const getInspections = (req, res) => {
+  Inspection.getInspectionJoin((err, inspections) => {
+    if (err) {
+      console.error("Error al obtener las inspecciones:", err);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+    res.json(inspections);
+  });
+};
+
 // Controlador para crear una nueva inspección
 const createInspection = (req, res) => {
   const { driver_id, vehicle_id, mileage } = req.body;
@@ -53,4 +63,5 @@ module.exports = {
   getAllInspection,
   createInspection,
   createVehicleCondition,
+  getInspections
 };
