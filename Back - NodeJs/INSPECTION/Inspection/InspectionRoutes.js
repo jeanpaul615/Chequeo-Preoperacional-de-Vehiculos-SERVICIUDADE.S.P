@@ -4,8 +4,8 @@ const inspectionController = require('./inspectionController'); // Asegúrate de
 
 // Ruta para obtener todos los vehículos
 router.get('/', inspectionController.getAllInspection);
-router.post('/newinspection', inspectionController.NewInspection);
-router.post('/newvehiclecondition', inspectionController.NewVehicleCondition);
+router.post('/newinspection', inspectionController.createInspection);
+router.post('/newvehiclecondition', inspectionController.createVehicleCondition);
 
 
 
