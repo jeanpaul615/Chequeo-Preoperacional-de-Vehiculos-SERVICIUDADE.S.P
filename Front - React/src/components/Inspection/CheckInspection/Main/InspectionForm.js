@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Container from "./Container";
 import Swal from "sweetalert2";
 import Comments from "./Comments";
+import { NewInspection, NewVehicleCondition } from "../../../../controllers/Inspection/InspectionControllers/NewInspection";
 
 /**
  * Componente de formulario de inspección.
@@ -12,6 +13,9 @@ const InspectionForm = () => {
   // Estado inicial del formulario con todos los campos establecidos en "Bien".
   const initialFormData = {
     fecha: "",
+    driver_id: "",
+    vehicle_id:"",
+    inspection_id: "",
     nombre_conductor: "",
     licencia: "",
     seguridad_social: "",
@@ -156,17 +160,39 @@ const InspectionForm = () => {
     return Object.keys(newObservations).every((key) => newObservations[key]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       if (generateObservations()) {
-        
-        Swal.fire({
-          icon: "success",
-          title: "Formulario Enviado",
-          text: "El formulario se ha enviado con éxito.",
-        });
-        // Aquí puedes agregar el código para enviar los datos a una API o realizar otras acciones necesarias
+        try {
+          const inspectionData = {
+            driver_id: formData.driver_id, // Asegúrate de ajustar esto según tu lógica
+            vehicle_id: formData.vehicle_id, // Cambia esto según tus necesidades
+            mileage: formData.kilometraje,
+            // Agrega más campos según tu modelo de datos
+          };
+  
+          const inspection_id = await NewInspection(inspectionData);
+          formData.inspection_id = inspection_id;
+          await NewVehicleCondition({
+            inspection_id: formData.inspection_id.inspection_id, // Id de la inspección
+            conditions: formData, // Los datos del formulario relacionados con las condiciones del vehículo
+            comment: Object.values(observations).join(' ') // Unifica los comentarios en un string
+          });
+          
+          Swal.fire({
+            icon: "success",
+            title: "Formulario Enviado",
+            text: "El formulario se ha enviado con éxito.",
+          });
+          //window.location.reload();
+        } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: `Error al enviar la inspección: ${error.message}`,
+          });
+        }
       } else {
         Swal.fire({
           icon: "error",

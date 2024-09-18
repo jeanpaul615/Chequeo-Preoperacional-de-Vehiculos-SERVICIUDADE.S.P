@@ -95,7 +95,18 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             id="placa"
             name="placa"
             value={formData.placa || ""} // Default value
-            onChange={handleChange}
+            onChange={(e) => {
+              const selectedVehicle = vehicles.find(
+                (vehicle) => vehicle.license_plate === e.target.value
+              );
+              handleChange(e); // Update the nombre_conductor field
+              if (selectedVehicle) {
+                // Update formData.driver_id with the selected driver's user_id
+                handleChange({
+                  target: { name: "vehicle_id", value: selectedVehicle.vehicle_id },
+                });
+              }
+            }}
             className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
             required
           >

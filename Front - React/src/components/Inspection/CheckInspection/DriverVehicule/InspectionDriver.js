@@ -48,6 +48,7 @@ const InspectionDriver = ({ formData, handleChange }) => {
       }
     };
     fetchDrivers();
+    // eslint-disable-next-line
   }, []);
 
   // Filtrar conductores según el término de búsqueda
@@ -100,7 +101,18 @@ const InspectionDriver = ({ formData, handleChange }) => {
               id="nombre_conductor"
               name="nombre_conductor"
               value={formData.nombre_conductor}
-              onChange={handleChange}
+              onChange={(e) => {
+                const selectedDriver = drivers.find(
+                  (driver) => driver.driver_name === e.target.value
+                );
+                handleChange(e); // Update the nombre_conductor field
+                if (selectedDriver) {
+                  // Update formData.driver_id with the selected driver's user_id
+                  handleChange({
+                    target: { name: "driver_id", value: selectedDriver.user_id },
+                  });
+                }
+              }}
               className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
               required
             >
