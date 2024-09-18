@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from './components/LogIn/Login';
 import MainDashboard from './components/Inspection/Dashboard/MainDashboard';
 import InspectionForm from './components/Inspection/CheckInspection/Main/InspectionForm';
+import DatatableInspection from './components/Inspection/ListInspection/Datatable';
 import DatatableDrivers from './components/Inspection/Drivers/Datatable';
 import DataTableIndicators from './components/Indicators/IndicatorsComponent/Datatable';
 import DataTableVariables from './components/Indicators/Variables/Datatable';
@@ -31,7 +32,11 @@ export default function App() {
         <Route exact path='/dashboard' element={<MainDashboard />} />
 
         {/* Ruta para el formulario de inspección */}
-        <Route exact path='/inspection' element={<InspectionForm />} />
+        <Route exact path='/inspection' element={<InspectionForm/>} />
+
+        {/* Ruta para la lista de inspección */}
+        <Route exact path='/listinspection' element={<DatatableInspection />} />
+
 
         {/* Ruta para la tabla de conductores */}
         <Route exact path='/drivers' element={<DatatableDrivers />} />
