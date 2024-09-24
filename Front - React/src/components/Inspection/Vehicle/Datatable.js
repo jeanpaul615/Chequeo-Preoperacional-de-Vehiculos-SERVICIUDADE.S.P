@@ -31,8 +31,6 @@ const DatatableVehicles = () => {
           // No formatear las fechas aquí para que estén en formato original
           soat_until: item.soat_until,
           rtm_until: item.rtm_until,
-          seguro_contractual_until: item.seguro_contractual_until,
-          seguro_extracontractual_until: item.seguro_extracontractual_until,
           created_at: item.created_at,
           updated_at: item.updated_at,
         }));
@@ -69,16 +67,6 @@ const DatatableVehicles = () => {
             render: (data) => formatDate(data),
           },
           {
-            title: "Seguro Contractual",
-            data: "seguro_contractual_until",
-            render: (data) => formatDate(data),
-          },
-          {
-            title: "Seguro Extracontractual",
-            data: "seguro_extracontractual_until",
-            render: (data) => formatDate(data),
-          },
-          {
             title: "Fecha Creación",
             data: "created_at",
             render: (data) => formatDate(data),
@@ -112,7 +100,7 @@ const DatatableVehicles = () => {
         pagingType: "full_numbers", // Use full_numbers pagination style
         lengthMenu: [10, 25, 50, 75, 100, 1000], // Options for rows per page
         columnDefs: [
-          { width: "1%", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+          { width: "1%", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
         ],
       });
 
@@ -211,8 +199,6 @@ const DatatableVehicles = () => {
                 <th className="px-2 py-1">Área</th>
                 <th className="px-2 py-1">Vigencia Soat</th>
                 <th className="px-2 py-1">Vigencia RTM</th>
-                <th className="px-2 py-1">Seguro Contractual</th>
-                <th className="px-2 py-1">Seguro Extracontractual</th>
                 <th className="px-2 py-1">Fecha Creación</th>
                 <th className="px-2 py-1">Fecha Actualización</th>
                 <th className="px-2 py-1">Acciones</th>

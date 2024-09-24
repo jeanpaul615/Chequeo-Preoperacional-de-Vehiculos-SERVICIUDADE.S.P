@@ -9,8 +9,6 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
     area: "",
     soat_until: "",
     rtm_until: "",
-    seguro_contractual_until: "",
-    seguro_extracontractual_until: ""
   });
 
   const handleChange = (e) => {
@@ -101,6 +99,9 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
                   <option value="RECOLECTOR">RECOLECTOR</option>
                   <option value="VOLQUETA">VOLQUETA</option>
                   <option value="LIVIANO">LIVIANO</option>
+                  <option value="CAMION">CAMIÓN</option>
+                  <option value="CAMIONETA">CAMIONETA</option>
+                  <option value="MOTO">MOTO</option>
                   <option value="OTRO">OTRO</option>
                 </select>
               </div>

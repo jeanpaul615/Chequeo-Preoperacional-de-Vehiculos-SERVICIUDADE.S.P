@@ -13,8 +13,6 @@ const ModalUpdate = ({ isOpen, onClose, vehicle }) => {
     area: "Área",
     soat_until: "SOAT Válido Hasta",
     rtm_until: "RTM Válido Hasta",
-    seguro_contractual_until: "Seguro Contractual Hasta",
-    seguro_extracontractual_until: "Seguro Extracontractual Hasta",
   };
 
   useEffect(() => {
@@ -23,8 +21,6 @@ const ModalUpdate = ({ isOpen, onClose, vehicle }) => {
         ...vehicle,
         soat_until: vehicle.soat_until ? vehicle.soat_until.split("T")[0] : "",
         rtm_until: vehicle.rtm_until ? vehicle.rtm_until.split("T")[0] : "",
-        seguro_contractual_until: vehicle.seguro_contractual_until ? vehicle.seguro_contractual_until.split("T")[0] : "",
-        seguro_extracontractual_until: vehicle.seguro_extracontractual_until ? vehicle.seguro_extracontractual_until.split("T")[0] : "",
       };
       setFormData(formattedData);
     }

@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 const token = localStorage.getItem('access_token'); // O sessionStorage.getItem('authToken')
 
 export const NewVehicleCondition = async (data) => {
-  console.log(data);
   try {
     const response = await axios.post('http://localhost:8000/inspection/newvehiclecondition', 
       data, // Envía directamente el objeto data
@@ -20,7 +19,7 @@ export const NewVehicleCondition = async (data) => {
   } catch (error) {
     Swal.fire({
       title: 'Error',
-      text: `Error al agregar vehículo: ${error.response?.data?.message || 'Conductor ya registrado'}`,
+      text: `Error al agregar condicion del vehiculo: ${error.response?.data?.message || 'Conductor ya registrado'}`,
       icon: 'error',
       confirmButtonText: 'OK'
     });
@@ -41,7 +40,7 @@ export const NewInspection = async (data) => {
   } catch (error) {
     Swal.fire({
       title: 'Error',
-      text: `Error al agregar vehículo: ${error.response?.data?.message || 'Conductor ya registrado'}`,
+      text: `Error al crear inspecion: ${error.response?.data?.message || 'Conductor ya registrado'}`,
       icon: 'error',
       confirmButtonText: 'OK'
     });

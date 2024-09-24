@@ -29,7 +29,7 @@ export const NewVehicle = async (data) => {
   } catch (error) {
     Swal.fire({
       title: 'Error',
-      text: `Error al agregar conductor: Conductor ya registrado`,
+      text: `Error al agregar vehiculos: Vehiculo ya registrado`,
       icon: 'error',
       confirmButtonText: 'OK'
     });

@@ -9,6 +9,8 @@ import DataTableIndicators from './components/Indicators/IndicatorsComponent/Dat
 import DataTableVariables from './components/Indicators/Variables/Datatable';
 import DatatableVehicles from './components/Inspection/Vehicle/Datatable';
 import Register from './components/LogIn/Register/Register';
+import ResetPassword from './components/LogIn/ResetPassword/ResetPassword';
+import NewPassword from './components/LogIn/NewPassword/NewPassword';
 
 /**
  * App Component
@@ -27,6 +29,13 @@ export default function App() {
 
         {/* Ruta para el registro de nuevos usuarios */}
         <Route exact path='/register' element={<Register />} />
+
+        <Route exact path='/resetpassword' element={<ResetPassword />} />
+
+
+        <Route exact path='/newpassword' element={<NewPassword />} />
+
+
 
         {/* Ruta para el panel de control principal */}
         <Route exact path='/dashboard' element={<MainDashboard />} />

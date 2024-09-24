@@ -26,16 +26,6 @@ const InspectionVehicule = ({ formData, handleChange }) => {
               rtm: vehicleData.rtm_until
                 ? new Date(vehicleData.rtm_until).toISOString().split("T")[0]
                 : "",
-              seguro_contractual: vehicleData.seguro_contractual_until
-                ? new Date(vehicleData.seguro_contractual_until)
-                    .toISOString()
-                    .split("T")[0]
-                : "",
-              seguro_extracontractual: vehicleData.seguro_extracontractual_until
-                ? new Date(vehicleData.seguro_extracontractual_until)
-                    .toISOString()
-                    .split("T")[0]
-                : "",
               dependencia: vehicleData.area || "",
             };
 
@@ -138,6 +128,8 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             <option value="">Seleccione el vehículo</option>
             <option value="RECOLECTOR">Recolector</option>
             <option value="VOLQUETA">Volqueta</option>
+            <option value="LIVIANO">Liviano</option>
+            <option value="CAMION">Camíon</option>
             <option value="CAMIONETA">Camioneta</option>
             <option value="MOTO">Moto</option>
             <option value="OTRO">Otro</option>
@@ -218,44 +210,6 @@ const InspectionVehicule = ({ formData, handleChange }) => {
             id="rtm"
             name="rtm"
             value={formData.rtm || ""} // Default value
-            onChange={handleChange}
-            className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
-            required
-          />
-        </div>
-
-        {/* Seguro Contractual */}
-        <div>
-          <label
-            htmlFor="seguro_contractual"
-            className="block text-sm font-medium text-gray-900 dark:text-black"
-          >
-            SeguroContractual(*):
-          </label>
-          <input
-            type="text"
-            id="seguro_contractual"
-            name="seguro_contractual"
-            value={formData.seguro_contractual || ""} // Default value
-            onChange={handleChange}
-            className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
-            required
-          />
-        </div>
-
-        {/* Seguro Extracontractual */}
-        <div>
-          <label
-            htmlFor="seguro_extracontractual"
-            className="block text-sm font-medium text-gray-900 dark:text-black"
-          >
-            SeguroExtracontractual(*):
-          </label>
-          <input
-            type="text"
-            id="seguro_extracontractual"
-            name="seguro_extracontractual"
-            value={formData.seguro_extracontractual || ""} // Default value
             onChange={handleChange}
             className="font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
             required

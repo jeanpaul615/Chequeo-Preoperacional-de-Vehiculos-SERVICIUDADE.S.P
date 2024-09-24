@@ -109,7 +109,7 @@ const InspectionDriver = ({ formData, handleChange }) => {
                 if (selectedDriver) {
                   // Update formData.driver_id with the selected driver's user_id
                   handleChange({
-                    target: { name: "driver_id", value: selectedDriver.user_id },
+                    target: { name: "driver_id", value: selectedDriver.driver_id },
                   });
                 }
               }}

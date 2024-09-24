@@ -97,7 +97,7 @@ function LoginForm() {
         </div>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <div className="mb-6 text-right">
-          <a href="/login" className="text-blue-500 text-sm italic">
+          <a href="/resetpassword" className="text-blue-500 text-sm italic">
             ¿Olvidaste tu contraseña?
           </a>
         </div>

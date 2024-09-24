@@ -101,7 +101,6 @@ export default function ContainerInspection({ formData, handleChange }) {
    * Actualmente, solo imprime los datos en la consola.
    */
   const handleSave = () => {
-    console.log("Form data saved:", formData);
     setSelectedGroupId(null);
     const Toast = Swal.mixin({
       toast: true,

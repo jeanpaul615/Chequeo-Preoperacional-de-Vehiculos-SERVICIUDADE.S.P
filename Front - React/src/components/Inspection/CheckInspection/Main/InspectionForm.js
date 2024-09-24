@@ -26,8 +26,6 @@ const InspectionForm = () => {
     kilometraje: "",
     soat: "",
     rtm: "",
-    seguro_contractual: "",
-    seguro_extracontractual: "",
     aceite_motor: "Bien",
     aceite_hidraulico: "Bien",
     liquido_de_frenos: "Bien",
@@ -127,8 +125,6 @@ const InspectionForm = () => {
       "kilometraje",
       "soat",
       "rtm",
-      "seguro_contractual",
-      "seguro_extracontractual",
     ];
 
     for (let field of requiredFields) {
@@ -176,16 +172,16 @@ const InspectionForm = () => {
           formData.inspection_id = inspection_id;
           await NewVehicleCondition({
             inspection_id: formData.inspection_id.inspection_id, // Id de la inspección
-            conditions: formData, // Los datos del formulario relacionados con las condiciones del vehículo
+            conditions: JSON.stringify(formData), // Los datos del formulario relacionados con las condiciones del vehículo
             comment: Object.values(observations).join(' ') // Unifica los comentarios en un string
           });
-          
           Swal.fire({
             icon: "success",
             title: "Formulario Enviado",
             text: "El formulario se ha enviado con éxito.",
           });
-          //window.location.reload();
+          setFormData([]);
+          setObservations({});
         } catch (error) {
           Swal.fire({
             icon: "error",
