@@ -63,13 +63,13 @@ exports.requestPasswordReset = (req, res) => {
         return res.status(400).json({ success: false, message: 'El email es obligatorio' });
     }
 
-    Login.checkEmail(email, (err, emailExists) => {
+    Login.checkEmail(email, (err, cedulaExists) => {
         if (err) {
             console.log('Error en checkEmail:', err);
             return res.status(500).json({ success: false, message: 'Error en el servidor' });
         }
-        if (!emailExists) {
-            console.log('Email no registrado');
+        if (!cedulaExists) {
+            console.log('Cedula no registrado');
             return res.status(404).json({ success: false, message: 'Email no registrado' });
         }
 
