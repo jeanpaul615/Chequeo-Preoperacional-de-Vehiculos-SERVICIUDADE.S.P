@@ -1,6 +1,8 @@
 const db = require('.././../config/db/connectioninspeccion');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto'); // Asegúrate de que esta línea esté presente
+
 
 const User = {
     checkCedula: (cedula, callback) => {
@@ -70,7 +72,52 @@ const User = {
                 callback(null, { access_token });
             });
         });
-    }
+    },
+
+
+    requestPasswordReset: (email, callback) => {
+        // Generar un token aleatorio
+        const token = crypto.randomBytes(20).toString('hex');
+
+        // Guardar el token y su fecha de expiración en la base de datos
+        const resetTokenQuery = 'UPDATE user SET reset_token = ?, reset_token_expiration = ? WHERE email = ?';
+        const expires = new Date(Date.now() + 7200000).toISOString().slice(0, 19).replace('T', ' '); // 2 horas a partir de ahora
+        db.query(resetTokenQuery, [token, expires, email], (err, result) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, token);
+        });
+    },
+
+    resetPassword: (token, password, cedula, callback) => {
+        const resetPasswordQuery = 'SELECT * FROM user WHERE reset_token = ? AND reset_token_expiration > ?';
+        db.query(resetPasswordQuery, [token, Date.now()], (err, result) => {
+            if (err) {
+                return callback(err, null);
+            }
+            if (result.length === 0) {
+                return callback(null, { error: 'Token inválido o expirado' });
+            }
+
+            const user = result[0];
+            bcrypt.hash(password, 10, (err, hashedPassword) => {
+                if (err) {
+                    return callback(err, null);
+                }
+
+                // Actualizar la contraseña y limpiar el token
+                const updatePasswordQuery = 'UPDATE user SET password = ?, reset_token = NULL, reset_token_expiration = NULL WHERE cedula = ?';
+                db.query(updatePasswordQuery, [hashedPassword, cedula], (err, result) => {
+                    if (err) {
+                        return callback(err, null);
+                    }
+                    callback(null, { message: 'Contraseña actualizada exitosamente' });
+                });
+            });
+        });
+    },
+
 };
 
 module.exports = User;
