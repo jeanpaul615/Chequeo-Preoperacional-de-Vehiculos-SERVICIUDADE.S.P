@@ -30,10 +30,10 @@ export default function App() {
         {/* Ruta para el registro de nuevos usuarios */}
         <Route exact path='/register' element={<Register />} />
 
-        <Route exact path='/resetpassword' element={<ResetPassword />} />
+        <Route exact path='/request-reset-password' element={<ResetPassword />} />
 
 
-        <Route exact path='/newpassword' element={<NewPassword />} />
+        <Route exact path='/reset-password' element={<NewPassword />} />
 
 
 

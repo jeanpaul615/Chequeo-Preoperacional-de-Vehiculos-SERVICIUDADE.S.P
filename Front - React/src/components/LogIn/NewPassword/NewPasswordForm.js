@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
 import { resetPassword } from "../../../controllers/Inspection/ResetPasswordController/ResetPassword";
 
 function NewPasswordForm() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const token = searchParams.get('token');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
+    cedula: "",
     password: "",
-    verificationPassword: "",
   });
   const [error, setError] = useState(null);
 
@@ -34,7 +37,7 @@ function NewPasswordForm() {
     }
 
     try {
-      const response = await resetPassword("TOKEN_AQUI", formData.password); // Asegúrate de obtener el token correctamente
+      const response = await resetPassword(token, formData.cedula, formData.password);
 
       if (response && response.success) {
         Swal.fire({
@@ -46,7 +49,7 @@ function NewPasswordForm() {
           timer: 3000,
           timerProgressBar: true,
         });
-        navigate("/");  // Redirigir después del restablecimiento exitoso
+        navigate("/"); // Redirigir después del restablecimiento exitoso
       } else {
         setError(response?.message || "Error desconocido al restablecer la contraseña");
       }
@@ -57,8 +60,19 @@ function NewPasswordForm() {
 
   return (
     <div className="p-5 rounded-lg shadow-md md:w-full w-max-w-md border-dotted border-2 border-gray-400">
-      <h2 className="md:text-xl text-orange-600 mb-6 font-extrabold">Digite su nueva contraseña</h2>
+      <h2 className="md:text-xl text-orange-600 mb-6 font-extrabold">Digite su nueva contraseña y su cedula</h2>
       <form onSubmit={handleSubmit}>
+      <div className="mb-4 relative">
+          <label className="pl-2 text-sm block text-gray-700 italic font-bold">Cedula:</label>
+          <input
+            type="number"
+            name="cedula"
+            value={formData.cedula}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-full border-blue-700 focus:outline-none focus:border-gray-300"
+            required
+          />
+        </div>
         <div className="mb-4 relative">
           <label className="pl-2 text-sm block text-gray-700 italic font-bold">Contraseña:</label>
           <input

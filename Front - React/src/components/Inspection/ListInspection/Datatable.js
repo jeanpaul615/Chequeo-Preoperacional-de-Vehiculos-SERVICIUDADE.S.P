@@ -22,7 +22,6 @@ const DatatableInspection = () => {
     const fetchData = async () => {
       try {
         const result = await GetInspection();
-        console.log(result);
         setInspection(result);
       } catch (error) {
         console.error("Error fetching data:", error);

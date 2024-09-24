@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { sendResetPasswordEmail } from "../../../controllers/Inspection/ResetPasswordController/ResetPassword";
 
 function ResetPasswordForm() {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    cedula: "",
     email: "",
   });
   const [error, setError] = useState(null);
@@ -36,7 +33,6 @@ function ResetPasswordForm() {
           timer: 3000,
           timerProgressBar: true,
         });
-        navigate("/resetpassword");
       } else {
         setError(response?.message || "Error al enviar el correo de restablecimiento");
       }
@@ -61,7 +57,7 @@ function ResetPasswordForm() {
           />
         </div>
         <div className="mb-4">
-          <label className="pl-2 text-sm block text-gray-700 italic font-bold">Correo Electrónico:</label>
+          <label className="pl-2 text-sm block text-gray-700 italic font-bold">Correo Electrónico Personal(No empresarial):</label>
           <input
             type="email"
             name="email"
