@@ -20,6 +20,7 @@ const Users = {
     user.email AS user_email, 
     user.role AS user_role, 
     user.status AS user_status, 
+    driver.driver_id As driver_id,
     driver.name AS driver_name, 
     driver.license_until AS driver_license_until, 
     user.user_id AS user_id

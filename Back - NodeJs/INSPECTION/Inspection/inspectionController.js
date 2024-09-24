@@ -42,8 +42,7 @@ const createInspection = (req, res) => {
 // Controlador para crear una nueva condición del vehículo
 const createVehicleCondition = (req, res) => {
   const { inspection_id, conditions, comment } = req.body;
-
-  if (!inspection_id || !conditions || !comment) {
+  if (!inspection_id || !conditions) {
     return res.status(400).json({ message: "Faltan parámetros requeridos" });
   }
 

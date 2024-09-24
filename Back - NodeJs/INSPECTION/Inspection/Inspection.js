@@ -26,7 +26,8 @@ const Inspection = {
         DRIVER d ON i.driver_id = d.driver_id
     INNER JOIN 
         VEHICLE v ON i.vehicle_id = v.vehicle_id;
-    `;
+`;
+
 
     db.query(query, (err, results) => {
       if (err) {

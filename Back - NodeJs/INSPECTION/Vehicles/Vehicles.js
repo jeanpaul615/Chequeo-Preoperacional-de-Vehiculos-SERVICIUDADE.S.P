@@ -28,9 +28,8 @@ const Vehicle = {
             INSERT INTO vehicle (
                 type, license_plate, brand, area, 
                 soat_until, rtm_until, 
-                seguro_contractual_until, seguro_extracontractual_until, 
                 created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`;
+            ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`;
         
         const values = [
             newVehicle.type,
@@ -38,9 +37,7 @@ const Vehicle = {
             newVehicle.brand,
             newVehicle.area,
             newVehicle.soat_until,
-            newVehicle.rtm_until,
-            newVehicle.seguro_contractual_until,
-            newVehicle.seguro_extracontractual_until
+            newVehicle.rtm_until
         ];
         
         db.query(query, values, (err, results) => {
@@ -56,7 +53,6 @@ const Vehicle = {
         UPDATE vehicle
         SET type = ?, license_plate = ?, brand = ?, area = ?, 
             soat_until = ?, rtm_until = ?, 
-            seguro_contractual_until = ?, seguro_extracontractual_until = ?, 
             updated_at = NOW()
         WHERE vehicle_id = ?`;
         
@@ -67,8 +63,6 @@ const Vehicle = {
             updateVehicle.area,
             updateVehicle.soat_until,
             updateVehicle.rtm_until,
-            updateVehicle.seguro_contractual_until,
-            updateVehicle.seguro_extracontractual_until,
             updateVehicle.vehicle_id
         ];
         
