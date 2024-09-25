@@ -68,6 +68,27 @@ const Inspection = {
       }
     );
   },
+  getAllVehicleCondition: (callback) => {
+    const query = "SELECT * FROM vehicle_condition";
+    db.query(query, (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, results);
+    });
+  },
+
+  getVehicleConditionbyId: (inspection_id,callback) => {
+    const query = "SELECT * FROM vehicle_condition WHERE inspection_id = ?";
+    db.query(query,inspection_id, (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, results);
+    });
+  },
+
+
 };
 
 module.exports = Inspection;

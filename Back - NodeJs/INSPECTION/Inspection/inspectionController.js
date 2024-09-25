@@ -58,9 +58,37 @@ const createVehicleCondition = (req, res) => {
   });
 };
 
+const getAllVehicleCondition = (req, res) => {
+  Inspection.getAllVehicleCondition((err, conditions) => {
+    if (err) {
+      console.error("Error al obtener las condiciones de cada inspección:", err);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+    res.json(conditions);
+  });
+};
+
+const getVehicleConditionbyId = (req, res) =>{
+  const {inspection_id } = req.body;
+
+  if(!inspection_id) {
+    return res.status(400).json({ message: "Faltan parámetros requeridos" });
+  }
+
+  Inspection.getVehicleConditionbyId(inspection_id, (err, condition) => {
+    if (err) {
+      console.error("Error al obtener la condicion por Id:", err);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+    res.json(condition);
+  });
+
+};
 module.exports = {
   getAllInspection,
   createInspection,
   createVehicleCondition,
-  getInspections
+  getInspections, 
+  getAllVehicleCondition,
+  getVehicleConditionbyId
 };
