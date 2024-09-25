@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "datatables.net-dt";
 import $ from "jquery";
 import "datatables.net-dt/css/dataTables.dataTables.min.css";
 import Sidebar from "../../../containers/Sidebar";
 import Navbar from "../../../containers/Navbar";
 import { GetInspection } from "../../../controllers/Inspection/InspectionControllers/GetInspection";
-import ModalChequeo from "./ModalChequeo"; // Puedes usar cualquier librería de modales
+import ModalChequeo from "./ModalChequeo";
+import jsPDF from "jspdf";
+import * as XLSX from "xlsx";
 
 const formatDate = (dateString) => {
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -14,9 +17,11 @@ const formatDate = (dateString) => {
 
 const DatatableInspection = () => {
   const tableRef = useRef(null);
+  const navigate = useNavigate();
   const [inspection, setInspection] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedInspection, setSelectedInspection] = useState(null); // Almacenar la inspección seleccionada
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +48,36 @@ const DatatableInspection = () => {
     setSelectedInspection(null);
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev); // Toggle dropdown visibility
+  };
+
+  const NewInspection = () => {
+    navigate("/inspection"); // Redirigir después del restablecimiento exitoso
+  };
+
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Lista de Inspecciones", 20, 20);
+    inspection.forEach((item, index) => {
+      doc.text(
+        `${index + 1}. ID: ${item.inspection_id}, Vehículo: ${
+          item.license_plate
+        }, Fecha: ${formatDate(item.created_at)}`,
+        20,
+        30 + index * 10
+      );
+    });
+    doc.save("inspections.pdf");
+  };
+
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(inspection);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Inspections");
+    XLSX.writeFile(workbook, "inspections.xlsx");
+  };
+
   useEffect(() => {
     if (inspection.length > 0) {
       const tableElement = tableRef.current;
@@ -55,8 +90,8 @@ const DatatableInspection = () => {
         data: inspection,
         columns: [
           { title: "ID Inspección", data: "inspection_id" },
-          { title: "Kilometraje", data: "mileage" },
           { title: "Vehículo", data: "license_plate" },
+          { title: "Kilometraje", data: "mileage" },
           { title: "Conductor", data: "driver_name" },
           {
             title: "Fecha Creación",
@@ -104,8 +139,8 @@ const DatatableInspection = () => {
 
       // Manejador de clic en el botón de chequeo
       $(tableElement).on("click", ".btn-chequeo", function () {
-        const row = $(this).closest("tr").data(); // Obtener los datos de la fila
-        handleCheckClick(row);
+        const rowData = $(tableElement).DataTable().row($(this).closest("tr")).data(); // Obtener los datos de la fila
+        handleCheckClick(rowData);
       });
     }
   }, [inspection]);
@@ -115,6 +150,92 @@ const DatatableInspection = () => {
       <Sidebar />
       <div className="flex-1 md:ml-72 ml-4 text-sm md:mr-5 mr-5 overflow-x-auto">
         <Navbar Title={"Lista de Inspecciones"} />
+        <button
+          onClick={NewInspection}
+          className="bg-green-500 hover:bg-gray-800 text-white focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center w-full md:w-auto"
+        >
+          Nueva Inspección
+        </button>
+
+        {/* Export Buttons */}
+        <div className="relative inline-block text-left float-right ml-2">
+          <div>
+            <button
+              type="button"
+              onClick={toggleDropdown}
+              className="flex justify-center items-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+              id="menu-button"
+              aria-expanded={isDropdownOpen}
+              aria-haspopup="true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Exportar
+            </button>
+          </div>
+
+          {/* Dropdown Menu */}
+          {isDropdownOpen && (
+            <div className="absolute right-0 z-10 rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+              <div className="relative inline-block text-left">
+                <button
+                  onClick={exportToPDF}
+                  className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200 px-2 py-1 mr-2"
+                  role="menuitem"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4 mr-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 2v20l6-6h6a2 2 0 002-2V8a2 2 0 00-2-2h-6L6 2z"
+                    />
+                  </svg>
+                  PDF
+                </button>
+                <button
+                  onClick={exportToExcel}
+                  className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-green-500 hover:text-white transition-colors duration-200 px-2 py-1"
+                  role="menuitem"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4 mr-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 12l8-4v8l-8 4-8-4V8l8 4z"
+                    />
+                  </svg>
+                  Excel
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
 
         <div className="bg-white shadow-md rounded-lg overflow-x-auto">
           <table
@@ -124,8 +245,8 @@ const DatatableInspection = () => {
             <thead className="bg-gray-800 text-white">
               <tr>
                 <th className="px-2 py-1">ID Inspección</th>
-                <th className="px-2 py-1">Kilometraje</th>
                 <th className="px-2 py-1">Vehículo</th>
+                <th className="px-2 py-1">Kilometraje</th>
                 <th className="px-2 py-1">Conductor</th>
                 <th className="px-2 py-1">Fecha</th>
                 <th className="px-2 py-1 ml-12">Chequeado</th>
@@ -137,12 +258,7 @@ const DatatableInspection = () => {
 
         {/* Modal para Chequear */}
         {selectedInspection && (
-          <ModalChequeo isOpen={openModal} onRequestClose={closeModal} center>
-            <h2>Chequear Inspección</h2>
-            <p>ID Inspección: {selectedInspection.inspection_id}</p>
-            <p>Vehículo: {selectedInspection.license_plate}</p>
-            <p>Conductor: {selectedInspection.driver_name}</p>
-            {/* Aquí puedes añadir más campos para chequear */}
+          <ModalChequeo isOpen={openModal} onRequestClose={closeModal} row={selectedInspection} center>
             <button onClick={closeModal} className="btn btn-primary mt-4">
               Cerrar
             </button>

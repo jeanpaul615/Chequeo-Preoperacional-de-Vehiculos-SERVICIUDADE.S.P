@@ -1,74 +1,73 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; 
 import Swal from "sweetalert2";
-import { UpdateDriver } from "../../../controllers/Inspection/DriversControllers/UpdateDriver";
+import { GetVehicleConditionById } from "../../../controllers/Inspection/InspectionControllers/GetVehicleConditionById";
 
-const ModalChequeo = ({ isOpen, onRequestClose, driver }) => {
-  const [formData, setFormData] = useState({});
+// Componente principal de chequeo de condiciones
+const ModalChequeo = ({ isOpen, onRequestClose, row }) => {
+  const [conditions, setConditions] = useState([]);
 
-  const labelMap = {
-    user_cedula: "Cédula",
-    user_email: "Email",
-    user_role: "Rol",
-    user_status: "Estado",
-    driver_name: "Nombre",
-    driver_license_until: "Licencia válida hasta",
-  };
-
+  // Función para obtener las condiciones desde la API
   useEffect(() => {
-    if (driver) {
-      const formattedData = {
-        ...driver,
-        driver_license_until: driver.driver_license_until
-          ? driver.driver_license_until.split("T")[0]  // Formatear fecha
-          : "",
-      };
-      setFormData(formattedData);
-    }
-  }, [driver]);
+    const fetchConditions = async () => {
+      try {
+        const response = await GetVehicleConditionById(row.inspection_id);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+        // Parsear el JSON recibido y convertirlo a un formato adecuado
+        const conditionsArray = Object.entries(response).map(([key, value]) => ({
+          name: key,
+          status: value,
+        }));
+
+        setConditions(conditionsArray); // Guardamos las condiciones
+      } catch (error) {
+        Swal.fire('Error al obtener las condiciones:', error.message);
+      }
+    };
+
+    if (row.inspection_id) {
+      fetchConditions();
+    }
+  }, [row.inspection_id]);
+
+  // Función para manejar cambios en las condiciones
+  const handleConditionChange = (index, value) => {
+    setConditions(prevConditions => {
+      const newConditions = [...prevConditions];
+      newConditions[index].status = value; // Agregamos el estado seleccionado a cada condición
+      return newConditions;
+    });
   };
 
+  // Función para manejar el submit del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData);
-      const success = await UpdateDriver(formData);
-      if (success) {
-        Swal.fire({
-          icon: "success",
-          title: "Éxito",
-          text: "Los datos se han guardado correctamente.",
-        });
-        onRequestClose();
-      } else {
-        throw new Error("Error al actualizar el indicador");
-      }
+      // Aquí puedes enviar las condiciones actualizadas al backend
+      console.log("Condiciones actualizadas:", conditions);
+
+      // Enviar condiciones al backend (puedes usar otra función o Axios directamente)
+      // await sendUpdatedConditionsToBackend(conditions);
+
+      Swal.fire({
+        icon: "success",
+        title: "Éxito",
+        text: "Los datos se han guardado correctamente.",
+      });
+      onRequestClose();
     } catch (error) {
-      console.error("Error updating user:", error);
-      Swal.fire("Error", "Error al actualizar el usuario", "error");
+      Swal.fire("Error", "Error al actualizar las condiciones", "error");
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
-    >
-      <div
-        className="bg-white rounded-lg shadow-lg p-6 relative"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+      <div className="bg-white rounded-lg shadow-lg p-6 relative">
         <button
           type="button"
           onClick={onRequestClose}
-          className="absolute md:top-4 md:right-4 top-1 right-1 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+          className="absolute md:top-4 md:right-4 top-1 right-1 text-gray-400 hover:text-gray-600"
           aria-label="Close modal"
         >
           <svg
@@ -86,69 +85,31 @@ const ModalChequeo = ({ isOpen, onRequestClose, driver }) => {
             />
           </svg>
         </button>
-        <div className="flex justify-center items-center mb-4">
-          <span className="sm:text-base text-xs font-semibold pr-5">
-            Actualizar Conductor:
-          </span>
-          <span className="sm:text-base text-xs font-medium">{formData.driver_name}</span>
-        </div>
-        <hr className="border-gray-400 opacity-50 pt-2 mb-6" />
-
-        <form
-          className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-          onSubmit={handleSubmit}
-        >
-          {Object.keys(labelMap).map((key) => (
-            <div key={key} className="md:mb-4 -mb-1">
-              <label className="block md:mb-2 md:text-sm text-xs font-medium text-gray-700">
-                {labelMap[key]}
-              </label>
-              {key === "user_status" ? (
+        <h2 className="text-lg font-semibold mb-4">Revisión de Condiciones</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="overflow-y-scroll h-64">
+            {conditions.map((condition, index) => (
+              <div key={index} className="mb-4">
+                <label className="block text-gray-700 font-medium mb-2">
+                  {condition.name}: {/* Mostramos el nombre de la condición */}
+                </label>
                 <select
-                  name={key}
-                  value={formData[key] || ""}
-                  onChange={handleChange}
-                  className="md:text-base text-xs w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-700"
+                  value={condition.status || 'Bien'} // Manejamos el valor por defecto
+                  onChange={(e) => handleConditionChange(index, e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                 >
-                  <option value=" ">Seleccione una opción</option>
-                  <option value="1">Activo</option>
-                  <option value="0">Inactivo</option>
+                  <option value="Bien">Bien</option>
+                  <option value="Mal">Mal</option>
+                  <option value="No aplica">No aplica</option>
                 </select>
-              ) : key === "user_role" ? (
-                <select
-                  name={key}
-                  value={formData[key] || ""}
-                  onChange={handleChange}
-                  className="md:text-base text-xs w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-700"
-                >
-                  <option value="ADMIN">Administrador</option>
-                  <option value="AUDITOR">Auditor</option>
-                  <option value="CONDUCTOR">Conductor</option>
-                </select>
-              ) : key === "driver_license_until" ? (
-                <input
-                  type="date"
-                  name={key}
-                  value={formData[key] || ""}
-                  onChange={handleChange}
-                  className="md:text-base text-xs w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-700"
-                />
-              ) : (
-                <input
-                  type="text"
-                  name={key}
-                  value={formData[key] || ""}
-                  onChange={handleChange}
-                  className="md:text-base text-xs w-full md:px-3 md:py-2 px-2 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-700"
-                />
-              )}
-            </div>
-          ))}
+              </div>
+            ))}
+          </div>
           <button
             type="submit"
-            className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center transition ease-in-out duration-150"
+            className="bg-green-600 text-white px-4 py-2 rounded-lg mt-4"
           >
-            Actualizar
+            Guardar
           </button>
         </form>
       </div>

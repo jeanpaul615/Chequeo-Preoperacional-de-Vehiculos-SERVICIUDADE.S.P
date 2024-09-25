@@ -79,6 +79,7 @@ const InspectionDriver = ({ formData, handleChange }) => {
               onChange={handleChange}
               className="bg-gray-50 font-medium border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
               required
+              readOnly
             />
           </div>
 
