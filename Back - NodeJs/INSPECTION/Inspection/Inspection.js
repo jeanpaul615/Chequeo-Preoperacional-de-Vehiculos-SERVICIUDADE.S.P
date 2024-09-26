@@ -53,13 +53,13 @@ const Inspection = {
 
   newVehicleCondition: (data, callback) => {
     const query = `
-      INSERT INTO vehicle_condition (inspection_id, conditions, comment) 
-      VALUES (?, ?, ?)
+      INSERT INTO vehicle_condition (inspection_id, name_condition, conditions, comment) 
+      VALUES (?, ?, ?, ?)
     `;
-    const { inspection_id, conditions, comment } = data;
+    const { inspection_id, name_condition, conditions, comment } = data;
     db.query(
       query,
-      [inspection_id, JSON.stringify(conditions), comment],
+      [inspection_id, name_condition, conditions, comment],
       (err, results) => {
         if (err) {
           return callback(err, null);
@@ -68,6 +68,7 @@ const Inspection = {
       }
     );
   },
+
   getAllVehicleCondition: (callback) => {
     const query = "SELECT * FROM vehicle_condition";
     db.query(query, (err, results) => {
@@ -79,7 +80,7 @@ const Inspection = {
   },
 
   getVehicleConditionbyId: (inspection_id,callback) => {
-    const query = "SELECT * FROM vehicle_condition WHERE inspection_id = ?";
+    const query = "SELECT conditions FROM vehicle_condition WHERE inspection_id = ?";
     db.query(query,inspection_id, (err, results) => {
       if (err) {
         return callback(err, null);

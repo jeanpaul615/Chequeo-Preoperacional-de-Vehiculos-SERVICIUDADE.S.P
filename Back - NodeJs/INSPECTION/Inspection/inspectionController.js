@@ -39,24 +39,55 @@ const createInspection = (req, res) => {
   });
 };
 
-// Controlador para crear una nueva condición del vehículo
-const createVehicleCondition = (req, res) => {
-  const { inspection_id, conditions, comment } = req.body;
-  if (!inspection_id || !conditions) {
-    return res.status(400).json({ message: "Faltan parámetros requeridos" });
+const createVehicleCondition = async (req, res) => {
+  const { inspections } = req.body;
+
+  if (!inspections || !Array.isArray(inspections)) {
+    return res.status(400).json({ message: "'inspections' debe ser un array válido" });
   }
 
-  // Asegúrate de que `conditions` sea procesado correctamente si es necesario
-  const newVehicleConditionData = { inspection_id, conditions, comment };
+  try {
+    const insertedConditions = [];
 
-  Inspection.newVehicleCondition(newVehicleConditionData, (err, vehicleCondition) => {
-    if (err) {
-      console.error("Error al crear la condición del vehículo:", err);
-      return res.status(500).json({ error: "Error en el servidor" });
+    // Procesar e insertar cada inspección y sus condiciones
+    for (const inspection of inspections) {
+      const { inspection_id, name_condition, conditions, comment } = inspection;
+
+      // Validar que cada inspección tenga los campos requeridos
+      if (!inspection_id || !name_condition || !conditions) {
+        return res.status(400).json({ message: "Faltan parámetros requeridos en una de las inspecciones" });
+      }
+
+      // Insertar la inspección con su condición
+      const newVehicleConditionData = {
+        inspection_id,
+        name_condition,
+        conditions,  // Condición única
+        comment
+      };
+
+      const insertedCondition = await new Promise((resolve, reject) => {
+        Inspection.newVehicleCondition(newVehicleConditionData, (err, vehicleCondition) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(vehicleCondition);
+        });
+      });
+
+      insertedConditions.push(insertedCondition);
     }
-    res.status(201).json(vehicleCondition);
-  });
+
+    // Responder con todas las condiciones insertadas
+    res.status(201).json({ message: "Todas las inspecciones y condiciones insertadas correctamente", data: insertedConditions });
+
+  } catch (error) {
+    console.error("Error al crear las condiciones del vehículo:", error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
 };
+
+
 
 const getAllVehicleCondition = (req, res) => {
   Inspection.getAllVehicleCondition((err, conditions) => {

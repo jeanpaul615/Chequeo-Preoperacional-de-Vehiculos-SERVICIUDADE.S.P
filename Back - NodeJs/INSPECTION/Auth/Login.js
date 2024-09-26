@@ -69,7 +69,7 @@ const User = {
 
                 // Crear token JWT
                 const access_token = jwt.sign({ email: user.email, role: user.role, userId: user.user_id }, "Stack");
-                callback(null, { access_token });
+                callback(null, { access_token, role: user.role, user_id:user.user_id  });
             });
         });
     },

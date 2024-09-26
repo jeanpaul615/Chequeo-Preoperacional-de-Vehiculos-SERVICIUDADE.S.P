@@ -13,6 +13,24 @@ const Users = {
     });
   },
 
+
+  getUserById: (data, callback) => {
+    const query = `SELECT   
+    driver.driver_id AS driver_id,
+    driver.name AS driver_name, 
+    driver.license_until AS driver_license_until
+    FROM driver WHERE user_id = ?`;
+
+    const { user_id } = data;
+    db.query(query, [user_id], (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+
+      callback(null, results);
+    });
+  },
+
   getUsers: (data, callback) => {
     const query = `
            SELECT 

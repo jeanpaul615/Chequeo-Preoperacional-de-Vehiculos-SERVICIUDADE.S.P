@@ -30,6 +30,25 @@ const getUsers = (req, res) => {
   });
 };
 
+const getUserById = (req, res) => {
+  const { user_id } = req.body;
+
+  const updateUserData = {
+    user_id,
+  };
+
+  Users.getUserById(updateUserData, (err, user) => {
+    if (err) {
+      console.error("Error al obtener el usuario:", err);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+    if (user.length === 0) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+    res.status(200).json(user);
+  });
+};
+
 const UpdateUser = (req, res) => {
   const { cedula, email, role, status, user_id } = req.body;
 
@@ -88,5 +107,6 @@ module.exports = {
   getAllUsers,
   getUsers,
   UpdateUser,
-  DeleteUser
+  DeleteUser,
+  getUserById
 };
