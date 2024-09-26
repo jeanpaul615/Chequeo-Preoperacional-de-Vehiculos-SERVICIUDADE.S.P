@@ -80,7 +80,7 @@ const Inspection = {
   },
 
   getVehicleConditionbyId: (inspection_id,callback) => {
-    const query = "SELECT conditions FROM vehicle_condition WHERE inspection_id = ?";
+    const query = "SELECT * FROM vehicle_condition WHERE inspection_id = ?";
     db.query(query,inspection_id, (err, results) => {
       if (err) {
         return callback(err, null);
