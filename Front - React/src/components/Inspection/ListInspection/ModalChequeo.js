@@ -4,49 +4,45 @@ import { GetVehicleConditionById } from "../../../controllers/Inspection/Inspect
 
 // Componente principal de chequeo de condiciones
 const ModalChequeo = ({ isOpen, onRequestClose, row }) => {
-  const [conditions, setConditions] = useState([]);
+  const [conditions, setConditions] = useState([]); // Cambiar a un array
 
   // Función para obtener las condiciones desde la API
   useEffect(() => {
     const fetchConditions = async () => {
       try {
         const response = await GetVehicleConditionById(row.inspection_id);
-
-        // Parsear el JSON recibido y convertirlo a un formato adecuado
-        const conditionsArray = Object.entries(response).map(([key, value]) => ({
-          name: key,
-          status: value,
-        }));
-
-        setConditions(conditionsArray); // Guardamos las condiciones
+        console.log("Raw response:", response);
+  
+        // Asegúrate de que response[0].conditions sea una cadena JSON válida
+        if (Array.isArray(response) && response.length > 0 && typeof response[0].conditions === 'string') {
+          const conditionsString = response[0].conditions;
+          try {
+            const parsedConditions = JSON.parse(conditionsString);
+            setConditions(parsedConditions);
+            console.log("Condiciones parseadas:", parsedConditions);
+          } catch (error) {
+            console.error("Error al parsear JSON:", error);
+            Swal.fire('Error', 'Error al parsear las condiciones JSON', 'error');
+          }
+        } else {
+          throw new Error("Formato de respuesta inválido o condiciones no encontradas.");
+        }
       } catch (error) {
         Swal.fire('Error al obtener las condiciones:', error.message);
       }
     };
-
+  
     if (row.inspection_id) {
       fetchConditions();
     }
   }, [row.inspection_id]);
 
-  // Función para manejar cambios en las condiciones
-  const handleConditionChange = (index, value) => {
-    setConditions(prevConditions => {
-      const newConditions = [...prevConditions];
-      newConditions[index].status = value; // Agregamos el estado seleccionado a cada condición
-      return newConditions;
-    });
-  };
-
   // Función para manejar el submit del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Aquí puedes enviar las condiciones actualizadas al backend
       console.log("Condiciones actualizadas:", conditions);
-
-      // Enviar condiciones al backend (puedes usar otra función o Axios directamente)
-      // await sendUpdatedConditionsToBackend(conditions);
+      // Aquí puedes enviar las condiciones actualizadas al backend
 
       Swal.fire({
         icon: "success",
@@ -59,55 +55,46 @@ const ModalChequeo = ({ isOpen, onRequestClose, row }) => {
     }
   };
 
+  // Función para actualizar una condición individual
+  const handleConditionChange = (index, value) => {
+    const newConditions = [...conditions];
+    newConditions[index] = value; // Actualiza la condición específica
+    setConditions(newConditions);
+  };
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-6 relative">
+      <div className="bg-white rounded-lg shadow-lg p-6 relative max-w-md w-full">
         <button
           type="button"
           onClick={onRequestClose}
-          className="absolute md:top-4 md:right-4 top-1 right-1 text-gray-400 hover:text-gray-600"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
           aria-label="Close modal"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
         <h2 className="text-lg font-semibold mb-4">Revisión de Condiciones</h2>
         <form onSubmit={handleSubmit}>
           <div className="overflow-y-scroll h-64">
+            {/* Mostrar condiciones como inputs */}
             {conditions.map((condition, index) => (
-              <div key={index} className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">
-                  {condition.name}: {/* Mostramos el nombre de la condición */}
-                </label>
-                <select
-                  value={condition.status || 'Bien'} // Manejamos el valor por defecto
+              <div key={index} className="mb-2">
+                <input
+                  type="text"
+                  value={condition}
                   onChange={(e) => handleConditionChange(index, e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                >
-                  <option value="Bien">Bien</option>
-                  <option value="Mal">Mal</option>
-                  <option value="No aplica">No aplica</option>
-                </select>
+                  className="border border-gray-300 rounded mx-1 w-full"
+                />
               </div>
             ))}
           </div>
           <button
             type="submit"
-            className="bg-green-600 text-white px-4 py-2 rounded-lg mt-4"
+            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
           >
             Guardar
           </button>

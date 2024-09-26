@@ -14,7 +14,7 @@ const InspectionForm = () => {
   const initialFormData = {
     fecha: "",
     driver_id: "",
-    vehicle_id:"",
+    vehicle_id: "",
     inspection_id: "",
     nombre_conductor: "",
     licencia: "",
@@ -165,23 +165,40 @@ const InspectionForm = () => {
             driver_id: formData.driver_id, // Asegúrate de ajustar esto según tu lógica
             vehicle_id: formData.vehicle_id, // Cambia esto según tus necesidades
             mileage: formData.kilometraje,
-            // Agrega más campos según tu modelo de datos
           };
-  
           const inspection_id = await NewInspection(inspectionData);
           formData.inspection_id = inspection_id;
-          await NewVehicleCondition({
-            inspection_id: formData.inspection_id.inspection_id, // Id de la inspección
-            conditions: JSON.stringify(formData), // Los datos del formulario relacionados con las condiciones del vehículo
-            comment: Object.values(observations).join(' ') // Unifica los comentarios en un string
+  
+          // Aquí se construye el array de inspecciones
+          const inspections = [];
+  
+          // Para cada condición, se construye un objeto y se agrega al array
+          Object.keys(formData).forEach((key) => {
+            if (
+              key !== "fecha" &&
+              key !== "driver_id" &&
+              key !== "vehicle_id" &&
+              key !== "inspection_id"
+            ) {
+              inspections.push({
+                inspection_id: formData.inspection_id.inspection_id,
+                name_condition: key,
+                conditions: formData[key], // Se envían todas las condiciones, incluyendo "Bien"
+                comment: observations[key] || "", // Se agrega el comentario si existe
+              });
+            }
           });
+  
+          // Se envían los datos a la API
+          await NewVehicleCondition({ inspections });
+  
           Swal.fire({
             icon: "success",
             title: "Formulario Enviado",
             text: "El formulario se ha enviado con éxito.",
           });
-          setFormData([]);
-          setObservations({});
+          setFormData(initialFormData); // Resetea el formulario a su estado inicial
+          setObservations({}); // Limpia las observaciones
         } catch (error) {
           Swal.fire({
             icon: "error",
@@ -198,6 +215,7 @@ const InspectionForm = () => {
       }
     }
   };
+  
 
   return (
     <div className="container mx-auto px-6 py-12">
@@ -224,10 +242,10 @@ const InspectionForm = () => {
             >
               <path
                 fill="#ffffff"
-                d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480l0-83.6c0-4 1.5-7.8 4.2-10.8L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"
+                d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480l0-83.6c0-4 1.5-7.8 4.2-10.8L331.8 12c8.3-7.5 21.2-7.5 29.5-.1z"
               />
             </svg>
-            Enviar Chequeo
+            Enviar
           </button>
         </div>
       </form>

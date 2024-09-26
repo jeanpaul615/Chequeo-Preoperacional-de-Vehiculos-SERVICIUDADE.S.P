@@ -63,7 +63,7 @@ const DatatableInspection = () => {
       doc.text(
         `${index + 1}. ID: ${item.inspection_id}, Vehículo: ${
           item.license_plate
-        }, Fecha: ${formatDate(item.created_at)}`,
+        },  Fecha: ${formatDate(item.created_at)}`,
         20,
         30 + index * 10
       );

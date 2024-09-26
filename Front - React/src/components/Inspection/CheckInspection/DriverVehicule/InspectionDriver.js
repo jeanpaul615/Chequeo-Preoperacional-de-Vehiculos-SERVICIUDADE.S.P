@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import Sidebar from "../../../../containers/Sidebar";
-import { GetUsers } from "../../../../controllers/Inspection/DriversControllers/GetDriver";
+import { GetUserById } from "../../../../controllers/Inspection/DriversControllers/GetDriver";
 import { DriverbyName } from "../../../../controllers/Inspection/DriversControllers/DriverbyName";
 
 const today = new Date().toISOString().split("T")[0];
+const user_id = sessionStorage.getItem('user_id');
+
 
 const InspectionDriver = ({ formData, handleChange }) => {
   const [drivers, setDrivers] = useState([]);
   const [licenseUntil, setLicenseUntil] = useState(""); // Cambiar el nombre a licenseUntil
-  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchLicense = async () => {
@@ -41,7 +42,7 @@ const InspectionDriver = ({ formData, handleChange }) => {
   useEffect(() => {
     const fetchDrivers = async () => {
       try {
-        const data = await GetUsers();
+        const data = await GetUserById();
         setDrivers(data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -51,10 +52,6 @@ const InspectionDriver = ({ formData, handleChange }) => {
     // eslint-disable-next-line
   }, []);
 
-  // Filtrar conductores según el término de búsqueda
-  const filteredDrivers = drivers.filter((driver) =>
-    driver.driver_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div className="text-flex flex-col md:flex-row md:justify-center p-4">
@@ -91,13 +88,6 @@ const InspectionDriver = ({ formData, handleChange }) => {
             >
               Nombre del Conductor(*):
             </label>
-            <input
-              type="text"
-              placeholder="Buscar conductor..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="mb-2 font-medium bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2"
-            />
             <select
               id="nombre_conductor"
               name="nombre_conductor"
@@ -118,8 +108,8 @@ const InspectionDriver = ({ formData, handleChange }) => {
               required
             >
               <option value="">Seleccionar Conductor</option>
-              {filteredDrivers.map((driver) => (
-                <option key={driver.user_id} value={driver.driver_name}>
+              {drivers.map((driver) => (
+                <option key={user_id} value={driver.driver_name}>
                   {driver.driver_name}
                 </option>
               ))}
