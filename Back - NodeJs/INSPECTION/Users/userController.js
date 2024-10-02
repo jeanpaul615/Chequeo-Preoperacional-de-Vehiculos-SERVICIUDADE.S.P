@@ -103,10 +103,31 @@ const DeleteUser = (req, res) => {
 
   });
 }
+  const getDriverById = (req, res) => {
+    const { user_id } = req.body;
+  
+    const updateUserData = {
+      user_id,
+    };
+  
+    Users.getDriverById(updateUserData, (err, user) => {
+      if (err) {
+        console.error("Error al obtener el usuario:", err);
+        return res.status(500).json({ error: "Error en el servidor" });
+      }
+      if (user.length === 0) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+      }
+      res.status(200).json(user);
+    });
+};
+
+
 module.exports = {
   getAllUsers,
   getUsers,
   UpdateUser,
   DeleteUser,
-  getUserById
+  getUserById,
+  getDriverById
 };

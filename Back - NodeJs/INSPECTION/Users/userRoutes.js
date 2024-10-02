@@ -6,6 +6,8 @@ const usersController = require('./userController'); // Asegúrate de que la rut
 router.get('/', usersController.getAllUsers);
 router.get('/getuser', usersController.getUsers);
 router.post('/getuserbyid', usersController.getUserById);
+router.post('/getdriverbyid', usersController.getDriverById);
+
 router.put('/updateuser', usersController.UpdateUser);
 router.post('/deleteuser', usersController.DeleteUser);
 

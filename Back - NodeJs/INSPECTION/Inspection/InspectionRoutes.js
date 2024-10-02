@@ -12,6 +12,10 @@ router.post('/getvehicleconditionbyid', inspectionController.getVehicleCondition
 
 router.post('/newinspection', inspectionController.createInspection);
 router.post('/newvehiclecondition', inspectionController.createVehicleCondition);
+router.put('/checkedby', inspectionController.UpdateCheckedBy);
+router.post('/verifyinspection', inspectionController.VerifyInspection);
+
+
 
 
 

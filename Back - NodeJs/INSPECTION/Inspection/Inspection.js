@@ -89,7 +89,29 @@ const Inspection = {
     });
   },
 
+  UpdateAuditChecked: (checked_by, inspection_id, callback) => {
+    const query = "UPDATE inspection SET checked_by = ? WHERE inspection_id = ?";
+    db.query(query, [checked_by, inspection_id], (err, results) => {
+      if(err) {
+        return callback(err, null);
+      }
+      callback(null, results);
+    })
+  },
 
+  VerifyInspection: (created_at, vehicle_id, callback) => {
+    // Usar DATE() para comparar solo la fecha
+    const query = "SELECT * FROM inspection WHERE DATE(created_at) = DATE(?) AND vehicle_id = ?";
+    db.query(query, [created_at, vehicle_id], (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, results);
+    });
+  },
 };
+
+
+
 
 module.exports = Inspection;

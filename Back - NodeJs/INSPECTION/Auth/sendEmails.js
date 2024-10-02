@@ -1,12 +1,12 @@
+
+
 const nodemailer = require('nodemailer');
 const path = require('path'); // Importa el módulo 'path'
 require('dotenv').config(); // Cargar variables de entorno
 
-// Configurar el transportador de nodemailer
+// Configurar el transportador de nodemailer para Gmail
 const transporter = nodemailer.createTransport({
-    host: 'smtp.office365.com', // Servidor SMTP de Outlook
-    port: 587, // Puerto SMTP
-    secure: false, // true para 465, false para otros puertos
+    service: 'gmail', // Utiliza el servicio de Gmail
     auth: {
         user: process.env.EMAIL_USER, // Almacena tu email en .env
         pass: process.env.EMAIL_PASS,   // Almacena tu contraseña en .env
@@ -21,8 +21,7 @@ const enviarEmail = (email, token) => {
         from: process.env.EMAIL_USER,
         to: email,
         subject: 'Restablece tu contraseña',
-        html: `
-        <div style="background-color: #f4f4f4; padding: 20px; font-family: Arial, sans-serif;">
+        html: `<div style="background-color: #f4f4f4; padding: 20px; font-family: Arial, sans-serif;">
             <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
                 
                 <!-- Banner -->
@@ -55,8 +54,7 @@ const enviarEmail = (email, token) => {
                 <!-- Despedida -->
                 <p style="color: #555555; font-size: 16px;">Gracias,<br />El equipo de soporte SERVICIUDAD ESP</p>
             </div>
-        </div>
-        `,
+        </div>`, // (mantén tu contenido HTML aquí)
         attachments: [
             {
                 filename: 'bannerserviciudad.png', // Nombre del archivo
@@ -79,3 +77,4 @@ const enviarEmail = (email, token) => {
 };
 
 module.exports = { enviarEmail };
+

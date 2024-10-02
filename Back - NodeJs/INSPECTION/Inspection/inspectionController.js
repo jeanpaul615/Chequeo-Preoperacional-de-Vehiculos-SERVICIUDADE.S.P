@@ -99,7 +99,7 @@ const getAllVehicleCondition = (req, res) => {
   });
 };
 
-const getVehicleConditionbyId = (req, res) =>{
+const getVehicleConditionbyId = (req, res) => {
   const {inspection_id } = req.body;
 
   if(!inspection_id) {
@@ -113,13 +113,55 @@ const getVehicleConditionbyId = (req, res) =>{
     }
     res.json(condition);
   });
-
 };
+
+const UpdateCheckedBy = (req, res) => {
+  const {checked_by, inspection_id} = req.body;
+
+  if(!checked_by || !inspection_id){
+    return res.status(400).json({ message: "Faltan parámetros requeridos" });
+  }
+
+  Inspection.UpdateAuditChecked(checked_by, inspection_id, (err, checked_by) =>{
+    if (err) {
+      console.error("Error al auditar el chequeo:", err);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+    res.json(checked_by);
+  });  
+};
+
+const VerifyInspection = (req, res) => {
+  const { created_at, vehicle_id } = req.body;
+
+  // Validar parámetros requeridos
+  if (!created_at || !vehicle_id) {
+    return res.status(400).json({ message: "Faltan parámetros requeridos" });
+  }
+
+  // Verificar la inspección solo con la fecha
+  Inspection.VerifyInspection(created_at, vehicle_id, (err, results) => {
+    if (err) {
+      console.error("Error al verificar inspección:", err);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    // Comprobar si se encontraron resultados
+    if (results.length > 0) {
+      return res.status(200).json({ message: "Inspección ya existe", inspections: results });
+    } else {
+      return res.status(200).json({ message: "No se encontraron inspecciones" });
+    }
+  });
+};
+
 module.exports = {
   getAllInspection,
   createInspection,
   createVehicleCondition,
   getInspections, 
   getAllVehicleCondition,
-  getVehicleConditionbyId
+  getVehicleConditionbyId,
+  UpdateCheckedBy,
+  VerifyInspection
 };
