@@ -9,6 +9,7 @@ import { GetInspection } from "../../../controllers/Inspection/InspectionControl
 import ModalChequeo from "./ModalChequeo";
 import jsPDF from "jspdf";
 import * as XLSX from "xlsx";
+import RoleVerify from "../../../containers/RoleVerify";
 
 const formatDate = (dateString) => {
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -22,7 +23,9 @@ const DatatableInspection = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedInspection, setSelectedInspection] = useState(null); // Almacenar la inspección seleccionada
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown
+  const [isViewOnly, setIsViewOnly] = useState(false); // New state for view-only mode
 
+  const roleUser = RoleVerify();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,11 +44,18 @@ const DatatableInspection = () => {
       setOpenModal(true); // Abrir modal
     }
   };
+  
+  const handleViewClick = (row) => {
+    setSelectedInspection(row); // Store selected inspection
+    setOpenModal(true); // Open modal
+    setIsViewOnly(true); // Set to view-only mode
+  };
 
   // Cerrar modal
   const closeModal = () => {
     setOpenModal(false);
     setSelectedInspection(null);
+    setIsViewOnly(false); // Reset view-only state on close
   };
 
   const toggleDropdown = () => {
@@ -72,11 +82,25 @@ const DatatableInspection = () => {
   };
 
   const exportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(inspection);
+    // Crear una copia del array de inspecciones con nombres de columnas en español
+    const inspectionInSpanish = inspection.map((item) => ({
+      "ID Inspección": item.inspection_id,
+      "Vehículo": item.license_plate,
+      "Kilometraje": item.mileage,
+      "Conductor": item.driver_name,
+      "Fecha Creación": formatDate(item.created_at),
+      "Chequeado": item.checked_by || "Pendiente", // Mostrar "Pendiente" si no está chequeado
+    }));
+  
+    // Crear la hoja de cálculo con los nuevos nombres de columnas
+    const worksheet = XLSX.utils.json_to_sheet(inspectionInSpanish);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Inspections");
-    XLSX.writeFile(workbook, "inspections.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Inspecciones");
+    
+    // Descargar el archivo Excel con nombre en español
+    XLSX.writeFile(workbook, "inspecciones.xlsx");
   };
+  
 
   useEffect(() => {
     if (inspection.length > 0) {
@@ -112,13 +136,18 @@ const DatatableInspection = () => {
                       </svg>
                     </button>
                   </div>
-
-                  `;
+                `;
               } else {
-                return `${data}`; // Mostrar chequeador si existe
+                return `
+                  <div class="btn-auditor flex items-center justify-center">
+                    <button class="flex items-center justify-center bg-gray-500 text-white py-2 px-4 rounded" title="Auditor">
+                      <h1 class="text-xs font-semibold">${data}</h1>
+                    </button>
+                  </div>
+                `;
               }
             },
-          },
+          }          
         ],
         responsive: true,
         paging: true,
@@ -142,6 +171,11 @@ const DatatableInspection = () => {
         const rowData = $(tableElement).DataTable().row($(this).closest("tr")).data(); // Obtener los datos de la fila
         handleCheckClick(rowData);
       });
+
+      $(tableElement).on("click", ".btn-auditor", function () {
+        const rowData = $(tableElement).DataTable().row($(this).closest("tr")).data(); // Obtener los datos de la fila
+        handleViewClick(rowData);
+      });
     }
   }, [inspection]);
 
@@ -160,6 +194,7 @@ const DatatableInspection = () => {
         {/* Export Buttons */}
         <div className="relative inline-block text-left float-right ml-2">
           <div>
+          {roleUser === 'ADMIN' || roleUser === 'AUDITOR' ? (
             <button
               type="button"
               onClick={toggleDropdown}
@@ -184,6 +219,7 @@ const DatatableInspection = () => {
               </svg>
               Exportar
             </button>
+            ) : null}
           </div>
 
           {/* Dropdown Menu */}
@@ -258,7 +294,7 @@ const DatatableInspection = () => {
 
         {/* Modal para Chequear */}
         {selectedInspection && (
-          <ModalChequeo isOpen={openModal} onRequestClose={closeModal} row={selectedInspection} center>
+          <ModalChequeo isOpen={openModal} isViewOnly={isViewOnly} onRequestClose={closeModal} row={selectedInspection} center>
             <button onClick={closeModal} className="btn btn-primary mt-4">
               Cerrar
             </button>

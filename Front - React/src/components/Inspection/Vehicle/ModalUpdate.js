@@ -44,9 +44,9 @@ const ModalUpdate = ({ isOpen, onClose, vehicle }) => {
           title: "Éxito",
           text: "Los datos del vehículo se han actualizado correctamente.",
         });
-        onClose(); 
+        onClose();
         window.location.reload();
-        } else {
+      } else {
         throw new Error("Error al actualizar el vehículo");
       }
     } catch (error) {
@@ -88,9 +88,7 @@ const ModalUpdate = ({ isOpen, onClose, vehicle }) => {
           </svg>
         </button>
         <div className="flex justify-center items-center mb-4">
-          <span className="text-lg font-semibold">
-            Actualizar Vehículo:
-          </span>
+          <span className="text-lg font-semibold">Actualizar Vehículo:</span>
         </div>
         <hr className="border-gray-400 opacity-50 pt-2 mb-4" />
 
@@ -103,7 +101,15 @@ const ModalUpdate = ({ isOpen, onClose, vehicle }) => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 {labelMap[key]}
               </label>
-              {key === "type" || key === "area" ? (
+              {key === "vehicle_id" ? ( // Campo solo lectura para ID del vehículo
+                <input
+                  type="text"
+                  name={key}
+                  value={formData[key] || ""}
+                  readOnly
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-700"
+                />
+              ) : key === "type" || key === "area" ? (
                 <select
                   name={key}
                   value={formData[key] || ""}
@@ -111,13 +117,16 @@ const ModalUpdate = ({ isOpen, onClose, vehicle }) => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-700"
                 >
                   {key === "type" && (
-                    <>
-                      <option value="">Seleccione Tipo</option>
-                      <option value="RECOLECTOR">Recolector</option>
-                      <option value="VOLQUETA">Volqueta</option>
-                      <option value="LIVIANO">Liviano</option>
-                      <option value="OTRO">Otro</option>
-                    </>
+                  <>
+                  <option value="">Seleccione Tipo</option>
+                  <option value="RECOLECTOR">RECOLECTOR</option>
+                  <option value="VOLQUETA">VOLQUETA</option>
+                  <option value="LIVIANO">LIVIANO</option>
+                  <option value="CAMION">CAMIÓN</option>
+                  <option value="CAMIONETA">CAMIONETA</option>
+                  <option value="MOTO">MOTO</option>
+                  <option value="OTRO">OTRO</option>
+                  </>
                   )}
                   {key === "area" && (
                     <>
@@ -148,17 +157,15 @@ const ModalUpdate = ({ isOpen, onClose, vehicle }) => {
               )}
             </div>
           ))}
-  <div className="col-span-2 flex justify-center mt-4">
-    <button
-      type="submit"
-      className="py-3 px-4 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm transition ease-in-out duration-150"
-    >
-      Actualizar
-    </button>
-  </div>
-
+          <div className="col-span-2 flex justify-center mt-4">
+            <button
+              type="submit"
+              className="py-3 px-4 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm transition ease-in-out duration-150"
+            >
+              Actualizar
+            </button>
+          </div>
         </form>
-
       </div>
     </div>
   );

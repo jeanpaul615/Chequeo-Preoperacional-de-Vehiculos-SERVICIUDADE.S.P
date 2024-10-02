@@ -47,3 +47,29 @@ export const GetUserById = async () => {
 }
 
 
+export const GetDriverById = async () => {
+  try {
+    const response = await axios.post('http://localhost:8000/users/getdriverbyid', 
+      { user_id }, // Convertir el objeto a formato x-www-form-urlencoded
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Agrega el token al encabezado de la solicitud
+          'Content-Type': 'application/json' // Asegúrate de que el tipo de contenido sea JSON
+        }
+      }
+    );
+    return response;
+  } catch (error) {
+    Swal.fire({
+      title: 'Error',
+      text: `Error al agregar conductor: ${error.message}`,
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
+  }
+}
+
+
+
+
+

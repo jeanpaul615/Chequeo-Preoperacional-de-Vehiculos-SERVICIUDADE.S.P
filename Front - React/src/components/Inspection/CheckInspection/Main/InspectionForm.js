@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import Container from "./Container";
 import Swal from "sweetalert2";
 import Comments from "./Comments";
-import { NewInspection, NewVehicleCondition } from "../../../../controllers/Inspection/InspectionControllers/NewInspection";
-
+import {
+  NewInspection,
+  NewVehicleCondition,
+} from "../../../../controllers/Inspection/InspectionControllers/NewInspection";
+import { VerifyInspection } from "../../../../controllers/Inspection/InspectionControllers/VerifyInspection";
 /**
  * Componente de formulario de inspección.
  * Este componente renderiza un formulario de inspección con una serie de campos predefinidos.
@@ -158,64 +161,78 @@ const InspectionForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      if (generateObservations()) {
-        try {
-          const inspectionData = {
-            driver_id: formData.driver_id, // Asegúrate de ajustar esto según tu lógica
-            vehicle_id: formData.vehicle_id, // Cambia esto según tus necesidades
-            mileage: formData.kilometraje,
-          };
-          const inspection_id = await NewInspection(inspectionData);
-          formData.inspection_id = inspection_id;
-  
-          // Aquí se construye el array de inspecciones
-          const inspections = [];
-  
-          // Para cada condición, se construye un objeto y se agrega al array
-          Object.keys(formData).forEach((key) => {
-            if (
-              key !== "fecha" &&
-              key !== "driver_id" &&
-              key !== "vehicle_id" &&
-              key !== "inspection_id"
-            ) {
-              inspections.push({
-                inspection_id: formData.inspection_id.inspection_id,
-                name_condition: key,
-                conditions: formData[key], // Se envían todas las condiciones, incluyendo "Bien"
-                comment: observations[key] || "", // Se agrega el comentario si existe
-              });
-            }
-          });
-  
-          // Se envían los datos a la API
-          await NewVehicleCondition({ inspections });
-  
-          Swal.fire({
-            icon: "success",
-            title: "Formulario Enviado",
-            text: "El formulario se ha enviado con éxito.",
-          });
-          setFormData(initialFormData); // Resetea el formulario a su estado inicial
-          setObservations({}); // Limpia las observaciones
-        } catch (error) {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: `Error al enviar la inspección: ${error.message}`,
+
+    // Validar el formulario
+    if (!validateForm()) return;
+
+    // Generar observaciones
+    if (!generateObservations()) {
+      Swal.fire({
+        icon: "error",
+        title: "Diligencie las observaciones de cada item (Malo)",
+        text: "De no hacerlo no podrá continuar con el envío.",
+      });
+      return;
+    }
+
+    try {
+      // Llama a VerifyInspection y espera su resultado
+      const response = await VerifyInspection(
+        formData.fecha,
+        formData.vehicle_id
+      );
+
+      if (response && response.message === "Inspección ya existe") {
+        Swal.fire({
+          icon: "warning",
+          title: "Inspección Existente",
+          text: "Ya hay una inspección registrada para esta fecha y vehículo.",
+        });
+        return; // Detener el envío si existe una inspección
+      }
+      const inspectionData = {
+        driver_id: formData.driver_id,
+        vehicle_id: formData.vehicle_id,
+        mileage: formData.kilometraje,
+      };
+
+      const inspection_id = await NewInspection(inspectionData);
+      formData.inspection_id = inspection_id;
+
+      // Construir el array de inspecciones
+      const inspections = [];
+      Object.keys(formData).forEach((key) => {
+        if (
+          !["fecha", "driver_id", "vehicle_id", "inspection_id"].includes(key)
+        ) {
+          inspections.push({
+            inspection_id: formData.inspection_id.inspection_id,
+            name_condition: key,
+            conditions: formData[key],
+            comment: observations[key] || "",
           });
         }
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Diligencie las observaciones de cada item (Malo)",
-          text: "De no hacerlo no podrá continuar con el envío.",
-        });
-      }
+      });
+
+      await NewVehicleCondition({ inspections });
+
+      Swal.fire({
+        icon: "success",
+        title: "Formulario Enviado",
+        text: "El formulario se ha enviado con éxito.",
+      });
+
+      setFormData(initialFormData); // Resetea el formulario a su estado inicial
+      setObservations({}); // Limpia las observaciones
+    } catch (error) {
+      console.error("Error en el envío de la inspección:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: `Error al enviar la inspección: ${error.message}`,
+      });
     }
   };
-  
 
   return (
     <div className="container mx-auto px-6 py-12">
@@ -238,11 +255,11 @@ const InspectionForm = () => {
             <svg
               className="w-5 h-5 mr-2 inline-block"
               xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
+              viewBox="0 0 448 512"
             >
               <path
                 fill="#ffffff"
-                d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480l0-83.6c0-4 1.5-7.8 4.2-10.8L331.8 12c8.3-7.5 21.2-7.5 29.5-.1z"
+                d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"
               />
             </svg>
             Enviar

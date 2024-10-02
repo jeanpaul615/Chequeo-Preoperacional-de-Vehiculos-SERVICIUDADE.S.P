@@ -4,6 +4,8 @@ import Login from './components/LogIn/Login';
 import MainDashboard from './components/Inspection/Dashboard/MainDashboard';
 import InspectionForm from './components/Inspection/CheckInspection/Main/InspectionForm';
 import DatatableInspection from './components/Inspection/ListInspection/Datatable';
+import DatatableInspectionByDriver from './components/Inspection/InspectionByDriver/Datatable';
+
 import DatatableDrivers from './components/Inspection/Drivers/Datatable';
 import DataTableIndicators from './components/Indicators/IndicatorsComponent/Datatable';
 import DataTableVariables from './components/Indicators/Variables/Datatable';
@@ -45,6 +47,10 @@ export default function App() {
 
         {/* Ruta para la lista de inspección */}
         <Route exact path='/listinspection' element={<DatatableInspection />} />
+
+        {/* Ruta para la lista de inspección por conductor */}
+        <Route exact path='/inspectionbydriver' element={<DatatableInspectionByDriver />} />
+
 
 
         {/* Ruta para la tabla de conductores */}

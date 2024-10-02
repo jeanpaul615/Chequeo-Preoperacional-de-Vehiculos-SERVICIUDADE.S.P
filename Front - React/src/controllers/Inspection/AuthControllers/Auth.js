@@ -19,7 +19,6 @@ export const Auth = async (authData) => {
       localStorage.setItem('access_token', access_token); // Almacena el token en sessionStorage
       sessionStorage.setItem('user_id', user_id); // Almacena el user_id en sessionStorage
       sessionStorage.setItem('role', role); // Almacena el user_id en sessionStorage
-      console.log(user_id, role);
       Swal.fire('Autenticación exitosa', 'Has iniciado sesión correctamente.', 'success');
       return { access_token, user_id };
     } else {

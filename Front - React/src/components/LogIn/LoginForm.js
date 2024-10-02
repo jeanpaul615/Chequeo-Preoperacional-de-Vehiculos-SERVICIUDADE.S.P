@@ -36,6 +36,7 @@ function LoginForm() {
       // Verifica que la respuesta tenga la propiedad 'access_token'
       if (response && response.access_token) {
         navigate("/dashboard");
+        window.location.reload();
       } else {
         navigate("/");
       }

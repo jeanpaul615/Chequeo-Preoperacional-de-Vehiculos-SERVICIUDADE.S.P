@@ -21,17 +21,18 @@ const MainDashboard = () => {
     const fetchInspectionData = async () => {
       try {
         if (!token) {
-          Swal.fire("Error", "No se ha encontrado el token de acceso.", "error");
+          Swal.fire(
+            "Error",
+            "No se ha encontrado el token de acceso.",
+            "error"
+          );
           return;
         }
-        const response = await axios.get(
-          "http://localhost:8000/inspection",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get("http://localhost:8000/inspection", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const currentYear = new Date().getFullYear();
 
@@ -46,10 +47,12 @@ const MainDashboard = () => {
           return acc;
         }, {});
 
-        const formattedMonthlyData = Object.keys(monthlyGroupedData).map((month) => ({
-          label: month,
-          value: monthlyGroupedData[month],
-        }));
+        const formattedMonthlyData = Object.keys(monthlyGroupedData).map(
+          (month) => ({
+            label: month,
+            value: monthlyGroupedData[month],
+          })
+        );
 
         // Agrupar datos por año
         const yearlyGroupedData = response.data.reduce((acc, inspection) => {
@@ -59,10 +62,12 @@ const MainDashboard = () => {
           return acc;
         }, {});
 
-        const formattedYearlyData = Object.keys(yearlyGroupedData).map((year) => ({
-          year: year,
-          value: yearlyGroupedData[year],
-        }));
+        const formattedYearlyData = Object.keys(yearlyGroupedData).map(
+          (year) => ({
+            year: year,
+            value: yearlyGroupedData[year],
+          })
+        );
 
         setMonthlyInspectionData(formattedMonthlyData);
         setYearlyInspectionData(formattedYearlyData);
@@ -73,44 +78,88 @@ const MainDashboard = () => {
 
     const fetchData = async () => {
       try {
-        const driversResponse = await axios.get("http://localhost:8000/drivers", {
-          headers: {
-            Authorization: `Bearer ${token}`
+        const driversResponse = await axios.get(
+          "http://localhost:8000/drivers",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
         setDriversCount(driversResponse.data.length);
 
-        const vehiclesResponse = await axios.get("http://localhost:8000/vehicles", {
-          headers: {
-            Authorization: `Bearer ${token}`
+        const vehiclesResponse = await axios.get(
+          "http://localhost:8000/vehicles",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
         setVehiclesCount(vehiclesResponse.data.length);
 
-        const inspectionResponse = await axios.get("http://localhost:8000/inspection", {
-          headers: {
-            Authorization: `Bearer ${token}`
+        const inspectionResponse = await axios.get(
+          "http://localhost:8000/inspection",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
         setNumberInspection(inspectionResponse.data.length);
 
         // Filtrar las inspecciones del día de hoy y del mes actual
         const today = new Date().toISOString().slice(0, 10);
-        const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().slice(0, 10);
-        const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().slice(0, 10);
+        const startOfMonth = new Date(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          1
+        )
+          .toISOString()
+          .slice(0, 10);
+        const endOfMonth = new Date(
+          new Date().getFullYear(),
+          new Date().getMonth() + 1,
+          0
+        )
+          .toISOString()
+          .slice(0, 10);
 
-        const todayCount = inspectionResponse.data.filter(inspection => inspection.created_at.startsWith(today)).length;
-        const monthCount = inspectionResponse.data.filter(inspection => inspection.created_at >= startOfMonth && inspection.created_at <= endOfMonth).length;
+          const formatDate = (date) => {
+            const d = new Date(date);
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
 
+        const formattedData = inspectionResponse.data.map(inspection => {
+          return {
+              ...inspection,
+              created_at: formatDate(inspection.created_at) // Formato 'YYYY-MM-DD'
+          };
+      });
+
+        const todayCount = inspectionResponse.data.filter((inspection) =>
+          inspection.created_at.startsWith(today)
+        ).length;
+        const monthCount = formattedData.filter(
+          (inspection) =>
+            inspection.created_at >= startOfMonth &&
+            inspection.created_at <= endOfMonth
+        ).length;
         setInspectionsToday(todayCount);
         setInspectionsThisMonth(monthCount);
 
-        const types = [...new Set(vehiclesResponse.data.map(vehicle => vehicle.type))];
-        const dependencies = [...new Set(vehiclesResponse.data.map(vehicle => vehicle.area))];
+        const types = [
+          ...new Set(vehiclesResponse.data.map((vehicle) => vehicle.type)),
+        ];
+        const dependencies = [
+          ...new Set(vehiclesResponse.data.map((vehicle) => vehicle.area)),
+        ];
 
         setVehicleTypes(types);
         setVehicleDependencies(dependencies);
-
       } catch (error) {
         Swal.fire("Error al obtener los datos:", error.message);
       }
