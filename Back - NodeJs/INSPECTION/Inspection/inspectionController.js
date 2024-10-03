@@ -21,6 +21,20 @@ const getInspections = (req, res) => {
   });
 };
 
+const getInspectionsByDriver = (req, res) => {
+  const { driver_id } = req.body;
+  if(!driver_id){
+    return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+  }
+  Inspection.getInspectionByDriver(driver_id, (err, inspections) => {
+    if (err) {
+      console.error("Error al obtener las inspecciones:", err);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+    res.json(inspections);
+  });
+};
+
 // Controlador para crear una nueva inspección
 const createInspection = (req, res) => {
   const { driver_id, vehicle_id, mileage } = req.body;
@@ -157,6 +171,7 @@ const VerifyInspection = (req, res) => {
 
 module.exports = {
   getAllInspection,
+  getInspectionsByDriver,
   createInspection,
   createVehicleCondition,
   getInspections, 

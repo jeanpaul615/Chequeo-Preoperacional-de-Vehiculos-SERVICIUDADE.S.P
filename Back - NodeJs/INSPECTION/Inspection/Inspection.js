@@ -37,6 +37,32 @@ const Inspection = {
     });
   },
 
+  getInspectionByDriver: (data, callback) => {
+    const query = `
+    SELECT 
+        i.inspection_id,
+        i.mileage,
+        i.checked_by,
+        i.created_at,
+        d.name AS driver_name,
+        v.license_plate
+    FROM 
+        INSPECTION i
+    INNER JOIN 
+        DRIVER d ON i.driver_id = d.driver_id
+    INNER JOIN 
+        VEHICLE v ON i.vehicle_id = v.vehicle_id;
+`;
+const { driver_id } = data;
+
+    db.query(query, driver_id,  (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, results);
+    });
+  },
+
   newInspection: (data, callback) => {
     const query = `
       INSERT INTO inspection (driver_id, vehicle_id, mileage) 
