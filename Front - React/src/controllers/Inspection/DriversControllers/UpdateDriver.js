@@ -1,5 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../../containers/Api"; 
 
 const token = localStorage.getItem("access_token");
 
@@ -8,7 +9,7 @@ export const UpdateDriver = async (data) => {
     // Definir las dos solicitudes en paralelo
     const [response1, response2] = await Promise.all([
       axios.put(
-        "http://localhost:8000/users/updateuser", // Verifica esta URL en el backend
+        `${API_BASE_URL}/users/updateuser`, // Verifica esta URL en el backend
         {
             cedula: data.user_cedula,
             email: data.user_email,
@@ -24,7 +25,7 @@ export const UpdateDriver = async (data) => {
         }
       ),
       axios.put(
-        "http://localhost:8000/drivers/updatedriver", // Verifica esta URL en el backend
+        `${API_BASE_URL}/drivers/updatedriver`, // Verifica esta URL en el backend
         {
             name: data.driver_name,
             license_until: data.driver_license_until,

@@ -1,11 +1,12 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import qs from "qs";
+import { API_BASE_URL } from "../../../containers/Api"; 
 const token = localStorage.getItem("access_token");
 export const VehiclebyPlate = async (license_plate) => {
     try {
       const response = await axios.post(
-        'http://localhost:8000/vehicles/vehiclebyplate', // Correct the typo here
+        `${API_BASE_URL}/vehicles/vehiclebyplate`, // Correct the typo here
         qs.stringify({ license_plate: license_plate }), // Convert the object to x-www-form-urlencoded
         {
           headers: {

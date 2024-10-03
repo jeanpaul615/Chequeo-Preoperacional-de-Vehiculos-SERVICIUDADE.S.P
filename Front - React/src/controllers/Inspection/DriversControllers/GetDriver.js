@@ -1,11 +1,13 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../../containers/Api"; 
+
 // Asegúrate de tener un token almacenado después de iniciar sesión
 const token = localStorage.getItem('access_token'); // O sessionStorage.getItem('authToken')
 const user_id = sessionStorage.getItem('user_id');
 export const GetUsers = async () => {
   try {
-    const response = await axios.get('http://localhost:8000/users/getuser', 
+    const response = await axios.get(`${API_BASE_URL}/users/getuser`, 
       {
         headers: {
           'Authorization': `Bearer ${token}`, // Agrega el token al encabezado de la solicitud
@@ -26,7 +28,7 @@ export const GetUsers = async () => {
 
 export const GetUserById = async () => {
   try {
-    const response = await axios.post('http://localhost:8000/users/getuserbyid', 
+    const response = await axios.post(`${API_BASE_URL}/users/getuserbyid`, 
       { user_id }, // Convertir el objeto a formato x-www-form-urlencoded
       {
         headers: {
@@ -49,7 +51,7 @@ export const GetUserById = async () => {
 
 export const GetDriverById = async () => {
   try {
-    const response = await axios.post('http://localhost:8000/users/getdriverbyid', 
+    const response = await axios.post(`${API_BASE_URL}/users/getdriverbyid`, 
       { user_id }, // Convertir el objeto a formato x-www-form-urlencoded
       {
         headers: {

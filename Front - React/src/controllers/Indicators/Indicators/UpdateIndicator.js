@@ -1,13 +1,13 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../../containers/Api"; // Ajusta la ruta según la ubicación de tu archivo api.js
 
 const token = localStorage.getItem("access_token");
 
 export const UpdateIndicator = async (data) => {
   try {
-    console.log(data);
     const response = await axios.post(
-      "http://localhost:8000/indicators/updateindicator",
+      `${API_BASE_URL}/indicators/updateindicator`,
       {
         indicador_id: data.id_indicador,
         valor: data.valor,

@@ -1,6 +1,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import qs from "qs"; // Importar qs para convertir los datos en formato x-www-form-urlencoded
+import { API_BASE_URL } from "../../../containers/Api"; 
 
 // Asegúrate de tener un token almacenado después de iniciar sesión
 const token = localStorage.getItem('access_token'); // O sessionStorage.getItem('authToken')
@@ -8,7 +9,7 @@ const token = localStorage.getItem('access_token'); // O sessionStorage.getItem(
 export const DriverbyName = async (driver_name) => {
   try {
     const response = await axios.post(
-      'http://localhost:8000/drivers/driverbyname',
+      `${API_BASE_URL}/drivers/driverbyname`,
       qs.stringify({ driver_name: driver_name }), // Convertir el objeto a formato x-www-form-urlencoded
       {
         headers: {

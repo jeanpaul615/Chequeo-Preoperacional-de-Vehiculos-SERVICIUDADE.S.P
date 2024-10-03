@@ -1,12 +1,13 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import qs from "qs";
+import { API_BASE_URL } from "../../../containers/Api"; 
 
 const token = localStorage.getItem("access_token");
 
 export const DeleteVehicle = (vehicle_id) => {
   return axios.post(
-    "http://localhost:8000/vehicles/deletevehicle",
+    `${API_BASE_URL}/vehicles/deletevehicle`,
     qs.stringify({
       vehicle_id: vehicle_id,  // Asegúrate de que vehicle_id tenga un valor válido
     }),

@@ -1,5 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../../containers/Api"; 
 
 // Asegúrate de tener un token almacenado después de iniciar sesión
 const token = localStorage.getItem("access_token"); // O sessionStorage.getItem('authToken')
@@ -7,7 +8,7 @@ const token = localStorage.getItem("access_token"); // O sessionStorage.getItem(
 export const CheckedBy = async (data) => {
   try {
     const response = await axios.put(
-      "http://localhost:8000/inspection/checkedby",
+      `${API_BASE_URL}/inspection/checkedby`,
       {
         checked_by: data.auditor, 
         inspection_id: data.row.inspection_id

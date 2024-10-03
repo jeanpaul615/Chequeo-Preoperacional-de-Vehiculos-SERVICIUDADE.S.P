@@ -8,7 +8,10 @@ import Swal from "sweetalert2";
 import { GetVehicles } from "../../../controllers/Inspection/DashboardControllers/Vehicle";
 import { DeleteVehicle } from "../../../controllers/Inspection/VehicleControllers/DeleteVehicle";
 import ModalNewVehicle from "./ModalNewVehicle";
-import ModalUpdate from "./ModalUpdate";  
+import ModalUpdate from "./ModalUpdate"; 
+import jsPDF from "jspdf";
+import * as XLSX from "xlsx"; 
+import RoleVerify from "../../../containers/RoleVerify";
 // Función para formatear la fecha
 const formatDate = (dateString) => {
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -20,12 +23,15 @@ const DatatableVehicles = () => {
   const [data, setData] = useState([]);
   const [modalUpdateIsOpen, setModalUpdateIsOpen] = useState(false);
   const [modalNewVehicleIsOpen, setModalNewVehicleIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown
   const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const roleUser = RoleVerify();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await GetVehicles();
+        console.log(result);
         const formattedData = result.map((item) => ({
           ...item,
           // No formatear las fechas aquí para que estén en formato original
@@ -152,6 +158,10 @@ const DatatableVehicles = () => {
     // eslint-disable-next-line
   }, [data]);
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev); // Toggle dropdown visibility
+  };
+
   const openUpdateModal = (vehicle) => {
     setSelectedVehicle(vehicle);
     setModalUpdateIsOpen(true);
@@ -173,6 +183,64 @@ const DatatableVehicles = () => {
     openUpdateModal(vehicle);
   };
 
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(10); // Reducir el tamaño de la letra
+    
+    // Título
+    doc.text("Lista de Inspecciones", 20, 20);
+    
+    // Variables para la posición inicial y el margen inferior
+    let yPosition = 30;
+    const lineHeight = 10; // Altura de cada línea
+    const pageHeight = doc.internal.pageSize.height;
+    const marginBottom = 20;
+  
+    // Recorrer los datos
+    data.forEach((item, index) => {
+      const text = `${index + 1}. ID: ${item.vehicle_id}, Vehículo: ${item.license_plate}, Marca: ${item.brand}, Tipo: ${item.type}, Area: ${item.area}, Soat: ${item.soat_until}, RTM: ${item.rtm_until}, Fecha: ${formatDate(item.created_at)}`;
+      
+      // Comprobar si es necesario crear una nueva página
+      if (yPosition > pageHeight - marginBottom) {
+        doc.addPage(); // Añadir una nueva página
+        yPosition = 20; // Reiniciar la posición de la línea en la nueva página
+      }
+      
+      // Dividir el texto si es demasiado largo para una sola línea
+      const splitText = doc.splitTextToSize(text, 180); // Ajustar el ancho del texto a 180
+      doc.text(splitText, 20, yPosition);
+      
+      yPosition += lineHeight; // Aumentar la posición vertical para la próxima línea
+    });
+  
+    // Guardar el archivo PDF
+    doc.save("vehiculos.pdf");
+  };
+  
+
+  const exportToExcel = () => {
+    // Crear una copia del array de inspecciones con nombres de columnas en español
+    const inspectionInSpanish = data.map((item) => ({
+      "ID Inspección": item.vehicle_id,
+      "Vehículo": item.license_plate,
+      "Tipo": item.type,
+      "Marca": item.brand,
+      "RTM vigencia": item.rtm_until,
+      "Soat vigencia": item.soat_until,
+      "Fecha Creación": formatDate(item.created_at),
+    }));
+  
+    // Crear la hoja de cálculo con los nuevos nombres de columnas
+    const worksheet = XLSX.utils.json_to_sheet(inspectionInSpanish);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Inspecciones");
+    
+    // Descargar el archivo Excel con nombre en español
+    XLSX.writeFile(workbook, "vehiculos.xlsx");
+  };
+  
+
+
   return (
     <div className="flex flex-col md:flex-row mt-8">
       <Sidebar />
@@ -184,11 +252,92 @@ const DatatableVehicles = () => {
         >
           Nuevo Vehículo
         </button>
+ {/* Export Buttons */}
+ <div className="relative inline-block text-left float-right ml-2">
+          <div>
+          {roleUser === 'ADMIN' || roleUser === 'AUDITOR' ? (
+            <button
+              type="button"
+              onClick={toggleDropdown}
+              className="flex justify-center items-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+              id="menu-button"
+              aria-expanded={isDropdownOpen}
+              aria-haspopup="true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Exportar
+            </button>
+            ) : null}
+          </div>
 
-        <div className="bg-white shadow-md rounded-lg overflow-x-auto">
+          {/* Dropdown Menu */}
+          {isDropdownOpen && (
+            <div className="absolute right-0 z-10 rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+              <div className="relative inline-block text-left">
+                <button
+                  onClick={exportToPDF}
+                  className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200 px-2 py-1 mr-2"
+                  role="menuitem"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4 mr-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 2v20l6-6h6a2 2 0 002-2V8a2 2 0 00-2-2h-6L6 2z"
+                    />
+                  </svg>
+                  PDF
+                </button>
+                <button
+                  onClick={exportToExcel}
+                  className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-green-500 hover:text-white transition-colors duration-200 px-2 py-1"
+                  role="menuitem"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4 mr-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 12l8-4v8l-8 4-8-4V8l8 4z"
+                    />
+                  </svg>
+                  Excel
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="bg-white shadow-md rounded-lg overflow-x-auto ">
           <table
             ref={tableRef}
-            className="display w-full table-auto border-collapse"
+            className="display w-full table-auto border-collapse "
           >
             <thead className="bg-gray-800 text-white">
               <tr>

@@ -1,5 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../../containers/Api"; 
 
 const token = localStorage.getItem("access_token");
 
@@ -12,7 +13,7 @@ export const DeleteDriver = (data) => {
 
 
   return axios.post(
-    "http://localhost:8000/users/deleteuser",
+    `${API_BASE_URL}/users/deleteuser`,
     {
       user_id: data.user_id,
     },

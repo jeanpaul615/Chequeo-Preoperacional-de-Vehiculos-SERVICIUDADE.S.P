@@ -3,7 +3,7 @@ import LoginForm from "./LoginForm";
 import imageLogin from "../../assets/Login/imagelogin.png";
 import bannerserviciudad from "../../assets/Navbar/banner-serviciudad.png";
 import logoserviciudad from "../../assets/Login/logo-serviciudad.png";
-
+import Footer from "../../containers/Footer";
 /**
  * Login Component
  * 
@@ -46,6 +46,7 @@ function Login() {
           />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -8,19 +8,12 @@ export default function AvatarUser() {
   // Fetch driver information
   useEffect(() => {
     const fetchDriver = async () => {
-      // Intenta recuperar los datos del localStorage
-      const storedDriver = localStorage.getItem("driver");
-
-      if (storedDriver) {
-        setDriver(JSON.parse(storedDriver)); // Si existen, usalos
-      } else {
         const response = await GetDriverById();
         if (response) {
           const driverData = response.data[0];
-          setDriver(driverData);
           localStorage.setItem("driver", JSON.stringify(driverData)); // Guarda los datos en localStorage
+          setDriver(driverData);
         }
-      }
     };
 
     fetchDriver();
@@ -34,7 +27,7 @@ export default function AvatarUser() {
     <div className="relative">
       <div
         onClick={toggleDropdown}
-        className="flex items-center bg-gradient-to-r from-blue-500 to-blue-700 text-white p-3 rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300"
+        className="flex items-center bg-gradient-to-r from-orange-400 to-orange-600 text-white p-3 rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300"
       >
         {/* Avatar Icon */}
         <svg

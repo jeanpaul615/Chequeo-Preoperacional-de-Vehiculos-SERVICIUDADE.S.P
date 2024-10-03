@@ -1,5 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../../containers/Api"; 
 
 // Asegúrate de tener un token almacenado después de iniciar sesión
 const token = localStorage.getItem('access_token'); // O sessionStorage.getItem('authToken')
@@ -7,7 +8,7 @@ const token = localStorage.getItem('access_token'); // O sessionStorage.getItem(
 export const GetVehicleConditionById = async (data) => {  
   try {
     const response = await axios.post(
-      'http://localhost:8000/inspection/getvehicleconditionbyid',
+      `${API_BASE_URL}/inspection/getvehicleconditionbyid`,
       {
         inspection_id: data, // Asegúrate de enviar 'data' en el cuerpo
       },

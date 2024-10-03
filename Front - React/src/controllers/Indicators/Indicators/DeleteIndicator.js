@@ -1,5 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../../containers/Api"; // Ajusta la ruta según la ubicación de tu archivo api.js
 
 const token = localStorage.getItem("access_token");
 
@@ -18,7 +19,7 @@ export const DeleteIndicator = (data) => {
   const formattedDate = `${year}/${month}/${day}`;
 
   return axios.post(
-    "http://localhost:8000/indicators/deleteindicator",
+    `${API_BASE_URL}/indicators/deleteindicator`, // Aquí concatenas la ruta
     {
       indicador_id: data.id_indicador,
       periodo_inicio: formattedDate,

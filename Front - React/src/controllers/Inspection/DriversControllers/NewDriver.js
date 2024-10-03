@@ -1,12 +1,12 @@
 import axios from "axios";
 import Swal from "sweetalert2";
-
+import { API_BASE_URL } from "../../../containers/Api"; 
 // Asegúrate de tener un token almacenado después de iniciar sesión
 const token = localStorage.getItem('access_token'); // O sessionStorage.getItem('authToken')
 
 export const NewDriver = async (data) => {
   try {
-    const response = await axios.post('http://localhost:8000/drivers/newdriver', 
+    const response = await axios.post(`${API_BASE_URL}/drivers/newdriver`, 
       {
         user_id: data.user_id,
         name: data.name,

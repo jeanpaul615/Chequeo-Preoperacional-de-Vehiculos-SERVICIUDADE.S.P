@@ -1,13 +1,13 @@
 import axios from "axios";
 import Swal from "sweetalert2";
-
+import { API_BASE_URL } from "../../../containers/Api"; 
 // Asegúrate de tener un token almacenado después de iniciar sesión
 const token = localStorage.getItem("access_token");
 
 export const NewVariables = async (data) => {
   try {
     const response = await axios.post(
-      "http://localhost:8000/variables/register",
+      `${API_BASE_URL}/variables/register`,
       data, // Enviar los datos en el cuerpo de la solicitud
       {
         headers: {

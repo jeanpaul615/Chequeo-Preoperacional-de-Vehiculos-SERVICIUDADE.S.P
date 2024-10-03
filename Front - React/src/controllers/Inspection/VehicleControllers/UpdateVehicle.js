@@ -1,12 +1,13 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../../containers/Api"; 
 
 const token = localStorage.getItem("access_token");
 
 export const UpdateVehicle = async (data) => {
   try {
     const response = await axios.put(
-      "http://localhost:8000/vehicles/updatevehicle", // Verifica esta URL en el backend
+      `${API_BASE_URL}/vehicles/updatevehicle`, // Verifica esta URL en el backend
       {
         type: data.type,
         license_plate: data.license_plate,

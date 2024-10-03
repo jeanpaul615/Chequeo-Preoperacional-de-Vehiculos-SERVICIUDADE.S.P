@@ -1,8 +1,9 @@
 import axios from "axios";
+import { API_BASE_URL } from "../../../containers/Api"; 
 
 export const sendResetPasswordEmail = async (formData) => {
   try {
-    const response = await axios.post("http://localhost:8000/auth/request-password-reset", formData);
+    const response = await axios.post(`${API_BASE_URL}/auth/request-password-reset`, formData);
     return response.data;
   } catch (error) {
     return error.response.data;
@@ -11,7 +12,7 @@ export const sendResetPasswordEmail = async (formData) => {
 
 export const resetPassword = async (token, cedula, password) => {
   try {
-    const response = await axios.post(`http://localhost:8000/auth/reset-password`, {
+    const response = await axios.post(`${API_BASE_URL}/auth/reset-password`, {
       cedula,
       password,
       token

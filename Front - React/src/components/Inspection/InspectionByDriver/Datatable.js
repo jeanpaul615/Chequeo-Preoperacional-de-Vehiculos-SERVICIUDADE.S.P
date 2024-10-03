@@ -4,7 +4,7 @@ import $ from "jquery";
 import "datatables.net-dt/css/dataTables.dataTables.min.css";
 import Sidebar from "../../../containers/Sidebar";
 import Navbar from "../../../containers/Navbar";
-import { GetUserById } from "../../../controllers/Inspection/DriversControllers/GetDriver";
+import { GetInspectionByDriver } from "../../../controllers/Inspection/InspectionControllers/GetInspectionByDriver";
 
 
 const formatDate = (dateString) => {
@@ -19,8 +19,8 @@ const DatatableInspectionByDriver = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await GetUserById();
-        setInspection(result);
+        const result = await GetInspectionByDriver();
+        setInspection(result || []);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -79,7 +79,6 @@ const DatatableInspectionByDriver = () => {
                 <th className="px-2 py-1">Kilometraje</th>
                 <th className="px-2 py-1">Conductor</th>
                 <th className="px-2 py-1">Fecha</th>
-                <th className="px-2 py-1 ml-12">Chequeado</th>
               </tr>
             </thead>
             <tbody className="bg-white text-gray-600 font-medium"></tbody>

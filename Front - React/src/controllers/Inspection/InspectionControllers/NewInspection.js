@@ -1,12 +1,13 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../../containers/Api"; 
 
 // Asegúrate de tener un token almacenado después de iniciar sesión
 const token = localStorage.getItem('access_token'); // O sessionStorage.getItem('authToken')
 
 export const NewVehicleCondition = async (data) => {
   try {
-    const response = await axios.post('http://localhost:8000/inspection/newvehiclecondition', 
+    const response = await axios.post(`${API_BASE_URL}/inspection/newvehiclecondition`, 
       data, // Envía directamente el objeto data
       {
         headers: {
@@ -27,7 +28,7 @@ export const NewVehicleCondition = async (data) => {
 }
 export const NewInspection = async (data) => {
   try {
-    const response = await axios.post('http://localhost:8000/inspection/newinspection', 
+    const response = await axios.post(`${API_BASE_URL}/inspection/newinspection`, 
       data, // Envía directamente el objeto data
       {
         headers: {

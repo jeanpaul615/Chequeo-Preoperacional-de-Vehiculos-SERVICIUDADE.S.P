@@ -105,50 +105,56 @@ const DatatableInspection = () => {
   useEffect(() => {
     if (inspection.length > 0) {
       const tableElement = tableRef.current;
-
+  
       if ($.fn.DataTable.isDataTable(tableElement)) {
         $(tableElement).DataTable().destroy();
       }
-
+  
+      const columns = [
+        { title: "ID Inspección", data: "inspection_id" },
+        { title: "Vehículo", data: "license_plate" },
+        { title: "Kilometraje", data: "mileage" },
+        { title: "Conductor", data: "driver_name" },
+        {
+          title: "Fecha Creación",
+          data: "created_at",
+          render: (data) => formatDate(data),
+        },
+      ];
+  
+      // Conditionally add the "Chequeado" column for Admin and Auditor roles
+      if (roleUser === 'ADMIN' || roleUser === 'AUDITOR') {
+        columns.push({
+          title: "Chequeado",
+          data: "checked_by",
+          render: function (data, type, row) {
+            if (!data) {
+              return `
+                <div class="btn-chequeo flex items-center justify-center">
+                  <button class="flex items-center justify-center space-x-2 bg-green-500 text-white py-2 px-4 rounded hover:bg-orange-600" title="Chequear">
+                    <h1 class="text-xs font-semibold">Auditar</h1>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 512 512" fill="currentColor">
+                      <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"/>
+                    </svg>
+                  </button>
+                </div>
+              `;
+            } else {
+              return `
+                <div class="btn-auditor flex items-center justify-center">
+                  <button class="flex items-center justify-center bg-gray-500 text-white py-2 px-4 rounded" title="Auditor">
+                    <h1 class="text-xs font-semibold">${data}</h1>
+                  </button>
+                </div>
+              `;
+            }
+          },
+        });
+      }
+  
       $(tableElement).DataTable({
         data: inspection,
-        columns: [
-          { title: "ID Inspección", data: "inspection_id" },
-          { title: "Vehículo", data: "license_plate" },
-          { title: "Kilometraje", data: "mileage" },
-          { title: "Conductor", data: "driver_name" },
-          {
-            title: "Fecha Creación",
-            data: "created_at",
-            render: (data) => formatDate(data),
-          },
-          {
-            title: "Chequeado",
-            data: "checked_by",
-            render: function (data, type, row) {
-              if (!data) {
-                return `
-                  <div class="btn-chequeo flex items-center justify-center">
-                    <button class="flex items-center justify-center space-x-2 bg-green-500 text-white py-2 px-4 rounded hover:bg-orange-600" title="Chequear">
-                      <h1 class="text-xs font-semibold">Auditar</h1>
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" viewBox="0 0 512 512" fill="currentColor">
-                        <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"/>
-                      </svg>
-                    </button>
-                  </div>
-                `;
-              } else {
-                return `
-                  <div class="btn-auditor flex items-center justify-center">
-                    <button class="flex items-center justify-center bg-gray-500 text-white py-2 px-4 rounded" title="Auditor">
-                      <h1 class="text-xs font-semibold">${data}</h1>
-                    </button>
-                  </div>
-                `;
-              }
-            },
-          }          
-        ],
+        columns: columns,
         responsive: true,
         paging: true,
         searching: true,
@@ -159,26 +165,27 @@ const DatatableInspection = () => {
         columnDefs: [{ width: "1%", targets: "_all" }],
         createdRow: function (row, data, dataIndex) {
           if (!data.checked_by) {
-            $(row).addClass("bg-red-200"); // Fila en rojo si no está chequeado
+            $(row).addClass("bg-red-200"); // Row in red if not checked
           } else {
-            $(row).addClass("bg-green-200"); // Fila en verde si está chequeado
+            $(row).addClass("bg-green-200"); // Row in green if checked
           }
         },
       });
-
-      // Manejador de clic en el botón de chequeo
+  
+      // Check button click handler
       $(tableElement).on("click", ".btn-chequeo", function () {
-        const rowData = $(tableElement).DataTable().row($(this).closest("tr")).data(); // Obtener los datos de la fila
+        const rowData = $(tableElement).DataTable().row($(this).closest("tr")).data(); // Get row data
         handleCheckClick(rowData);
       });
-
+  
+      // Auditor button click handler
       $(tableElement).on("click", ".btn-auditor", function () {
-        const rowData = $(tableElement).DataTable().row($(this).closest("tr")).data(); // Obtener los datos de la fila
+        const rowData = $(tableElement).DataTable().row($(this).closest("tr")).data(); // Get row data
         handleViewClick(rowData);
       });
     }
-  }, [inspection]);
-
+  }, [inspection, roleUser]);
+  
   return (
     <div className="flex flex-col md:flex-row mt-8">
       <Sidebar />
@@ -285,7 +292,7 @@ const DatatableInspection = () => {
                 <th className="px-2 py-1">Kilometraje</th>
                 <th className="px-2 py-1">Conductor</th>
                 <th className="px-2 py-1">Fecha</th>
-                <th className="px-2 py-1 ml-12">Chequeado</th>
+                {roleUser === 'ADMIN' || roleUser === 'AUDITOR' ? (<th className="px-2 py-1 ml-12">Chequeado</th>) : null}
               </tr>
             </thead>
             <tbody className="bg-white text-gray-600 font-medium"></tbody>

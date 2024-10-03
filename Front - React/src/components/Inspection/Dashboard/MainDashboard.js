@@ -4,7 +4,8 @@ import Swal from "sweetalert2";
 import Sidebar from "../../../containers/Sidebar";
 import DashboardStats from "./DashboardStats";
 import Navbar from "../../../containers/Navbar"; // Ajusta la ruta según tu estructura de carpetas
-
+import Footer from "../../../containers/Footer";
+import { API_BASE_URL } from "../../../containers/Api"; 
 const MainDashboard = () => {
   const [driversCount, setDriversCount] = useState(0);
   const [vehiclesCount, setVehiclesCount] = useState(0);
@@ -28,7 +29,7 @@ const MainDashboard = () => {
           );
           return;
         }
-        const response = await axios.get("http://localhost:8000/inspection", {
+        const response = await axios.get(`${API_BASE_URL}/inspection`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -79,7 +80,7 @@ const MainDashboard = () => {
     const fetchData = async () => {
       try {
         const driversResponse = await axios.get(
-          "http://localhost:8000/drivers",
+          `${API_BASE_URL}/drivers`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -89,7 +90,7 @@ const MainDashboard = () => {
         setDriversCount(driversResponse.data.length);
 
         const vehiclesResponse = await axios.get(
-          "http://localhost:8000/vehicles",
+           `${API_BASE_URL}/vehicles`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -99,7 +100,7 @@ const MainDashboard = () => {
         setVehiclesCount(vehiclesResponse.data.length);
 
         const inspectionResponse = await axios.get(
-          "http://localhost:8000/inspection",
+          `${API_BASE_URL}/inspection`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -189,6 +190,7 @@ const MainDashboard = () => {
           />
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import {
   NewVehicleCondition,
 } from "../../../../controllers/Inspection/InspectionControllers/NewInspection";
 import { VerifyInspection } from "../../../../controllers/Inspection/InspectionControllers/VerifyInspection";
+import Footer from "../../../../containers/Footer";
 /**
  * Componente de formulario de inspección.
  * Este componente renderiza un formulario de inspección con una serie de campos predefinidos.
@@ -266,6 +267,7 @@ const InspectionForm = () => {
           </button>
         </div>
       </form>
+      <Footer />
     </div>
   );
 };
