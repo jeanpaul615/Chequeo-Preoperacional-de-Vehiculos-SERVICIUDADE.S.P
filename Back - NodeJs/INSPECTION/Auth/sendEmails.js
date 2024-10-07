@@ -1,6 +1,6 @@
 
 
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer'); //Libreria encargada de enviar correo electronico
 const path = require('path'); // Importa el módulo 'path'
 require('dotenv').config(); // Cargar variables de entorno
 
@@ -12,11 +12,11 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS,   // Almacena tu contraseña en .env
     },
 });
-
+//Función recibe dos parametros un email y un token autogenerado para reestablecer contraseña
 const enviarEmail = (email, token) => {
     const enlace = `http://localhost:3000/reset-password?token=${token}`;
 
-    // Opciones del correo
+    // Opciones del correo a enviar al usuario
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: email,

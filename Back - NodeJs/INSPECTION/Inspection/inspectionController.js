@@ -10,22 +10,24 @@ const getAllInspection = (req, res) => {
     res.json(inspections);
   });
 };
-
+//Controlador que obtiene todas las inspecciones haciendo un innerjoin para consumir todos los nombre necesarios para la tabla
 const getInspections = (req, res) => {
   Inspection.getInspectionJoin((err, inspections) => {
     if (err) {
-      console.error("Error al obtener las inspecciones:", err);
+      console.error("Error al obtener las inspecciones:", err);//Manejo de errores por servidor
       return res.status(500).json({ error: "Error en el servidor" });
     }
-    res.json(inspections);
+    res.json(inspections); //restorna las inspecciones formato JSON
   });
 };
 
+// Controlador para obtener Inspecciones basada en conductor.
 const getInspectionsByDriver = (req, res) => {
   const { driver_id } = req.body;
   if(!driver_id){
-    return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    return res.status(400).json({ error: 'Todos los campos son obligatorios' });//Manejo de errores por falta de parametros
   }
+  //
   Inspection.getInspectionByDriver(driver_id, (err, inspections) => {
     if (err) {
       console.error("Error al obtener las inspecciones:", err);
@@ -52,7 +54,7 @@ const createInspection = (req, res) => {
     res.status(201).json(inspection);
   });
 };
-
+//Controlador para crear una nueva condicion de vehiculo.
 const createVehicleCondition = async (req, res) => {
   const { inspections } = req.body;
 
@@ -102,38 +104,39 @@ const createVehicleCondition = async (req, res) => {
 };
 
 
-
+//Controlador para obtener las condiciones de los vehiculos
 const getAllVehicleCondition = (req, res) => {
   Inspection.getAllVehicleCondition((err, conditions) => {
     if (err) {
-      console.error("Error al obtener las condiciones de cada inspección:", err);
+      console.error("Error al obtener las condiciones de cada inspección:", err);//Manejo de errores de consulta o servidor
       return res.status(500).json({ error: "Error en el servidor" });
     }
-    res.json(conditions);
+    res.json(conditions);//Respuesta formato JSON por 
   });
 };
 
+//Controlador para obtener las  condiciones de un vehiculo basado en su ID
 const getVehicleConditionbyId = (req, res) => {
   const {inspection_id } = req.body;
-
+  //Condicional para verificar que si este el parametro necesario
   if(!inspection_id) {
-    return res.status(400).json({ message: "Faltan parámetros requeridos" });
+    return res.status(400).json({ message: "Faltan parámetros requeridos" });//Respuesta de estado de servidor si faltan parametros 
   }
-
+  //Llamado al modelo de para traer las condiciones del vehiculo con una consulta SQL
   Inspection.getVehicleConditionbyId(inspection_id, (err, condition) => {
     if (err) {
       console.error("Error al obtener la condicion por Id:", err);
-      return res.status(500).json({ error: "Error en el servidor" });
+      return res.status(500).json({ error: "Error en el servidor" });//Manejo de errores del servidor
     }
-    res.json(condition);
+    res.json(condition);//Si todo sale bien que de respuesta en modo JSON
   });
 };
-
+//Controlador para chequear las inspecciones
 const UpdateCheckedBy = (req, res) => {
-  const {checked_by, inspection_id} = req.body;
+  const {checked_by, inspection_id} = req.body; //parametros requeridos en el body
 
   if(!checked_by || !inspection_id){
-    return res.status(400).json({ message: "Faltan parámetros requeridos" });
+    return res.status(400).json({ message: "Faltan parámetros requeridos" });//Manejo de parametros faltantes
   }
 
   Inspection.UpdateAuditChecked(checked_by, inspection_id, (err, checked_by) =>{

@@ -1,5 +1,7 @@
+//Importar base de datos para realizar consultas SQL
 const db = require('../../config/db/connectioninspeccion');
 
+//Función que obtiene a todos los conductores y los retorna al front.
 const Driver = {
     getAllDrivers: (callback) => {
         const query = 'SELECT * FROM driver'; 
@@ -11,8 +13,7 @@ const Driver = {
             callback(null, results); 
         });
     },
-
-    // Corregido el orden de los parámetros (primero el 'data', luego el 'callback')
+//Función encargada de traer un conductor especifico por el nombre
     getDriverbyName: (data, callback) => {
         const query = 'SELECT * FROM driver WHERE name = ?';
         const { driver_name } = data;
@@ -24,7 +25,7 @@ const Driver = {
             callback(null, results);
         });
     },
-
+//Función encargada de agregar un nuevo registro, solicita el id, nombre, licencia.
     NewDriverRegister: (data, callback) => {
         const query = `
             INSERT INTO driver (user_id, name, license_until) 
@@ -39,7 +40,7 @@ const Driver = {
             callback(null, results);
         });
     },
-
+//Actualiza el conductor, el nombre o la licencia basado en el id.
     UpdateDriver: (data, callback) => {
         const query = `
           UPDATE driver

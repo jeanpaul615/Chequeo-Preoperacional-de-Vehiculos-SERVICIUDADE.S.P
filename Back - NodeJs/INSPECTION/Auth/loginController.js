@@ -1,6 +1,7 @@
 const Login = require('./Login');
 const SendEmail = require('./sendEmails');
 
+// Controlador para registrar un nuevo usuario
 exports.register = (req, res) => {
     const { cedula, email, password, role, status } = req.body;
 
@@ -37,6 +38,16 @@ exports.register = (req, res) => {
     });
 };
 
+/**
+ * @route POST /login
+ * @description Inicia sesión de un usuario.
+ * @param {string} email - Email del usuario.
+ * @param {string} password - Contraseña del usuario.
+ * @returns {Object} 200 - Datos del usuario y token de sesión.
+ * @returns {Error} 400 - Si faltan campos obligatorios.
+ * @returns {Error} 401 - Si las credenciales son incorrectas.
+ * @returns {Error} 500 - Si ocurre un error en el servidor.
+ */
 exports.login = (req, res) => {
     const { email, password } = req.body;
 
@@ -55,6 +66,15 @@ exports.login = (req, res) => {
     });
 };
 
+/**
+ * @route POST /request-password-reset
+ * @description Solicita un restablecimiento de contraseña.
+ * @param {string} email - Email del usuario.
+ * @returns {Object} 200 - Mensaje de éxito.
+ * @returns {Error} 400 - Si el email es obligatorio.
+ * @returns {Error} 404 - Si el email no está registrado.
+ * @returns {Error} 500 - Si ocurre un error en el servidor.
+ */
 exports.requestPasswordReset = (req, res) => {
     const { email } = req.body;
 
@@ -86,7 +106,16 @@ exports.requestPasswordReset = (req, res) => {
     });
 };
 
-
+/**
+ * @route POST /reset-password
+ * @description Restablece la contraseña del usuario.
+ * @param {string} token - Token de restablecimiento de contraseña.
+ * @param {string} password - Nueva contraseña.
+ * @param {string} cedula - Cédula del usuario.
+ * @returns {Object} 200 - Mensaje de éxito.
+ * @returns {Error} 400 - Si faltan campos obligatorios.
+ * @returns {Error} 500 - Si ocurre un error en el servidor.
+ */
 exports.resetPassword = (req, res) => {
     const { token, password, cedula } = req.body;
 
@@ -94,7 +123,7 @@ exports.resetPassword = (req, res) => {
         return res.status(400).json({ success: false, message: 'Token y contraseña son obligatorios' });
     }
 
-    Login.resetPassword(token, password, cedula,  (err, result) => {
+    Login.resetPassword(token, password, cedula, (err, result) => {
         if (err) {
             return res.status(500).json({ success: false, message: 'Error en el servidor' });
         }
