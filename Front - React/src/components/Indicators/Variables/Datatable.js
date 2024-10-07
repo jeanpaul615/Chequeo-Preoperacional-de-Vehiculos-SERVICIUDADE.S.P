@@ -109,7 +109,7 @@ const DataTableVariable = () => {
     <div>
       <Sidebar />
       <div className="pt-8 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
-        <Navbar Title={"Indicadores"} />
+        <Navbar Title={"Variables"} />
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <div className="p-4">
             <FilterControls

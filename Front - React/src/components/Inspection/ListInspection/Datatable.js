@@ -189,98 +189,98 @@ const DatatableInspection = () => {
   return (
     <div className="flex flex-col md:flex-row mt-8">
       <Sidebar />
-      <div className="flex-1 md:ml-72 ml-4 text-sm md:mr-5 mr-5 overflow-x-auto">
+      <div className="flex-1 md:ml-72 ml-4 text-sm md:mr-5 mr-4 overflow-x-auto">
         <Navbar Title={"Lista de Inspecciones"} />
-        <button
-          onClick={NewInspection}
-          className="bg-green-500 hover:bg-gray-800 text-white focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center w-full md:w-auto"
-        >
-          Nueva Inspección
-        </button>
-
-        {/* Export Buttons */}
-        <div className="relative inline-block text-left float-right ml-2">
-          <div>
-          {roleUser === 'ADMIN' || roleUser === 'AUDITOR' ? (
-            <button
-              type="button"
-              onClick={toggleDropdown}
-              className="flex justify-center items-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
-              id="menu-button"
-              aria-expanded={isDropdownOpen}
-              aria-haspopup="true"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+        <div className="flex justify-between items-center mt-4">
+          <button
+            onClick={NewInspection}
+            className="bg-green-500 hover:bg-gray-800 text-white focus:ring-2 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 w-full md:w-auto"
+          >
+            Nueva Inspección
+          </button>
+  
+          {/* Botones de exportación */}
+          {(roleUser === 'ADMIN' || roleUser === 'AUDITOR') && (
+            <div className="relative inline-block text-left float-right ml-2">
+              <button
+                type="button"
+                onClick={toggleDropdown}
+                className="flex justify-center items-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+                id="menu-button"
+                aria-expanded={isDropdownOpen}
+                aria-haspopup="true"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              Exportar
-            </button>
-            ) : null}
-          </div>
-
-          {/* Dropdown Menu */}
-          {isDropdownOpen && (
-            <div className="absolute right-0 z-10 rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
-              <div className="relative inline-block text-left">
-                <button
-                  onClick={exportToPDF}
-                  className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200 px-2 py-1 mr-2"
-                  role="menuitem"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4 mr-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 2v20l6-6h6a2 2 0 002-2V8a2 2 0 00-2-2h-6L6 2z"
-                    />
-                  </svg>
-                  PDF
-                </button>
-                <button
-                  onClick={exportToExcel}
-                  className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-green-500 hover:text-white transition-colors duration-200 px-2 py-1"
-                  role="menuitem"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4 mr-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 12l8-4v8l-8 4-8-4V8l8 4z"
-                    />
-                  </svg>
-                  Excel
-                </button>
-              </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Exportar
+              </button>
+  
+              {/* Menú desplegable */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 z-10 rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                  <div className="relative inline-block text-left">
+                    <button
+                      onClick={exportToPDF}
+                      className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200 px-2 py-1 mr-2"
+                      role="menuitem"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 2v20l6-6h6a2 2 0 002-2V8a2 2 0 00-2-2h-6L6 2z"
+                        />
+                      </svg>
+                      PDF
+                    </button>
+                    <button
+                      onClick={exportToExcel}
+                      className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-green-500 hover:text-white transition-colors duration-200 px-2 py-1"
+                      role="menuitem"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 12l8-4v8l-8 4-8-4V8l8 4z"
+                        />
+                      </svg>
+                      Excel
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
-
-        <div className="bg-white shadow-md rounded-lg overflow-x-auto">
+  
+        <div className="bg-white shadow-md rounded-lg overflow-x-auto mt-4">
           <table
             ref={tableRef}
             className="display w-full table-auto border-collapse"
@@ -292,16 +292,24 @@ const DatatableInspection = () => {
                 <th className="px-2 py-1">Kilometraje</th>
                 <th className="px-2 py-1">Conductor</th>
                 <th className="px-2 py-1">Fecha</th>
-                {roleUser === 'ADMIN' || roleUser === 'AUDITOR' ? (<th className="px-2 py-1 ml-12">Chequeado</th>) : null}
+                {(roleUser === 'ADMIN' || roleUser === 'AUDITOR') && (
+                  <th className="px-2 py-1">Chequeado</th>
+                )}
               </tr>
             </thead>
             <tbody className="bg-white text-gray-600 font-medium"></tbody>
           </table>
         </div>
-
-        {/* Modal para Chequear */}
+  
+        {/* Modal para chequear */}
         {selectedInspection && (
-          <ModalChequeo isOpen={openModal} isViewOnly={isViewOnly} onRequestClose={closeModal} row={selectedInspection} center>
+          <ModalChequeo
+            isOpen={openModal}
+            isViewOnly={isViewOnly}
+            onRequestClose={closeModal}
+            row={selectedInspection}
+            center
+          >
             <button onClick={closeModal} className="btn btn-primary mt-4">
               Cerrar
             </button>
@@ -310,6 +318,7 @@ const DatatableInspection = () => {
       </div>
     </div>
   );
+  
 };
 
 export default DatatableInspection;

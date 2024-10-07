@@ -37,7 +37,6 @@ const ModalUpdate = ({ isOpen, onRequestClose, driver }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData);
       const success = await UpdateDriver(formData);
       if (success) {
         Swal.fire({
