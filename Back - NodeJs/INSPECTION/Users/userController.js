@@ -115,9 +115,6 @@ const DeleteUser = (req, res) => {
         console.error("Error al obtener el usuario:", err);
         return res.status(500).json({ error: "Error en el servidor" });
       }
-      if (user.length === 0) {
-        return res.status(404).json({ error: "Usuario no encontrado" });
-      }
       res.status(200).json(user);
     });
 };
