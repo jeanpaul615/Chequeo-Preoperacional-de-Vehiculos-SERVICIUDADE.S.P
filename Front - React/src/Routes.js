@@ -2,10 +2,11 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
 import Login from './components/LogIn/Login';
 import MainDashboard from './components/Inspection/Dashboard/MainDashboard';
+import InspectionFormMoto from './components/Inspection/CheckInspectionMotos/Main/InspectionForm';
 import InspectionForm from './components/Inspection/CheckInspection/Main/InspectionForm';
+
 import DatatableInspection from './components/Inspection/ListInspection/Datatable';
 import DatatableInspectionByDriver from './components/Inspection/InspectionByDriver/Datatable';
-
 import DatatableDrivers from './components/Inspection/Drivers/Datatable';
 import DataTableIndicators from './components/Indicators/IndicatorsComponent/Datatable';
 import DataTableVariables from './components/Indicators/Variables/Datatable';
@@ -45,6 +46,9 @@ export default function App() {
         {/* Ruta para el formulario de inspección */}
         <Route exact path='/inspection' element={<InspectionForm/>} />
 
+        <Route exact path='/inspectionmoto' element={<InspectionFormMoto/>} />
+
+
         {/* Ruta para la lista de inspección */}
         <Route exact path='/listinspection' element={<DatatableInspection />} />
 
@@ -63,7 +67,7 @@ export default function App() {
         <Route exact path='/variables' element={<DataTableVariables />} />
 
         {/* Ruta para la tabla de vehículos */}
-        <Route exact path='/vehicules' element={<DatatableVehicles />} />
+        <Route exact path='/vehicles' element={<DatatableVehicles />} />
       </Routes>
     </Router>
   );

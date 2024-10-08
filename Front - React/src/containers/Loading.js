@@ -1,5 +1,5 @@
 import React from 'react';
-
+//Componente de carga de componente.
 const Loading = () => {
   return (
     <div className="flex justify-center items-center h-screen">

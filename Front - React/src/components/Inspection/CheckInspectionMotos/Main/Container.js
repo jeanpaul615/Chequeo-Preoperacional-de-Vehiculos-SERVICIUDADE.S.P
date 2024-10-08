@@ -1,23 +1,22 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "../../../../containers/Sidebar";
-import InspectionCompactador from "../EstadoV2/InspectionCompactador";
-import InspectionInstrumentos from "../EstadoV2/InspectionInstrumentos";
+import InspectionElementosProteccionPersonal from "../EstadoV1/InspectionElementosProteccionPersonal";
+import InspectionMotor from "../EstadoV1/InspectionMotor";
 import InspectionLlantas from "../EstadoV2/InspectionLlantas";
-import InspectionNiveles from "../EstadoV3/InspectionNiveles";
-import InspectionOtros from "../EstadoV3/InspectionOtros";
-import InspectionVial from "../EstadoV3/InspectionVial";
-import InspectionVidrios from "../EstadoV1/InspectionVidrios";
-import InspectionRevisionInterna from "../EstadoV1/InspectionRevisionInterna";
-import InspectionLuces from "../EstadoV1/InspectionLuces";
-import InspectionVehicule from "../DriverVehicule/InspectionVehicule";
-import InspectionDriver from "../DriverVehicule/InspectionDriver";
+import InspectionSistemadeSuspension from "../EstadoV2/InspectionSistemadeSuspension";
+import InspectionSistemadeFrenos from "../EstadoV3/InspectionSistemadeFrenos";
+import InspectionSistemadeTransmision from "../EstadoV3/InspectionSistemadeTransmision";
+import InspectionSistemaElectrico from "../EstadoV3/InspectionSistemaElectrico";
+import InspectionVidriosyEspejos from "../EstadoV3/InspectionVidriosyEspejos";
+import InspectionVehicule from "../../CheckInspection/DriverVehicule/InspectionVehicule";
+import InspectionDriver from "../../CheckInspection/DriverVehicule/InspectionDriver";
 import Navbar from "../../../../containers/Navbar";
 // Importación de imágenes
-import Conductor from "../../../../assets/CheckInspection/conductor2.jpg";
-import Luces from "../../../../assets/CheckInspection/lucesvidrios.jpg";
+import Conductor from "../../../../assets/CheckInspection/moto.png";
+import Luces from "../../../../assets/CheckInspection/proteccionpersonal.png";
 import Llantas from "../../../../assets/CheckInspection/llantas.jpg";
-import Vial from "../../../../assets/CheckInspection/kitseguridad.jpg";
+import Vial from "../../../../assets/CheckInspection/kitseguridad.jpg";//CAMBIAR IMAGENES PARA EL COMPONENTE MOTO
 import Swal from "sweetalert2";
 
 // Define paths para las imágenes usadas en los grupos de componentes
@@ -41,32 +40,32 @@ const componentGroups = [
   },
   {
     id: "estadoV1",
-    title: "Vidrios, Revisión Interna y Luces",
+    title: "Elementos de Protección Personal y Motor",
     image: images.estadoV1,
     components: [
-      { id: "vidrios", component: InspectionVidrios },
-      { id: "revisionInterna", component: InspectionRevisionInterna },
-      { id: "luces", component: InspectionLuces },
+      { id: "Elementos Proteccion Personal", component: InspectionElementosProteccionPersonal },
+      { id: "Motor", component: InspectionMotor },
     ],
   },
   {
     id: "estadoV2",
-    title: "Compactador, Instrumentos y Llantas",
+    title: "LLantas y Sistema de Suspensión",
     image: images.estadoV2,
     components: [
-      { id: "compactador", component: InspectionCompactador },
-      { id: "instrumentos", component: InspectionInstrumentos },
-      { id: "llantas", component: InspectionLlantas },
+      { id: "Llantas", component: InspectionLlantas },
+      { id: "Sistema De Suspension", component: InspectionSistemadeSuspension },
     ],
   },
   {
     id: "estadoV3",
-    title: "Niveles, Vial y Otros",
+    title: "Frenos, Transmisión, Electrico y Vidrios y Espejos",
     image: images.estadoV3,
     components: [
-      { id: "niveles", component: InspectionNiveles },
-      { id: "otros", component: InspectionOtros },
-      { id: "vial", component: InspectionVial },
+      { id: "Frenos", component: InspectionSistemadeFrenos },
+      { id: "Sistema de Transimisión", component: InspectionSistemadeTransmision },
+      { id: "Sistema Electrico", component: InspectionSistemaElectrico },
+      { id: "Vidrios y Espejos", component: InspectionVidriosyEspejos },
+
     ],
   },
 ];
@@ -133,7 +132,7 @@ export default function ContainerInspection({ formData, handleChange }) {
 
       <div className="md:ml-36 flex-1 p-4 md:pl-1/4 lg:pl-1/5">
         {/* Navbar superior */}
-        <Navbar Title="Inspección Preoperacional CARROS" />
+        <Navbar Title="Inspección Preoperacional MOTOS" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
           {componentGroups.map((group) => (

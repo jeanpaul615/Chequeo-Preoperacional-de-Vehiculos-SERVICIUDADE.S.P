@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GetDriverById } from "../controllers/Inspection/DriversControllers/GetDriver";
 
+//Funcion encargada de dibujar y mostrar el conductor el cual se encuentre en session
 export default function AvatarUser() {
   const [driver, setDriver] = useState({});
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -11,7 +12,7 @@ export default function AvatarUser() {
         const response = await GetDriverById();
         if (response) {
           const driverData = response.data[0];
-          localStorage.setItem("driver", JSON.stringify(driverData)); // Guarda los datos en localStorage
+          localStorage.setItem("driver", JSON.stringify(driverData)); // Guarda los datos en localStorage del conductor que se registro
           setDriver(driverData);
         }
     };
@@ -103,14 +104,6 @@ export default function AvatarUser() {
               </a>
             </li>
           </ul>
-          <div className="py-2 px-1 text-center">
-            <a
-              href="/"
-              className="block rounded font-medium px-6 py-2 text-sm bg-gray-800 text-white transition-colors duration-150"
-            >
-              Ajustes de Usuario
-            </a>
-          </div>
         </div>
       )}
     </div>

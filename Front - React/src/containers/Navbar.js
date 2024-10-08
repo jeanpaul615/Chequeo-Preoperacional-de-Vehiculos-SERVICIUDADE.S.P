@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
  * El componente Navbar es un componente reutilizable, se utiliza en diferentes estructuras y diferentes 
  * conjuntos de mas componentes.
  *
-
  */
+
 const Navbar = ({ Title }) => {
   const navigate = useNavigate();
 

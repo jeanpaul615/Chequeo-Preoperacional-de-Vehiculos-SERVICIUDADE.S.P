@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import logoServiciudad from "./LOGO.png";
 
+//Footer para los componentes que lo requieran, componente informativo.
 export default function Footer() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 

@@ -1,4 +1,4 @@
-
+//Componente que es un modal y se usa para mostrar los datos del desarrollador.
 export function ContactModal({ isOpen, onClose }) {
   if (!isOpen) return null; // No mostrar el modal si no está abierto
 
@@ -19,5 +19,5 @@ export function ContactModal({ isOpen, onClose }) {
       {/* Background overlay */}
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
     </div>
-  );
+  ); 
 }
