@@ -10,7 +10,7 @@ const getAllUsers = (req, res) => {
     res.json(users);
   });
 };
-
+//Controlador para obtener usuario basado en el id
 const getUsers = (req, res) => {
   const { user_id } = req.body;
 
@@ -29,7 +29,7 @@ const getUsers = (req, res) => {
     res.status(200).json(user);
   });
 };
-
+//Controlador que obtiene el usuario por el ID
 const getUserById = (req, res) => {
   const { user_id } = req.body;
 
@@ -48,7 +48,7 @@ const getUserById = (req, res) => {
     res.status(200).json(user);
   });
 };
-
+//Controllador que actualiza el usuario
 const UpdateUser = (req, res) => {
   const { cedula, email, role, status, user_id } = req.body;
 
@@ -77,7 +77,7 @@ const UpdateUser = (req, res) => {
   });
 };
 
-
+//Controlador que elimina el usuario
 const DeleteUser = (req, res) => {
   const { user_id } = req.body;
 

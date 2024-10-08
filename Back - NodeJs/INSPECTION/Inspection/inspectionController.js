@@ -147,7 +147,7 @@ const UpdateCheckedBy = (req, res) => {
     res.json(checked_by);
   });  
 };
-
+//Controlador para verificar si la inspeccion ya existe
 const VerifyInspection = (req, res) => {
   const { created_at, vehicle_id } = req.body;
 
@@ -171,7 +171,7 @@ const VerifyInspection = (req, res) => {
     }
   });
 };
-
+//Exporta todos los controladores para ser usados como rutas
 module.exports = {
   getAllInspection,
   getInspectionsByDriver,

@@ -1,6 +1,7 @@
 const db = require("../../config/db/connectioninspeccion");
 
 const Users = {
+  //Modelo que obtiene todos los usuarios
   getAllUsers: (callback) => {
     const query = "SELECT * FROM user";
 
@@ -13,7 +14,7 @@ const Users = {
     });
   },
 
-
+//Modelo que obtiene el usuario por el id
   getUserById: (data, callback) => {
     const query = `SELECT   
     driver.driver_id AS driver_id,
@@ -30,7 +31,7 @@ const Users = {
       callback(null, results);
     });
   },
-
+//consulta inner join para traer datos de dos tablas enlazadaas
   getUsers: (data, callback) => {
     const query = `
            SELECT 
