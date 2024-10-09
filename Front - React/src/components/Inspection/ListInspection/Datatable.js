@@ -113,6 +113,7 @@ const DatatableInspection = () => {
       const columns = [
         { title: "ID Inspección", data: "inspection_id" },
         { title: "Vehículo", data: "license_plate" },
+        { title: "Tipo de Vehículo", data: "type" },
         { title: "Kilometraje", data: "mileage" },
         { title: "Conductor", data: "driver_name" },
         {
@@ -289,6 +290,7 @@ const DatatableInspection = () => {
               <tr>
                 <th className="px-2 py-1">ID Inspección</th>
                 <th className="px-2 py-1">Vehículo</th>
+                <th className="px-2 py-1">Tipo de Vehículo</th>
                 <th className="px-2 py-1">Kilometraje</th>
                 <th className="px-2 py-1">Conductor</th>
                 <th className="px-2 py-1">Fecha</th>

@@ -16,8 +16,10 @@ import Navbar from "../../../../containers/Navbar";
 import Conductor from "../../../../assets/CheckInspection/moto.png";
 import Luces from "../../../../assets/CheckInspection/proteccionpersonal.png";
 import Llantas from "../../../../assets/CheckInspection/llantas.jpg";
-import Vial from "../../../../assets/CheckInspection/kitseguridad.jpg";//CAMBIAR IMAGENES PARA EL COMPONENTE MOTO
+import Vial from "../../../../assets/CheckInspection/kitseguridad.jpg";
+import Maintenance from "../../../../assets/CheckInspection/maintenance.png";
 import Swal from "sweetalert2";
+import InspectionMaintenance from "../Maintenance/InspectionMaintenance";
 
 // Define paths para las imágenes usadas en los grupos de componentes
 const images = {
@@ -25,6 +27,7 @@ const images = {
   estadoV1: Luces,
   estadoV2: Llantas,
   estadoV3: Vial,
+  Maintenance: Maintenance
 };
 
 // Define los grupos de componentes para la inspección
@@ -65,7 +68,14 @@ const componentGroups = [
       { id: "Sistema de Transimisión", component: InspectionSistemadeTransmision },
       { id: "Sistema Electrico", component: InspectionSistemaElectrico },
       { id: "Vidrios y Espejos", component: InspectionVidriosyEspejos },
-
+    ],
+  },
+  {
+    id: "Maintenance",
+    title: "Mantenimientos",
+    image: images.Maintenance,
+    components: [
+      { id: "Mantenimientos", component: InspectionMaintenance },
     ],
   },
 ];

@@ -96,6 +96,7 @@ const InspectionForm = () => {
     empaque_portalon: "Bien",
     cilindros_hidraulicos: "Bien",
     seguro_portalon: "Bien",
+    mantenimientos: "Bien" //Todos los mantenimientos
   };
 
   const [formData, setFormData] = useState(initialFormData);

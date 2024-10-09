@@ -18,7 +18,9 @@ import Conductor from "../../../../assets/CheckInspection/conductor2.jpg";
 import Luces from "../../../../assets/CheckInspection/lucesvidrios.jpg";
 import Llantas from "../../../../assets/CheckInspection/llantas.jpg";
 import Vial from "../../../../assets/CheckInspection/kitseguridad.jpg";
+import Maintenance from "../../../../assets/CheckInspection/maintenance.png"
 import Swal from "sweetalert2";
+import InspectionMaintenance from "../Maintenance/InspectionMaintenance";
 
 // Define paths para las imágenes usadas en los grupos de componentes
 const images = {
@@ -26,6 +28,7 @@ const images = {
   estadoV1: Luces,
   estadoV2: Llantas,
   estadoV3: Vial,
+  Maintenance: Maintenance,
 };
 
 // Define los grupos de componentes para la inspección
@@ -69,6 +72,15 @@ const componentGroups = [
       { id: "vial", component: InspectionVial },
     ],
   },
+  {
+    id: "Maintenance",
+    title: "Mantenimientos",
+    image: images.Maintenance,
+    components: [
+      { id: "maintenance", component: InspectionMaintenance }
+    ],
+  },
+
 ];
 
 /**
