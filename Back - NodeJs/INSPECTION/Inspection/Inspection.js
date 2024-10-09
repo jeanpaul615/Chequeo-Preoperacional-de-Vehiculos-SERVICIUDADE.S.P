@@ -23,7 +23,8 @@ const Inspection = {
         i.checked_by,
         i.created_at,
         d.name AS driver_name,
-        v.license_plate
+        v.license_plate,
+        v.type
     FROM 
         INSPECTION i
     INNER JOIN 
@@ -48,7 +49,8 @@ const Inspection = {
         i.checked_by,
         i.created_at,
         d.name AS driver_name,
-        v.license_plate
+        v.license_plate,
+        v.type
     FROM 
         INSPECTION i
     INNER JOIN 
