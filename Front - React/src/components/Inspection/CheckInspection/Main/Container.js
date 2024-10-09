@@ -127,11 +127,12 @@ export default function ContainerInspection({ formData, handleChange }) {
   };
 
   return (
-    <div className="md:pl-36 flex flex-col md:flex-row">
+    <div className="md:pl-36 md:flex flex-col md:flex-row">
       {/* Barra lateral oculta en dispositivos móviles */}
       <Sidebar className="hidden md:block lg:w-1/5" />
 
-      <div className="md:ml-36 flex-1 p-4 md:pl-1/4 lg:pl-1/5">
+
+      <div className="md:ml-[20%] lg:ml-[20%] flex-1 p-4">
         {/* Navbar superior */}
         <Navbar Title="Inspección Preoperacional CARROS" />
 

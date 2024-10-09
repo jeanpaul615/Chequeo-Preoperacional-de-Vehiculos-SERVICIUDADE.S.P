@@ -25,6 +25,7 @@ export default function InspectionSelect({ label, name, value, handleChange }) {
         required // Indica que el campo es obligatorio
       >
         <option className="font-medium" value="Bien">Bien</option> 
+        <option className="font-medium" value="Regular">Regular</option> 
         <option className="font-medium" value="Mal">Mal</option>
         <option className="font-medium" value="Noaplica">No aplica</option>
       </select>

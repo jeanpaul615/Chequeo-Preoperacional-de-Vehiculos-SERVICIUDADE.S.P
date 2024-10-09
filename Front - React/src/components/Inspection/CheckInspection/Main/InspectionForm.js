@@ -147,7 +147,7 @@ const InspectionForm = () => {
   const generateObservations = () => {
     let newObservations = {};
     Object.keys(formData).forEach((key) => {
-      if (formData[key] === "Mal") {
+      if (formData[key] === "Mal" || formData[key] === "Regular") {
         newObservations[key] = observations[key] || "";
       }
     });
@@ -169,7 +169,7 @@ const InspectionForm = () => {
     if (!generateObservations()) {
       Swal.fire({
         icon: "error",
-        title: "Diligencie las observaciones de cada item (Malo)",
+        title: "Diligencie las observaciones de cada item (Malo) o (Regular)",
         text: "De no hacerlo no podrá continuar con el envío.",
       });
       return;

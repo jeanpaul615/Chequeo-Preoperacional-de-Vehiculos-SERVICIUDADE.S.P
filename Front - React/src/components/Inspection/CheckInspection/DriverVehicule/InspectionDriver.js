@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import React from "react";
-import Sidebar from "../../../../containers/Sidebar";
 import { GetUserById } from "../../../../controllers/Inspection/DriversControllers/GetDriver";
 import { DriverbyName } from "../../../../controllers/Inspection/DriversControllers/DriverbyName";
 
@@ -55,7 +54,6 @@ const InspectionDriver = ({ formData, handleChange }) => {
 
   return (
     <div className="text-flex flex-col md:flex-row md:justify-center p-4">
-      <Sidebar className="md:w-1/4" />
       <fieldset className="flex-1 max-w-4xl mb-6 p-8 bg-white border border-gray-300 rounded-lg shadow-md">
         <h1 className="text-xlxl font-bold text-gray-800">
           Datos del Conductor
