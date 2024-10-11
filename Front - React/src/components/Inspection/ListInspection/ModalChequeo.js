@@ -51,7 +51,7 @@ const ModalChequeo = ({ isOpen, onRequestClose, row, isViewOnly }) => {
   };
 
   const handleConditionClick = (condition) => {
-    if (condition.conditions === "Mal") {
+    if (condition.conditions === "Mal" || condition.conditions === "Regular") {
       Swal.fire({
         title: "Observación",
         text: condition.comment || "No hay comentario disponible",
@@ -109,9 +109,12 @@ const ModalChequeo = ({ isOpen, onRequestClose, row, isViewOnly }) => {
                   onChange={(e) => handleConditionChange(index, e.target.value)}
                   className={`w-full px-4 py-2 border rounded-lg shadow-sm text-black transition duration-150 focus:outline-none focus:ring-2 ${
                     condition.conditions === "Mal"
-                      ? "bg-red-400 border-red-600 focus:ring-red-500"
-                      : "bg-green-300 border-green-300 focus:ring-green-500"
+                      ? "bg-red-300 border-red-500 focus:ring-red-400"
+                      : condition.conditions === "Regular"
+                      ? "bg-orange-300 border-orange-500 focus:ring-orange-400"  // Clase para 'Regular'
+                      : "bg-green-100 border-green-200 focus:ring-green-400"  // Clase por defecto
                   }`}
+                  
                   placeholder={`Estado de ${condition.name_condition}`}
                   readOnly={isViewOnly} // Disable editing if in view-only mode
                 />

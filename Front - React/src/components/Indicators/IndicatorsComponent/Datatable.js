@@ -9,6 +9,10 @@ import FilterControls from "./FilterControls";
 import { DeleteIndicator } from "../../../controllers/Indicators/Indicators/DeleteIndicator";
 import Swal from "sweetalert2";
 import Loading from "../../../containers/Loading";
+import jsPDF from "jspdf";
+import * as XLSX from "xlsx";
+import RoleVerify from "../../../containers/RoleVerify";
+
 const ContainerStats = lazy(() => import("./Stats/ContainerStats"));
 const ModalUpdate = lazy(() => import("./ModalUpdate"));
 const InputModal = lazy(() => import("./InputModal"));
@@ -24,6 +28,8 @@ const DataTableIndicators = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedFrequency, setSelectedFrequency] = useState("");
+  const roleUser = RoleVerify();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -178,12 +184,55 @@ const DataTableIndicators = () => {
     setModalIsOpen(false);
   };
 
-  return (
-    <div>
-      <Sidebar />
-      <div className="pt-8 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
-        <Navbar Title={"Indicadores"} />
-        <div className="flex justify-end items-center gap-4">
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(10);
+    doc.text("Lista de Inspecciones", 20, 20);
+    let yPosition = 30;
+    const lineHeight = 10;
+    const pageHeight = doc.internal.pageSize.height;
+    const marginBottom = 20;
+
+    data.forEach((item, index) => {
+      const text = `${index + 1}. ID: ${item.id_indicador}, Nombre Indicador: ${item.nombre_indicador}, Frecuencia: ${item.frecuencia}, Valor: ${item.valor}, Periodo: ${item.periodo_inicio}`;
+      if (yPosition > pageHeight - marginBottom) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      const splitText = doc.splitTextToSize(text, 180);
+      doc.text(splitText, 20, yPosition);
+      yPosition += lineHeight;
+    });
+    doc.save("indicadores.pdf");
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  const exportToExcel = () => {
+    const inspectionInSpanish = data.map((item) => ({
+      "ID Indicador": item.id_indicador,
+      "Nombre Indicador": item.nombre_indicador,
+      "Nombre": item.driver_name,
+      "Frecuencia": item.frecuencia,
+      "Valor": item.valor,
+      "Periodo": item.periodo_inicio,
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(inspectionInSpanish);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Indicadores");
+    XLSX.writeFile(workbook, "indicadores.xlsx");
+  };
+
+
+return (
+  <div>
+    <Sidebar />
+    <div className="pt-8 md:ml-72 ml-4 text-sm md:mr-5 mr-5">
+      <Navbar Title={"Indicadores"} />
+      <div className="flex justify-between items-center gap-4 mb-4">
+        <div className="flex items-center">
           <button
             onClick={HandleStatsOpen}
             className="select-none font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 px-4 rounded-lg bg-gradient-to-tr from-gray-900 to-gray-800 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85] flex items-center gap-3"
@@ -203,63 +252,142 @@ const DataTableIndicators = () => {
           </button>
         </div>
 
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          <div className="p-4">
-            <FilterControls
-              data={data}
-              selectedIndicator={selectedIndicator}
-              setSelectedIndicator={setSelectedIndicator}
-              selectedMonth={selectedMonth}
-              setSelectedMonth={setSelectedMonth}
-              selectedYear={selectedYear}
-              setSelectedYear={setSelectedYear}
-              selectedFrequency={selectedFrequency}
-              setSelectedFrequency={setSelectedFrequency}
-              openModal={openModal}
-            />
-            <table
-              id="example"
-              className="display w-full table-auto border-collapse"
-              ref={tableRef}
-            >
-              <thead className="bg-gray-800 text-white text-right">
-                <tr>
-                  <th className="px-4 py-2">Id_indicador</th>
-                  <th className="px-4 py-2">Nombre Indicador</th>
-                  <th className="px-4 py-2">Frecuencia</th>
-                  <th className="px-4 py-2">Valor</th>
-                  <th className="px-4 py-2">Periodo</th>
-                  <th className="px-4 py-2">Opciones</th>
-                </tr>
-              </thead>
-              <tbody className="text-right bg-white text-gray-600 font-medium"></tbody>
-            </table>
-          </div>
-        </div>
+        {(roleUser === 'ADMIN' || roleUser === 'AUDITOR') && (
+            <div className="relative inline-block text-left float-right ml-2">
+              <button
+                type="button"
+                onClick={toggleDropdown}
+                className="flex justify-center items-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+                id="menu-button"
+                aria-expanded={isDropdownOpen}
+                aria-haspopup="true"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Exportar
+              </button>
+  
+              {/* Menú desplegable */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 z-10 rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                  <div className="relative inline-block text-left">
+                    <button
+                      onClick={exportToPDF}
+                      className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200 px-2 py-1 mr-2"
+                      role="menuitem"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 2v20l6-6h6a2 2 0 002-2V8a2 2 0 00-2-2h-6L6 2z"
+                        />
+                      </svg>
+                      PDF
+                    </button>
+                    <button
+                      onClick={exportToExcel}
+                      className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-green-500 hover:text-white transition-colors duration-200 px-2 py-1"
+                      role="menuitem"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 12l8-4v8l-8 4-8-4V8l8 4z"
+                        />
+                      </svg>
+                      Excel
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
       </div>
 
-      <Suspense fallback={<Loading />}>
-        {" "}
-        <InputModal isOpen={modalIsOpen} onRequestClose={closeModal} />{" "}
-      </Suspense>
-      <Suspense fallback={<Loading />}>
-        <ModalUpdate
-          isOpen={modalUpdateIsOpen}
-          onRequestClose={() => setModalUpdateIsOpen(false)}
-          indicator={selectedIndicator}
-        />
-        </Suspense>
-      {modalStatsIsOpen && (
-        <Suspense fallback={<Loading />}>
-          <ContainerStats
-            closeModal={HandleStatsClose}
-            indicators={data} // Pass the entire data to the modal
+      <div className="bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="p-4">
+          <FilterControls
+            data={data}
+            selectedIndicator={selectedIndicator}
+            setSelectedIndicator={setSelectedIndicator}
+            selectedMonth={selectedMonth}
+            setSelectedMonth={setSelectedMonth}
+            selectedYear={selectedYear}
+            setSelectedYear={setSelectedYear}
+            selectedFrequency={selectedFrequency}
+            setSelectedFrequency={setSelectedFrequency}
+            openModal={openModal}
           />
-          |
-        </Suspense>
-      )}
+          <table
+            id="example"
+            className="display w-full table-auto border-collapse"
+            ref={tableRef}
+          >
+            <thead className="bg-gray-800 text-white text-right">
+              <tr>
+                <th className="px-4 py-2">Id_indicador</th>
+                <th className="px-4 py-2">Nombre Indicador</th>
+                <th className="px-4 py-2">Frecuencia</th>
+                <th className="px-4 py-2">Valor</th>
+                <th className="px-4 py-2">Periodo</th>
+                <th className="px-4 py-2">Opciones</th>
+              </tr>
+            </thead>
+            <tbody className="text-right bg-white text-gray-600 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
-  );
+
+    <Suspense fallback={<Loading />}>
+      <InputModal isOpen={modalIsOpen} onRequestClose={closeModal} />
+    </Suspense>
+    <Suspense fallback={<Loading />}>
+      <ModalUpdate
+        isOpen={modalUpdateIsOpen}
+        onRequestClose={() => setModalUpdateIsOpen(false)}
+        indicator={selectedIndicator}
+      />
+    </Suspense>
+    {modalStatsIsOpen && (
+      <Suspense fallback={<Loading />}>
+        <ContainerStats
+          closeModal={HandleStatsClose}
+          indicators={data} // Pass the entire data to the modal
+        />
+      </Suspense>
+    )}
+  </div>
+);
+
 };
 
 export default DataTableIndicators;

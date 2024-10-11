@@ -10,6 +10,10 @@ import ModalUpdate from "./ModalUpdate";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { DeleteDriver } from "../../../controllers/Inspection/DriversControllers/DeleteDriver";
+import jsPDF from "jspdf";
+import * as XLSX from "xlsx";
+import RoleVerify from "../../../containers/RoleVerify";
+
 
 const DatatableDrivers = () => {
   const tableRef = useRef(null);
@@ -17,6 +21,8 @@ const DatatableDrivers = () => {
   const [modalUpdateIsOpen, setModalUpdateIsOpen] = useState(false);
   const [modalNewDriverIsOpen, setModalNewDriverIsOpen] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState(null); // Stores the selected driver object
+  const roleUser = RoleVerify();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -169,6 +175,47 @@ const DatatableDrivers = () => {
     openUpdateModal(driver); // Open the update modal with the selected driver
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(10);
+    doc.text("Lista de Inspecciones", 20, 20);
+    let yPosition = 30;
+    const lineHeight = 10;
+    const pageHeight = doc.internal.pageSize.height;
+    const marginBottom = 20;
+
+    data.forEach((item, index) => {
+      const text = `${index + 1}. ID: ${item.user_id}, Cedula: ${item.user_cedula}, Nombre: ${item.driver_name}, Correo: ${item.user_email}, Role: ${item.user_role}, Estado : ${item.user_status}}`;
+      if (yPosition > pageHeight - marginBottom) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      const splitText = doc.splitTextToSize(text, 180);
+      doc.text(splitText, 20, yPosition);
+      yPosition += lineHeight;
+    });
+    doc.save("usuarios.pdf");
+  };
+
+  const exportToExcel = () => {
+    const inspectionInSpanish = data.map((item) => ({
+      "ID Inspección": item.user_id,
+      "Cedula": item.user_cedula,
+      "Nombre": item.driver_name,
+      "Correo": item.user_email,
+      "Role": item.user_role,
+      "Estado": item.user_status,
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(inspectionInSpanish);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Usuarios");
+    XLSX.writeFile(workbook, "usuarios.xlsx");
+  };
+
   return (
     <div className="flex flex-col md:flex-row mt-8">
       <Sidebar />
@@ -180,7 +227,84 @@ const DatatableDrivers = () => {
         >
           Nuevo Conductor
         </button>
-
+        {(roleUser === 'ADMIN' || roleUser === 'AUDITOR') && (
+            <div className="relative inline-block text-left float-right ml-2">
+              <button
+                type="button"
+                onClick={toggleDropdown}
+                className="flex justify-center items-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+                id="menu-button"
+                aria-expanded={isDropdownOpen}
+                aria-haspopup="true"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Exportar
+              </button>
+  
+              {/* Menú desplegable */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 z-10 rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                  <div className="relative inline-block text-left">
+                    <button
+                      onClick={exportToPDF}
+                      className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200 px-2 py-1 mr-2"
+                      role="menuitem"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 2v20l6-6h6a2 2 0 002-2V8a2 2 0 00-2-2h-6L6 2z"
+                        />
+                      </svg>
+                      PDF
+                    </button>
+                    <button
+                      onClick={exportToExcel}
+                      className="w-full flex items-center justify-center text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-green-500 hover:text-white transition-colors duration-200 px-2 py-1"
+                      role="menuitem"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 12l8-4v8l-8 4-8-4V8l8 4z"
+                        />
+                      </svg>
+                      Excel
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         <div className="bg-white shadow-md rounded-lg overflow-x-auto">
           <table
             ref={tableRef}
