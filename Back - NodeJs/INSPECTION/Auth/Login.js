@@ -29,23 +29,41 @@ const User = {
     },
 
     // Método para registrar un nuevo usuario
-    register: ({ cedula, email, password }, callback) => {
+    register: ({ cedula, email, password, name, role, license_until }, callback) => {
         // Cifrar la contraseña usando bcrypt
         bcrypt.hash(password, 10, (err, hashedPassword) => {
             if (err) {
                 return callback(err, null); // Retornar error si ocurre
             }
-
-            // Insertar el nuevo usuario en la base de datos con estado = 1 y rol = 'CONDUCTOR'
+    
+            // Insertar el nuevo usuario en la tabla "user"
             const insertUserQuery = 'INSERT INTO user (cedula, email, password, role, status) VALUES (?, ?, ?, ?, ?)';
-            db.query(insertUserQuery, [cedula, email, hashedPassword, 'CONDUCTOR', 1], (err, result) => {
+            db.query(insertUserQuery, [cedula, email, hashedPassword, role, 1], (err, result) => {
                 if (err) {
                     return callback(err, null); // Retornar error si ocurre
                 }
-                callback(null, { message: 'Usuario registrado exitosamente', userId: result.insertId }); // Retornar mensaje de éxito
+    
+                // Obtener el ID del usuario recién creado
+                const userId = result.insertId;
+    
+                // Insertar los datos del conductor en la tabla "driver" usando el userId generado
+                const insertDriverQuery = 'INSERT INTO driver (user_id, name, license_until) VALUES (?, ?, ?)';
+                db.query(insertDriverQuery, [userId, name, license_until], (err, driverResult) => {
+                    if (err) {
+                        return callback(err, null); // Retornar error si ocurre
+                    }
+    
+                    // Retornar un mensaje de éxito con los detalles del registro
+                    callback(null, {
+                        message: 'Usuario y conductor registrados exitosamente',
+                        userId: userId,
+                        driverId: driverResult.insertId
+                    });
+                });
             });
         });
     },
+    
 
     // Método para iniciar sesión
     login: (email, password, callback) => {

@@ -3,9 +3,10 @@ const SendEmail = require('./sendEmails');
 
 // Controlador para registrar un nuevo usuario
 exports.register = (req, res) => {
-    const { cedula, email, password, role, status } = req.body;
+    const { name, cedula, email, password, role, status = 1, license_until } = req.body;
 
-    if (!cedula || !email || !password) {
+    // Validar si todos los campos requeridos están presentes
+    if (!name || !cedula || !email || !password || !role ) {
         return res.status(400).json({ success: false, message: 'Todos los campos son obligatorios' });
     }
 
@@ -28,15 +29,16 @@ exports.register = (req, res) => {
             }
 
             // Registrar el nuevo usuario si la cédula y el email no existen
-            Login.register({ cedula, email, password, role, status }, (err, result) => {
+            Login.register({ name, cedula, email, password, role, status, license_until }, (err, result) => {
                 if (err) {
-                    return res.status(500).json({ success: false, message: 'Error en el servidor' });
+                    return res.status(500).json({ success: false, message: 'Error en el servidor al registrar el usuario' });
                 }
-                res.status(201).json({ success: true, message: 'Usuario registrado exitosamente' });
+                return res.status(201).json({ success: true, message: 'Usuario registrado exitosamente', userId: result.insertId });
             });
         });
     });
 };
+
 
 /**
  * @route POST /login
