@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { GetUsers } from "../../../controllers/Inspection/UsersControllers/User";
-import { NewDriver } from "../../../controllers/Inspection/DriversControllers/NewDriver";
+import { Register } from "../../../controllers/Inspection/RegisterControllers/Register";
 import Swal from "sweetalert2";
 
 const ModalNewDriver = ({ onRequestClose }) => {
   const [formData, setFormData] = useState({
+    cedula: "", // Added cedula to formData for correct binding
     name: "",
     license_until: "",
-    user_id: ""
+    user_id: "",
+    role: "", // Added role to formData for correct binding
+    email: "",
+    password: ""
   });
   const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [isUserRegistered, setIsUserRegistered] = useState(false);
 
   useEffect(() => {
@@ -22,7 +25,6 @@ const ModalNewDriver = ({ onRequestClose }) => {
         console.error("Error al traer usuarios:", error);
       }
     };
-
     fetchUsers();
   }, []);
 
@@ -38,14 +40,6 @@ const ModalNewDriver = ({ onRequestClose }) => {
     }
   };
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredUsers = users.filter((user) =>
-    user.cedula.toString().toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -60,7 +54,7 @@ const ModalNewDriver = ({ onRequestClose }) => {
     }
 
     try {
-      const newDriverData = await NewDriver( formData);
+      const newDriverData = await Register(formData);
       if (newDriverData) {
         Swal.fire({
           title: 'Éxito',
@@ -73,7 +67,7 @@ const ModalNewDriver = ({ onRequestClose }) => {
     } catch (error) {
       Swal.fire({
         title: 'Error',
-        text: `El conductor ya esta registrado:`,
+        text: `Error al agregar el conductor: ${error.message}`,
         icon: 'error',
         confirmButtonText: 'OK'
       });
@@ -87,7 +81,7 @@ const ModalNewDriver = ({ onRequestClose }) => {
           type="button"
           onClick={onRequestClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200"
-          aria-label="Close modal"
+          aria-label="Cerrar modal"
         >
           <svg
             className="w-6 h-6"
@@ -105,75 +99,84 @@ const ModalNewDriver = ({ onRequestClose }) => {
           </svg>
         </button>
         <div className="flex justify-center items-center mb-4">
-          <span className="text-lg font-semibold">Nuevo Conductor:</span>
+          <span className="text-lg font-semibold">Nuevo Conductor</span>
         </div>
         <hr className="border-gray-400 opacity-50 pt-2 mb-6" />
-        <form onSubmit={handleSubmit}>
-          <div className="flex flex-col space-y-4">
-            <div className="flex flex-col md:flex-row md:space-x-4">
-              <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
-                  Nombre (*):
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="mb-4 px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
-                />
-              </div>
-              <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
-                  Vencimiento de licencia (*):
-                </label>
-                <input
-                  type="date"
-                  name="license_until"
-                  value={formData.license_until}
-                  onChange={handleChange}
-                  required
-                  className="mb-4 px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row md:space-x-4">
-              <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
-                  Buscar por cédula:
-                </label>
-                <input
-                  type="number"
-                  className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
-                  placeholder="Buscar por cédula..."
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                />
-              </div>
-              <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 mb-2">
-                  Seleccione cédula:
-                </label>
-                <select
-                  className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
-                  name="user_id"
-                  value={formData.user_id}
-                  required
-                  onChange={handleChange}
-                >
-                  <option value="">Seleccione la cédula (Verifique su correo)</option>
-                  {filteredUsers.map((user) => (
-                    <option key={user.user_id} value={user.user_id}>
-                      {user.cedula} {"("}{user.email}{")"}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mb-4">
+            <label className="block text-medium font-medium text-gray-700">Cédula (*):</label>
+            <input
+              type="number"
+              name="cedula"
+              value={formData.cedula}
+              onChange={handleChange}
+              className="px-3 py-2 border border-blue-900 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-medium font-medium text-gray-700">Nombre (*):</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="px-3 py-2 border border-blue-900 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-medium font-medium text-gray-700">Rol (*):</label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              required
+              className="px-3 py-2 border border-blue-900 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+            >
+              <option value="">Seleccione un tipo</option>
+              <option value="ADMIN">ADMINISTRADOR</option>
+              <option value="CONDUCTOR">CONDUCTOR</option>
+              <option value="AUDITOR">AUDITOR</option>
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-medium font-medium text-gray-700">Vigencia de la Licencia (*):</label>
+            <input
+              type="date"
+              name="license_until"
+              value={formData.license_until}
+              onChange={handleChange}
+              className="px-3 py-2 border border-blue-900 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-medium font-medium text-gray-700">Correo Electrónico (*):</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="px-3 py-2 border border-blue-900 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+              required
+            />
+          </div>
+          <div className="mb-4 relative">
+            <label className="block text-medium font-medium text-gray-700">Contraseña (*):</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="px-3 py-2 border border-blue-900 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+              required
+            />
+          </div>
+          <div className="col-span-1 md:col-span-2">
             <button
               type="submit"
-              className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm px-6 py-3 text-center transition ease-in-out duration-150"
+              className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm px-6 py-3 text-center transition ease-in-out duration-150 w-full"
             >
               Guardar
             </button>

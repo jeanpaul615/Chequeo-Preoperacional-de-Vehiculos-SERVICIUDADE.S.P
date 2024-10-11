@@ -54,7 +54,7 @@ function LoginForm() {
       </h3>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="pl-2 text-sm block text-gray-700 italic font-bold">
+          <label className="block text-medium font-medium text-gray-700">
             Usuario:
           </label>
           <input
@@ -62,12 +62,12 @@ function LoginForm() {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-full border-blue-700 focus:outline-none focus:border-gray-300"
+            className="px-3 py-2 border border-blue-900 rounded-2xl shadow-sm bg-gray-100 font-medium w-full"
             required
           />
         </div>
         <div className="mb-4 relative">
-          <label className="pl-2 text-sm block text-gray-700 italic font-bold">
+          <label className="block text-medium font-medium text-gray-700">
             Contraseña:
           </label>
           <input
@@ -75,7 +75,7 @@ function LoginForm() {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-full border-blue-700 focus:outline-none focus:border-gray-300"
+            className="px-3 py-2 border border-blue-900 rounded-2xl shadow-sm bg-gray-100 font-medium w-full"
             required
           />
           <button

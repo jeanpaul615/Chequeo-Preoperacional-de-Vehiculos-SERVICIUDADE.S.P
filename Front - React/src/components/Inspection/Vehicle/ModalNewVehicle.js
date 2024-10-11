@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { NewVehicle } from "../../../controllers/Inspection/VehicleControllers/NewVehicle";
+
 const ModalNewVehicle = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     type: "",
@@ -21,7 +22,7 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const newVehicleData = await NewVehicle(formData);
       if (newVehicleData) {
@@ -44,22 +45,23 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
       });
     }
   };
-  
+
+  if (!isOpen) return null; // Si el modal no está abierto, no mostrar nada
 
   return (
     <div
-      className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6 md:p-8"
-      onClick={onClose} // Click outside should close the modal
+      className="fixed inset-0 z-50 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6 md:p-8"
+      onClick={onClose} // Cerrar al hacer clic fuera del modal
     >
       <div
-        className="bg-white rounded-lg shadow-lg p-6 relative w-full max-w-4xl mx-auto"
-        onClick={(e) => e.stopPropagation()} // Prevent event from bubbling up
+        className="bg-white rounded-lg shadow-lg p-6 relative w-full max-w-4xl mx-auto z-60"
+        onClick={(e) => e.stopPropagation()} // Evitar que el clic se propague y cierre el modal
       >
         <button
           type="button"
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200"
-          aria-label="Close modal"
+          aria-label="Cerrar modal"
         >
           <svg
             className="w-6 h-6"
@@ -76,10 +78,13 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
             />
           </svg>
         </button>
+
         <div className="flex justify-center items-center mb-4">
           <span className="text-lg font-semibold">Nuevo Vehículo:</span>
         </div>
+
         <hr className="border-gray-400 opacity-50 pt-2 mb-4" />
+
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col space-y-4">
             {/* Input fields in rows */}
@@ -105,6 +110,7 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
                   <option value="OTRO">OTRO</option>
                 </select>
               </div>
+
               <div className="flex-1">
                 <label className="block text-medium font-medium text-gray-700">
                   Placa (*):
@@ -116,16 +122,15 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
                   onChange={handleChange}
                   required
                   maxLength="6"
-                  className=" px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+                  className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
                 />
               </div>
             </div>
 
             {/* More input fields */}
-            {/* Responsive columns for md and larger */}
             <div className="flex flex-col md:flex-row md:space-x-4">
               <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 ">
+                <label className="block text-medium font-medium text-gray-700">
                   Marca (*):
                 </label>
                 <input
@@ -138,14 +143,14 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
                 />
               </div>
               <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 ">
+                <label className="block text-medium font-medium text-gray-700">
                   Área:
                 </label>
                 <select
                   name="area"
                   value={formData.area}
                   onChange={handleChange}
-                  className=" px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
+                  className="px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 font-medium w-full"
                 >
                   <option value="">Seleccione un área</option>
                   <option value="ASEO">ASEO</option>
@@ -159,7 +164,7 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
             {/* More inputs */}
             <div className="flex flex-col md:flex-row md:space-x-4">
               <div className="flex-1">
-                <label className="block text-medium font-medium text-gray-700 ">
+                <label className="block text-medium font-medium text-gray-700">
                   SOAT hasta (*):
                 </label>
                 <input
