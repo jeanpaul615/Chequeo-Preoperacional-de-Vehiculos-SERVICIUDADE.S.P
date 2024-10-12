@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-10-2024 a las 21:24:35
+-- Tiempo de generación: 12-10-2024 a las 18:39:27
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -117,7 +117,33 @@ CREATE TABLE `inspection` (
 --
 
 INSERT INTO `inspection` (`inspection_id`, `driver_id`, `vehicle_id`, `mileage`, `checked_by`, `created_at`, `updated_at`) VALUES
-(80, 293, 96, 100000, 'Luis Fernando Aguirre', '2024-10-11 11:51:50', '2024-10-11 11:52:57');
+(80, 293, 96, 100000, 'Luis Fernando Aguirre', '2024-10-11 11:51:50', '2024-10-11 11:52:57'),
+(81, 293, 108, 10000, NULL, '2024-10-12 11:18:12', NULL),
+(82, 255, 119, 120000, 'Paul', '2018-10-24 11:22:40', NULL),
+(83, 290, 128, 120000, 'Paul', '2023-10-25 11:23:19', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `maintenance`
+--
+
+CREATE TABLE `maintenance` (
+  `id_maintenance` int(11) NOT NULL,
+  `license_plate` char(6) NOT NULL,
+  `driver_name` longtext NOT NULL,
+  `conditions` text NOT NULL,
+  `comment` text NOT NULL,
+  `solution` text NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `maintenance`
+--
+
+INSERT INTO `maintenance` (`id_maintenance`, `license_plate`, `driver_name`, `conditions`, `comment`, `solution`, `created_at`) VALUES
+(2, 'ABC123', 'Jean Paul Puerta', 'VISOR MALO', 'NO PERMITE VER NADA', 'Cambiamos visores', '2024-10-12 09:36:52');
 
 -- --------------------------------------------------------
 
@@ -398,7 +424,85 @@ INSERT INTO `vehicle_condition` (`condition_id`, `inspection_id`, `name_conditio
 (184, 80, 'empaque_portalon', 'Bien', '', '2024-10-11 11:51:51', NULL),
 (185, 80, 'cilindros_hidraulicos', 'Bien', '', '2024-10-11 11:51:51', NULL),
 (186, 80, 'seguro_portalon', 'Bien', '', '2024-10-11 11:51:51', NULL),
-(187, 80, 'mantenimientos', 'Bien', '', '2024-10-11 11:51:51', NULL);
+(187, 80, 'mantenimientos', 'Bien', '', '2024-10-11 11:51:51', NULL),
+(188, 81, 'nombre_conductor', 'Jean Paul Puerta Salazar ', '', '2024-10-12 11:18:12', NULL),
+(189, 81, 'licencia', '2025-05-15', '', '2024-10-12 11:18:12', NULL),
+(190, 81, 'seguridad_social', '2024-10-12', '', '2024-10-12 11:18:12', NULL),
+(191, 81, 'tipo_vehiculo', 'CAMION', '', '2024-10-12 11:18:12', NULL),
+(192, 81, 'placa', 'OEY024', '', '2024-10-12 11:18:12', NULL),
+(193, 81, 'marca', 'CHEVROLET', '', '2024-10-12 11:18:12', NULL),
+(194, 81, 'dependencia', 'ACUEDUCTO', '', '2024-10-12 11:18:12', NULL),
+(195, 81, 'kilometraje', '10000', '', '2024-10-12 11:18:12', NULL),
+(196, 81, 'soat', '2025-05-14', '', '2024-10-12 11:18:12', NULL),
+(197, 81, 'rtm', '2025-05-18', '', '2024-10-12 11:18:12', NULL),
+(198, 81, 'aceite_motor', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(199, 81, 'aceite_hidraulico', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(200, 81, 'liquido_de_frenos', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(201, 81, 'refrigerante', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(202, 81, 'agua_parabrisas', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(203, 81, 'nivel_combustible', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(204, 81, 'presion_aire', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(205, 81, 'lubricacion', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(206, 81, 'panel_de_control', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(207, 81, 'nivel_de_combustibles', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(208, 81, 'carga_bateria', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(209, 81, 'temperatura_motor', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(210, 81, 'tacometro_velocimetro', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(211, 81, 'parabrisas', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(212, 81, 'limpia_parabrisas', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(213, 81, 'laterales', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(214, 81, 'vidrio_trasero', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(215, 81, 'limpia_parabrisas_trasero', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(216, 81, 'espejo_retrovisor', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(217, 81, 'espejos_laterales', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(218, 81, 'bajas', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(219, 81, 'plenas', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(220, 81, 'direccionales', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(221, 81, 'cocuyos', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(222, 81, 'reversa', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(223, 81, 'antiniebla', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(224, 81, 'cabina', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(225, 81, 'emergencia', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(226, 81, 'tablero_y_testigos', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(227, 81, 'freno_de_seguridad', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(228, 81, 'alarma_de_reversa', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(229, 81, 'cinturon_de_seguridad', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(230, 81, 'bocina', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(231, 81, 'apoya_cabezas', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(232, 81, 'airbag', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(233, 81, 'manijas_chapas', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(234, 81, 'puertas_seguros', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(235, 81, 'eleva_vidrios', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(236, 81, 'sillas_cojineria', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(237, 81, 'latoneria_y_pintura', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(238, 81, 'estado_platon_carroceria', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(239, 81, 'carpas', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(240, 81, 'compuertas', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(241, 81, 'estribos', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(242, 81, 'sillas', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(243, 81, 'cojineria', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(244, 81, 'tapetes', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(245, 81, 'pernos_completos', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(246, 81, 'muelles_y_amortiguadores', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(247, 81, 'tanque_combustible', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(248, 81, 'tanque_aire', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(249, 81, 'llanta_delantera_derecha', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(250, 81, 'llanta_delantera_izquierda', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(251, 81, 'llanta_trasera_derecha', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(252, 81, 'llanta_trasera_izquierda', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(253, 81, 'llanta_repuesto', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(254, 81, 'kit_seguridad', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(255, 81, 'kit_derrames', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(256, 81, 'conos', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(257, 81, 'chaleco_reflectivo', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(258, 81, 'campana', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(259, 81, 'tanque_lixiviado', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(260, 81, 'rejilla', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(261, 81, 'manguera_lixiviado', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(262, 81, 'empaque_portalon', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(263, 81, 'cilindros_hidraulicos', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(264, 81, 'seguro_portalon', 'Bien', '', '2024-10-12 11:18:12', NULL),
+(265, 81, 'mantenimientos', 'Bien', '', '2024-10-12 11:18:12', NULL);
 
 --
 -- Índices para tablas volcadas
@@ -418,6 +522,12 @@ ALTER TABLE `inspection`
   ADD PRIMARY KEY (`inspection_id`),
   ADD KEY `driver_id` (`driver_id`),
   ADD KEY `vehicle_id` (`vehicle_id`);
+
+--
+-- Indices de la tabla `maintenance`
+--
+ALTER TABLE `maintenance`
+  ADD PRIMARY KEY (`id_maintenance`);
 
 --
 -- Indices de la tabla `token`
@@ -461,7 +571,13 @@ ALTER TABLE `driver`
 -- AUTO_INCREMENT de la tabla `inspection`
 --
 ALTER TABLE `inspection`
-  MODIFY `inspection_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `inspection_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
+
+--
+-- AUTO_INCREMENT de la tabla `maintenance`
+--
+ALTER TABLE `maintenance`
+  MODIFY `id_maintenance` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
@@ -479,7 +595,7 @@ ALTER TABLE `vehicle`
 -- AUTO_INCREMENT de la tabla `vehicle_condition`
 --
 ALTER TABLE `vehicle_condition`
-  MODIFY `condition_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
+  MODIFY `condition_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=266;
 
 --
 -- Restricciones para tablas volcadas
