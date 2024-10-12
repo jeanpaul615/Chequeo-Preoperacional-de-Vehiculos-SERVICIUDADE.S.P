@@ -144,7 +144,7 @@ export default function ContainerInspection({ formData, handleChange }) {
       <Sidebar className="hidden md:block lg:w-1/5" />
 
 
-      <div className="md:ml-[20%] lg:ml-[20%] flex-1 p-4">
+      <div className="md:ml-36 flex-1 p-4 md:pl-1/4 lg:pl-1/5">
         {/* Navbar superior */}
         <Navbar Title="Inspección Preoperacional CARROS" />
 
