@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import { sendResetPasswordEmail } from "../../../controllers/Inspection/ResetPasswordController/ResetPassword";
+import { sendResetPasswordEmail } from "../../../controllers/Inspection/ResetPasswordControllers/ResetPassword";
 
 function ResetPasswordForm() {
   const [formData, setFormData] = useState({

@@ -14,7 +14,9 @@ import DatatableVehicles from './components/Inspection/Vehicle/Datatable';
 import Register from './components/LogIn/Register/Register';
 import ResetPassword from './components/LogIn/ResetPassword/ResetPassword';
 import NewPassword from './components/LogIn/NewPassword/NewPassword';
-import DatatableMaintenance from './components/Inspection/Maintenance/Datatable';
+import DatatableMaintenance from './components/Inspection/Maintenance/SheetMaintenance/Datatable';
+import DatatableListMaintenance from './components/Inspection/Maintenance/ListMaintenance/Datatable';
+
 
 /**
  * App Component
@@ -69,7 +71,11 @@ export default function App() {
 
         {/* Ruta para la tabla de vehículos */}
         <Route exact path='/vehicles' element={<DatatableVehicles />} />
-        <Route exact path='/maintenance' element={<DatatableMaintenance />} />
+
+        <Route exact path='/sheetmaintenance' element={<DatatableMaintenance />} />
+
+        <Route exact path='/listmaintenance' element={<DatatableListMaintenance />} />
+
 
       </Routes>
     </Router>

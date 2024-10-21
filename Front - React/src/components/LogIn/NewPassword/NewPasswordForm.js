@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { EyeIcon, EyeOffIcon } from "@heroicons/react/solid";
-import { resetPassword } from "../../../controllers/Inspection/ResetPasswordController/ResetPassword";
+import { resetPassword } from "../../../controllers/Inspection/ResetPasswordControllers/ResetPassword";
 import Footer from "../../../containers/Footer";
 
 function NewPasswordForm() {
