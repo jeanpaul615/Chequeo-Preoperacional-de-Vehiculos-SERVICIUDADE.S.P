@@ -56,6 +56,11 @@ app.use('/variables', variablesRoutes);
 const maintenanceRoutes = require('./INSPECTION/Maintenance/MaintenanceRoutes');
 app.use('/maintenance', maintenanceRoutes);
 
+
+//sheetmaintenance
+const sheetmaintenanceRoutes = require('./INSPECTION/SheetMaintenance/SheetMaintenanceRoutes');
+app.use('/sheetmaintenance', sheetmaintenanceRoutes);
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
