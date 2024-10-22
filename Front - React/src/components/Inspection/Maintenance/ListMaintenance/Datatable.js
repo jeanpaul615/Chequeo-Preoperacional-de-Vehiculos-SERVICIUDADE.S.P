@@ -63,7 +63,7 @@ const DatatableListMaintenance = () => {
     setFilteredData(filtered);
     setShowModalVehiculo(false);
   };
-  
+
   const handleSolutionClick = (maintenance) => {
     setSelectedMaintenance(maintenance);
     setShowModalEdit(true);
@@ -144,7 +144,7 @@ const DatatableListMaintenance = () => {
     <div className="flex flex-col md:flex-row mt-8">
       <Sidebar />
       <div className="flex-1 md:ml-72 ml-4 text-sm md:mr-5 mr-5 overflow-x-auto">
-        <Navbar Title={"Mantenimientos"} />
+        <Navbar Title={"Mantenimientos Pendientes"} />
 
         <div className="flex justify-between items-center mb-4">
           {/* Botón para seleccionar vehículo */}
@@ -163,20 +163,31 @@ const DatatableListMaintenance = () => {
               className="hidden"
             />
             <div
-              className={`flex items-center justify-center w-5 h-5 border-2 border-gray-300 rounded-full 
-      transition duration-200 ease-in-out 
-      focus:ring-2 focus:ring-black focus:outline-none 
-      ${
-        showPendingOnly
-          ? "bg-black border-transparent"
-          : "bg-white border-gray-300"
-      }`}
-            >
-              <div
-                className={`w-3 h-3 bg-black rounded-full 
-        transform transition-transform duration-200 ease-in-out 
-        ${showPendingOnly ? "scale-100" : "scale-0"}`}
-              />
+              className={`flex items-center justify-center w-6 h-6 
+                border-2 border-gray-400 rounded-md shadow-md 
+                transition-all duration-300 ease-in-out cursor-pointer
+                hover:border-black hover:shadow-lg focus:ring-2 focus:ring-blue-500 focus:outline-none 
+                ${
+                  showPendingOnly
+                    ? "bg-gradient-to-r from-blue-500 to-purple-500 border-transparent"
+                    : "bg-white border-gray-300"
+                }`}
+                        >
+                <svg
+                className={`w-4 h-4 text-white transform transition-transform duration-300 ease-in-out
+                ${showPendingOnly ? "scale-100" : "scale-0"}`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+                >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+                </svg>
             </div>
 
             <span className="ml-2 text-sm font-medium text-black">
@@ -217,7 +228,7 @@ const DatatableListMaintenance = () => {
 
         {showModalEdit && (
           <SolutionModal
-            selectedMaintenance={selectedMaintenance}
+            maintenance={selectedMaintenance}
             setSelectedMaintenance={setSelectedMaintenance}
             onClose={() => setShowModalEdit(false)}
           />

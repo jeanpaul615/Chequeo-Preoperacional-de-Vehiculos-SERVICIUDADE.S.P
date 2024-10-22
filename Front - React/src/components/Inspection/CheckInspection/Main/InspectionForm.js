@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Container from "./Container";
 import Swal from "sweetalert2";
 import Comments from "./Comments";
+import { CreateMaintenance } from "../../../../controllers/Inspection/MaintenanceControllers/CreateMaintenance";
 import {
   NewInspection,
   NewVehicleCondition,
@@ -214,6 +215,15 @@ const InspectionForm = () => {
           });
         }
       });
+
+      const promises = inspections.map(async (inspection) => {
+        if (inspection.conditions === "Mal") {
+          console.log(formData.placa, formData.inspection_id.inspection_id, formData.nombre_conductor, inspection.name_condition, observations[inspection.name_condition] || "");
+          await CreateMaintenance(formData.placa, formData.inspection_id.inspection_id, formData.nombre_conductor, inspection.name_condition, observations[inspection.name_condition] || "");
+        }
+      });
+  
+      await Promise.all(promises); // Espera a que todos los envíos se completen
 
       await NewVehicleCondition({ inspections });
 

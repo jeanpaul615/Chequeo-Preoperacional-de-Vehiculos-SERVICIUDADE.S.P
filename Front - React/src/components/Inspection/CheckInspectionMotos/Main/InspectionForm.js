@@ -7,6 +7,7 @@ import {
   NewVehicleCondition,
 } from "../../../../controllers/Inspection/InspectionControllers/NewInspection";
 import { VerifyInspection } from "../../../../controllers/Inspection/InspectionControllers/VerifyInspection";
+import {CreateMaintenance} from "../../../../controllers/Inspection/MaintenanceControllers/CreateMaintenance";
 /**
  * Componente de formulario de inspección.
  * Este componente renderiza un formulario de inspección con una serie de campos predefinidos.
@@ -184,6 +185,15 @@ const InspectionForm = () => {
           });
         }
       });
+
+      const promises = inspections.map(async (inspection) => {
+        if (inspection.conditions === "Mal") {
+          console.log(formData.placa, formData.inspection_id.inspection_id, formData.nombre_conductor, inspection.name_condition, observations[inspection.name_condition] || "");
+          await CreateMaintenance(formData.placa, formData.inspection_id.inspection_id, formData.nombre_conductor, inspection.name_condition, observations[inspection.name_condition] || "");
+        }
+      });
+  
+      await Promise.all(promises); // Espera a que todos los envíos se completen
 
       await NewVehicleCondition({ inspections });
 
