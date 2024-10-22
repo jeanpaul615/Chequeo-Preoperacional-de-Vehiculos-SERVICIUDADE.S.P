@@ -38,6 +38,14 @@ const SheetMaintenanceQueries = {
       callback(null, result);
     });
   },
+
+  getMaintenance: (callback) => {
+    const query = `SELECT * FROM sheetmaintenance`;
+    db.query(query, (err, result) => {
+      if (err) return callback(err, null);
+      callback(null, result);
+    });
+  },
 };
 
 module.exports = SheetMaintenanceQueries;

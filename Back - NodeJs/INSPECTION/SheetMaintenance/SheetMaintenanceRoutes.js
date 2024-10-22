@@ -13,6 +13,9 @@ router.post('/createmaintenance', maintenanceController.createSheetMaintenance);
 // Descargar un archivo Excel asociado a una hoja de mantenimiento
 router.get('/download', maintenanceController.downloadExcel);
 
+router.get('/getmaintenance', maintenanceController.getMaintenance);
+
+
 // Actualizar una hoja de mantenimiento con una solución
 router.post('/updatemaintenance', maintenanceController.updateMaintenance);
 

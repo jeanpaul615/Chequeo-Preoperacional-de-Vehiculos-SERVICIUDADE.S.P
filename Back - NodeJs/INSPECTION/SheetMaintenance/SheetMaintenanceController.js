@@ -175,10 +175,23 @@ const updateMaintenance = (req, res) => {
       }
     );
   });
+
 };
+
+const getMaintenance = (req, res) => {
+  SheetMaintenanceQueries.getMaintenance((err, result) => {
+    if (err) {
+      console.error("Error al obtener matenimientos:", err);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+    res.json(result);
+  });
+};
+
 
 module.exports = {
   createSheetMaintenance,
   downloadExcel,
   updateMaintenance,
+  getMaintenance
 };
