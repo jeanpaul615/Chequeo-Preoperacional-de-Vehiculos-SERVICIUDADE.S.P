@@ -169,7 +169,7 @@ const DatatableListMaintenance = () => {
                 hover:border-black hover:shadow-lg focus:ring-2 focus:ring-blue-500 focus:outline-none 
                 ${
                   showPendingOnly
-                    ? "bg-gradient-to-r from-blue-500 to-purple-500 border-transparent"
+                    ? "bg-gradient-to-r from-blue-500 to-orange-500 border-transparent"
                     : "bg-white border-gray-300"
                 }`}
                         >

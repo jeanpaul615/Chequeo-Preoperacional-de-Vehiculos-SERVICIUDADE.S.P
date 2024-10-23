@@ -6,6 +6,8 @@ import Sidebar from "../../../../containers/Sidebar";
 import { GetMaintenance } from "../../../../controllers/Inspection/SheetMaintenanceControllers/getMaintenance"
 import Navbar from "../../../../containers/Navbar";
 import ModalMaintenance from "./ModalMaintenance"; // Import the modal component
+import ModalDocumentLoad from './ModalDocumentLoad'; // Asegúrate de que la ruta sea correcta
+
 
 const DatatableMaintenance = () => {
   const tableRef = useRef(null);
@@ -15,6 +17,7 @@ const DatatableMaintenance = () => {
   const [showModalVehiculo, setShowModalVehiculo] = useState(false); // Modal to select vehicle
   const [showModalEdit, setShowModalEdit] = useState(false); // Modal to edit maintenance
   const [selectedMaintenance, setSelectedMaintenance] = useState(null); // State for selected maintenance
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +48,10 @@ const DatatableMaintenance = () => {
   const handleEditClick = (maintenance) => {
     setSelectedMaintenance(maintenance); // Set selected maintenance for editing
     setShowModalEdit(true); // Open the modal
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Función para cerrar el modal
   };
 
   useEffect(() => {
@@ -118,6 +125,13 @@ const DatatableMaintenance = () => {
           Seleccionar Vehículo
         </button>
 
+        <button
+          className="ml-5 justify-center items-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+          onClick={() => setIsModalOpen(true)}
+        >
+          Crear Nueva Hoja de Mantenimiento
+        </button>
+
         {showModalVehiculo && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
@@ -175,6 +189,13 @@ const DatatableMaintenance = () => {
           </table>
         </div>
       </div>
+            {/* Modal de carga de documentos */}
+            {isModalOpen && (
+        <ModalDocumentLoad
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 };
