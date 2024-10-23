@@ -13,12 +13,16 @@ const SheetMaintenanceQueries = {
   },
 
 
-  createSheetMaintenance: (license_plate, fileUrl, callback) => {
+  createSheetMaintenance: (license_plate, url, callback) => {
     const query = `INSERT INTO sheetmaintenance (license_plate, url) VALUES (?, ?)`;
-    db.query(query, [license_plate, fileUrl], (err, result) => {
-      if (err) return callback(err, null);
+    db.query(query, [license_plate, url], (err, result) => {
+      if (err) {
+        console.error("Error en la consulta a la base de datos:", err);
+        return callback(err, null);
+      }
       callback(null, result);
     });
+    
   },
 
 

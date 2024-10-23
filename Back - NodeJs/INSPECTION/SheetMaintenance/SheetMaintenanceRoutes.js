@@ -11,7 +11,7 @@ router.use('/public', express.static('public'));
 router.post('/createmaintenance', maintenanceController.createSheetMaintenance);
 
 // Descargar un archivo Excel asociado a una hoja de mantenimiento
-router.get('/download', maintenanceController.downloadExcel);
+router.post('/download', maintenanceController.downloadExcel);
 
 router.get('/getmaintenance', maintenanceController.getMaintenance);
 
