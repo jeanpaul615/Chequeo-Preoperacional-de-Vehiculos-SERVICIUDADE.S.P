@@ -8,6 +8,8 @@ import {
 } from "../../../../controllers/Inspection/InspectionControllers/NewInspection";
 import { VerifyInspection } from "../../../../controllers/Inspection/InspectionControllers/VerifyInspection";
 import {CreateMaintenance} from "../../../../controllers/Inspection/MaintenanceControllers/CreateMaintenance";
+import { SendReport } from "../../../../controllers/Inspection/SendReportControllers/SendReport";
+
 /**
  * Componente de formulario de inspección.
  * Este componente renderiza un formulario de inspección con una serie de campos predefinidos.
@@ -185,16 +187,43 @@ const InspectionForm = () => {
           });
         }
       });
+      const reports = []; // Variable para almacenar los resultados
 
+      // Mapeamos sobre las inspecciones y generamos las promesas
       const promises = inspections.map(async (inspection) => {
+        // Solo procesamos inspecciones que están marcadas como "Mal"
         if (inspection.conditions === "Mal") {
-          console.log(formData.placa, formData.inspection_id.inspection_id, formData.nombre_conductor, inspection.name_condition, observations[inspection.name_condition] || "");
-          await CreateMaintenance(formData.placa, formData.inspection_id.inspection_id, formData.nombre_conductor, inspection.name_condition, observations[inspection.name_condition] || "");
+          try {
+            // Llamamos a la función de mantenimiento
+            const result = await CreateMaintenance(
+              formData.placa,
+              formData.inspection_id.inspection_id, // Asegúrate de que inspection_id está correctamente estructurado
+              formData.nombre_conductor,
+              inspection.name_condition,
+              observations[inspection.name_condition] || "" // Agrega observaciones si las hay
+            );
+
+            reports.push(result); // Añadimos el resultado a reports si la inspección es "Mal"
+          } catch (error) {
+            console.error("Error al crear mantenimiento:", error);
+            // Manejo de errores si ocurre
+          }
         }
       });
-  
-      await Promise.all(promises); // Espera a que todos los envíos se completen
 
+      await Promise.all(promises); // Asegúrate de esperar todas las promesas
+
+      // Verificamos si se generaron reportes malos antes de enviar el correo
+      if (reports.length > 0) {
+
+        // Llamamos a la función SendReport pasándole formData y la cantidad de reports
+        await SendReport({
+          ...formData, // Pasamos todos los datos del formulario
+          reports: reports.length, // Incluimos los reports
+        });
+      } else {
+        console.log("No se generaron reportes malos, no se enviará el correo.");
+      }
       await NewVehicleCondition({ inspections });
 
       Swal.fire({
