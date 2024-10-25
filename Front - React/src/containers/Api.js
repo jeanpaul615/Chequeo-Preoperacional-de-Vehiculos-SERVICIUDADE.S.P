@@ -1,2 +1,2 @@
 
-export const API_BASE_URL = "http://localhost:8000"; //URL UNIVERSAL PARA TODAS LAS APIS.
+export const API_BASE_URL = "https://localhost/8000"; //URL UNIVERSAL PARA TODAS LAS APIS.

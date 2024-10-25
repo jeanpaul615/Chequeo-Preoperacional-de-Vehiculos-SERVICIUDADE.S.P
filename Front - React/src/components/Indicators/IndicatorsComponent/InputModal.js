@@ -208,7 +208,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      className="md:pl-28 lg:pl-28 fixed inset-0 flex items-center justify-center bg-black bg-opacity-75"
+      className="md:pl-28 lg:pl-28 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
       overlayClassName="fixed inset-0 bg-black bg-opacity-75"
       contentLabel="Input Modal"
       ariaHideApp={false}

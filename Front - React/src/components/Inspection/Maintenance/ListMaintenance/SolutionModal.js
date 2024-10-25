@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { UpdateMaintenance } from '../../../../controllers/Inspection/MaintenanceControllers/UpdateMaintenance';
+import { motion } from 'framer-motion';
 
 export default function SolutionModal({ maintenance, onClose }) {
   const [solution, setSolution] = useState('');
@@ -36,55 +37,70 @@ export default function SolutionModal({ maintenance, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="relative p-6 w-full max-w-lg max-h-full bg-white rounded-xl shadow-2xl transform transition-all duration-300 ease-out">
-        {/* Modal header */}
-        <div className="flex items-center justify-between border-b pb-4 mb-4">
-          <h3 className="text-xl font-semibold text-gray-900">
-            Solución de Mantenimiento <span className="font-bold text-blue-600">{maintenance.vehicle_id}</span>
-          </h3>
-          <button
-            type="button"
-            className="text-gray-400 hover:text-red-600 transition-colors duration-200 rounded-lg text-lg h-8 w-8 flex justify-center items-center"
-            onClick={onClose}
-          >
-            <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-            <span className="sr-only">Cerrar modal</span>
-          </button>
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div
+        className="rounded-xl w-11/12 md:w-1/3"
+        initial={{ y: "-50vh" }}
+        animate={{ y: "0" }}
+        exit={{ y: "50vh" }}
+      >
+        <div className="flex justify-center items-center z-50">
+          <div className="relative p-6 w-full max-w-lg max-h-full bg-white rounded-xl shadow-2xl transform transition-all duration-300 ease-out">
+            {/* Modal header */}
+            <div className="flex items-center justify-between border-b pb-4 mb-4">
+              <h3 className="text-xl font-semibold text-gray-900">
+                Solución de Mantenimiento <span className="font-bold text-blue-600">{maintenance.vehicle_id}</span>
+              </h3>
+              <button
+                type="button"
+                className="text-gray-400 hover:text-red-600 transition-colors duration-200 rounded-lg text-lg h-8 w-8 flex justify-center items-center"
+                onClick={onClose}
+              >
+                <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span className="sr-only">Cerrar modal</span>
+              </button>
+            </div>
+
+            {/* Input para la solución */}
+            <div className="mb-6">
+              <label htmlFor="solution" className="block text-gray-700 font-medium mb-2">Ingrese la solución:</label>
+              <textarea
+                id="solution"
+                value={solution}
+                onChange={handleSolutionChange}
+                className="block w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none h-28 text-gray-700 placeholder-gray-400"
+                placeholder="Describa la solución de mantenimiento aquí"
+              />
+            </div>
+
+            {/* Modal footer */}
+            <div className="flex items-center justify-end space-x-4 border-t pt-4">
+              <button
+                type="button"
+                className="bg-gray-300 text-gray-700 hover:bg-gray-400 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2.5 transition-colors duration-200"
+                onClick={onClose}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 font-medium rounded-lg text-sm px-5 py-2.5 transition-colors duration-200"
+                onClick={handleSubmit}
+              >
+                Enviar Solución
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Input para la solución */}
-        <div className="mb-6">
-          <label htmlFor="solution" className="block text-gray-700 font-medium mb-2">Ingrese la solución:</label>
-          <textarea
-            id="solution"
-            value={solution}
-            onChange={handleSolutionChange}
-            className="block w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none h-28 text-gray-700 placeholder-gray-400"
-            placeholder="Describa la solución de mantenimiento aquí"
-          />
-        </div>
-
-        {/* Modal footer */}
-        <div className="flex items-center justify-end space-x-4 border-t pt-4">
-          <button
-            type="button"
-            className="bg-gray-300 text-gray-700 hover:bg-gray-400 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2.5 transition-colors duration-200"
-            onClick={onClose}
-          >
-            Cancelar
-          </button>
-          <button
-            type="button"
-            className="bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 font-medium rounded-lg text-sm px-5 py-2.5 transition-colors duration-200"
-            onClick={handleSubmit}
-          >
-            Enviar Solución
-          </button>
-        </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

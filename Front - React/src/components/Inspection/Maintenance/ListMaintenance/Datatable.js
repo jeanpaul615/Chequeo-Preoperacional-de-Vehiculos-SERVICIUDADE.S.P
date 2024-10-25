@@ -6,6 +6,7 @@ import Sidebar from "../../../../containers/Sidebar";
 import { GetMaintenance } from "../../../../controllers/Inspection/MaintenanceControllers/GetMaintenance";
 import Navbar from "../../../../containers/Navbar";
 import SolutionModal from "./SolutionModal";
+import { motion } from "framer-motion";
 
 const DatatableListMaintenance = () => {
   const tableRef = useRef(null);
@@ -156,6 +157,7 @@ const DatatableListMaintenance = () => {
           </button>
 
           <label className="flex items-center cursor-pointer ml-4">
+
             <input
               type="checkbox"
               checked={showPendingOnly}
@@ -163,17 +165,13 @@ const DatatableListMaintenance = () => {
               className="hidden"
             />
             <div
-              className={`flex items-center justify-center w-6 h-6 
-                border-2 border-gray-400 rounded-md shadow-md 
-                transition-all duration-300 ease-in-out cursor-pointer
-                hover:border-black hover:shadow-lg focus:ring-2 focus:ring-blue-500 focus:outline-none 
-                ${
-                  showPendingOnly
-                    ? "bg-gradient-to-r from-blue-500 to-orange-500 border-transparent"
-                    : "bg-white border-gray-300"
+              className={`<input id="link-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                ${showPendingOnly
+                  ? "bg-white"
+                  : ""
                 }`}
-                        >
-                <svg
+            >
+              <svg
                 className={`w-4 h-4 text-white transform transition-transform duration-300 ease-in-out
                 ${showPendingOnly ? "scale-100" : "scale-0"}`}
                 xmlns="http://www.w3.org/2000/svg"
@@ -181,13 +179,13 @@ const DatatableListMaintenance = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 strokeWidth="2"
-                >
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   d="M5 13l4 4L19 7"
                 />
-                </svg>
+              </svg>
             </div>
 
             <span className="ml-2 text-sm font-medium text-black">
@@ -198,32 +196,47 @@ const DatatableListMaintenance = () => {
 
         <table ref={tableRef} className="display" style={{ width: "100%" }} />
         {showModalVehiculo && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
-              <h2 className="text-lg font-medium mb-4">Seleccionar Vehículo</h2>
-              <input
-                type="text"
-                className="border rounded px-4 py-2 w-full mb-4"
-                placeholder="Ingrese Matrícula"
-                value={selectedVehicle}
-                onChange={(e) => setSelectedVehicle(e.target.value)}
-              />
-              <div className="flex justify-end space-x-2">
-                <button
-                  className="bg-gray-300 px-4 py-2 rounded"
-                  onClick={() => setShowModalVehiculo(false)}
-                >
-                  Cancelar
-                </button>
-                <button
-                  className="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded"
-                  onClick={filterByVehicle}
-                >
-                  Filtrar
-                </button>
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="rounded-xl w-11/12 md:w-1/3"
+              initial={{ y: "-50vh" }}
+              animate={{ y: "0" }}
+              exit={{ y: "50vh" }}
+            >
+              <div className="flex justify-center items-center z-50">
+                <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
+                  <h2 className="text-lg font-medium mb-4">Seleccionar Vehículo</h2>
+                  <input
+                    type="text"
+                    className="border rounded px-4 py-2 w-full mb-4"
+                    placeholder="Ingrese Matrícula"
+                    value={selectedVehicle}
+                    onChange={(e) => setSelectedVehicle(e.target.value)}
+                  />
+                  <div className="flex justify-end space-x-2">
+                    <button
+                      className="bg-gray-300 px-4 py-2 rounded"
+                      onClick={() => setShowModalVehiculo(false)}
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      className="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded"
+                      onClick={filterByVehicle}
+                    >
+                      Filtrar
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+
+            </motion.div>
+          </motion.div>
         )}
 
         {showModalEdit && (

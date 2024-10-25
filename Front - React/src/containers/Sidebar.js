@@ -52,7 +52,7 @@ function Sidebar() {
         data-drawer-toggle="logo-sidebar"
         aria-controls="logo-sidebar"
         type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        className="inline-flex items-center p-2 mt-2 ms-3 text-sm rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
         onClick={toggleMenu}
       >
         <span className="sr-only">Open sidebar</span>
@@ -75,7 +75,7 @@ function Sidebar() {
         } sm:translate-x-0`}
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-slate-900">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-slate-900">
           {/* Avatar User */}
           <div className="mb-4 flex justify-left items-left">
             <AvatarUser />
@@ -87,7 +87,7 @@ function Sidebar() {
                 className="flex items-center p-2 text-white rounded-lg hover:bg-blue-700 group"
               >
                 <svg
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -105,7 +105,7 @@ function Sidebar() {
                 className="flex items-center p-2 text-white rounded-lg hover:bg-blue-700 group"
               >
                 <svg
-                  className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 576 512"
                 >
@@ -125,7 +125,7 @@ function Sidebar() {
                 className="flex items-center p-2 text-white rounded-lg hover:bg-blue-700 group"
               >
                 <svg
-                  className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 640 512"
                 >
@@ -146,7 +146,7 @@ function Sidebar() {
                 className="flex items-center p-2 text-white rounded-lg hover:bg-blue-700 group"
               >
                 <svg
-                  className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
                 >
@@ -169,7 +169,7 @@ function Sidebar() {
                     className="flex items-center p-2 text-white rounded-lg hover:bg-green-700 group w-full"
                   >
                     <svg
-                      className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                      className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 576 512"
                     >
@@ -300,7 +300,7 @@ function Sidebar() {
                     className="flex items-center p-2  rounded-lg text-white hover:bg-orange-600 group"
                   >
                     <svg
-                      className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                      className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"

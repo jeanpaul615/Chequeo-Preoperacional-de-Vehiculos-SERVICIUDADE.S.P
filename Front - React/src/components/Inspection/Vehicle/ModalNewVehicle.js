@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { NewVehicle } from "../../../controllers/Inspection/VehicleControllers/NewVehicle";
+import { motion } from "framer-motion";
 
 const ModalNewVehicle = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -49,8 +50,20 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
   if (!isOpen) return null; // Si el modal no está abierto, no mostrar nada
 
   return (
+    <motion.div
+className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+initial={{ opacity: 0 }}
+animate={{ opacity: 1 }}
+exit={{ opacity: 0 }}
+>
+<motion.div
+  className="rounded-xl w-11/12 md:w-1/3"
+  initial={{ y: "-50vh" }}
+  animate={{ y: "0" }}
+  exit={{ y: "50vh" }}
+>
     <div
-      className="fixed inset-0 z-50 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6 md:p-8"
+      className="z-50 flex items-center justify-center p-4 sm:p-6 md:p-8"
       onClick={onClose} // Cerrar al hacer clic fuera del modal
     >
       <div
@@ -202,6 +215,9 @@ const ModalNewVehicle = ({ isOpen, onClose }) => {
         </form>
       </div>
     </div>
+    
+    </motion.div>
+  </motion.div>
   );
 };
 

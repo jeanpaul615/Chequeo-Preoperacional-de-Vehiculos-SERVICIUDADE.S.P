@@ -7,6 +7,7 @@ import { GetMaintenance } from "../../../../controllers/Inspection/SheetMaintena
 import Navbar from "../../../../containers/Navbar";
 import ModalMaintenance from "./ModalMaintenance"; // Import the modal component
 import ModalDocumentLoad from './ModalDocumentLoad'; // Asegúrate de que la ruta sea correcta
+import { motion } from "framer-motion";
 
 
 const DatatableMaintenance = () => {
@@ -111,7 +112,7 @@ const DatatableMaintenance = () => {
         $(tableElement).DataTable().destroy();
       }
     };
-}, [filteredData]);
+  }, [filteredData]);
 
   return (
     <div className="flex flex-col md:flex-row mt-8">
@@ -133,33 +134,48 @@ const DatatableMaintenance = () => {
         </button>
 
         {showModalVehiculo && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
-              <h2 className="text-lg font-medium mb-4">Seleccionar Vehículo</h2>
-              <input
-                type="text"
-                className="border rounded px-4 py-2 w-full mb-4"
-                placeholder="Ingrese Matrícula"
-                value={selectedVehicle}
-                onChange={(e) => setSelectedVehicle(e.target.value)}
-              />
-              <div className="flex justify-end space-x-2">
-                <button
-                  className="bg-gray-300 px-4 py-2 rounded"
-                  onClick={() => setShowModalVehiculo(false)}
-                >
-                  Cancelar
-                </button>
-                <button
-                  className="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded"
-                  onClick={filterByVehicle}
-                >
-                  Filtrar
-                </button>
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="rounded-xl w-11/12 md:w-1/3"
+              initial={{ y: "-50vh" }}
+              animate={{ y: "0" }}
+              exit={{ y: "50vh" }}
+            >
+              <div className=" flex justify-center items-center z-50">
+                <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
+                  <h2 className="text-lg font-medium mb-4">Seleccionar Vehículo</h2>
+                  <input
+                    type="text"
+                    className="border rounded px-4 py-2 w-full mb-4"
+                    placeholder="Ingrese Matrícula"
+                    value={selectedVehicle}
+                    onChange={(e) => setSelectedVehicle(e.target.value)}
+                  />
+                  <div className="flex justify-end space-x-2">
+                    <button
+                      className="bg-gray-300 px-4 py-2 rounded"
+                      onClick={() => setShowModalVehiculo(false)}
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      className="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded"
+                      onClick={filterByVehicle}
+                    >
+                      Filtrar
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
+
 
         {/* Render the modal for maintenance details if selectedMaintenance is set */}
         {showModalEdit && selectedMaintenance && (
@@ -189,8 +205,8 @@ const DatatableMaintenance = () => {
           </table>
         </div>
       </div>
-            {/* Modal de carga de documentos */}
-            {isModalOpen && (
+      {/* Modal de carga de documentos */}
+      {isModalOpen && (
         <ModalDocumentLoad
           isOpen={isModalOpen}
           onClose={handleCloseModal}

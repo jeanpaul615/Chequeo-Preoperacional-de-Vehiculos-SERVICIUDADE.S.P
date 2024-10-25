@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logoServiciudad from "./LOGO.png";
+import logoServiciudad from "../assets/PestañaPagina/Logo-Footer.png";
 
 //Footer para los componentes que lo requieran, componente informativo.
 export default function Footer() {
