@@ -73,14 +73,6 @@ export default function Footer() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
           <div className="relative bg-white rounded-lg p-8 max-w-md w-full shadow-lg transition-transform transform scale-95">
-            {/* Logo and Close Button */}
-            <div className="flex justify-between items-center mb-6">
-              <img
-                src={logoServiciudad}
-                alt="Logo Serviciudad"
-                className="h-12"
-              />
-            </div>
 
             {/* Contact Info */}
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">

@@ -4,7 +4,7 @@ export function ContactModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+      <div className="bg-white p-4 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-2xl font-semibold mb-4">Contacto del Desarrollador</h2>
         <p className="text-gray-700 mb-2"><strong>Nombre:</strong> Jean Paul Puerta</p>
         <p className="text-gray-700 mb-2"><strong>Email:</strong> jeanpaul@example.com</p>
