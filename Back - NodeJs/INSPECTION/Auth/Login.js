@@ -66,10 +66,10 @@ const User = {
     
 
     // Método para iniciar sesión
-    login: (email, password, callback) => {
-        const consult = 'SELECT * FROM user WHERE email = ?'; // Consulta para obtener el usuario por email
+    login: (cedula, password, callback) => {
+        const consult = 'SELECT * FROM user WHERE cedula = ?'; // Consulta para obtener el usuario por cedula
 
-        db.query(consult, [email], (err, result) => {
+        db.query(consult, [cedula], (err, result) => {
             if (err) {
                 return callback(err, null); // Retornar error si ocurre
             }
@@ -91,7 +91,8 @@ const User = {
                 }
 
                 // Crear token JWT
-                const access_token = jwt.sign({ email: user.email, role: user.role, userId: user.user_id }, "Stack");
+                const access_token = jwt.sign({ cedula: user.cedula, email:user.email,
+                     role: user.role, userId: user.user_id }, "Stack");
                 callback(null, { access_token, role: user.role, user_id:user.user_id }); // Retornar el token y datos del usuario
             });
         });

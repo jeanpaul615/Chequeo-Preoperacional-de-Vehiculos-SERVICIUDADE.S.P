@@ -51,13 +51,13 @@ exports.register = (req, res) => {
  * @returns {Error} 500 - Si ocurre un error en el servidor.
  */
 exports.login = (req, res) => {
-    const { email, password } = req.body;
+    const { cedula, password } = req.body;
 
-    if (!email || !password) {
-        return res.status(400).json({ success: false, message: 'Email y contraseña son obligatorios' });
+    if (!cedula || !password) {
+        return res.status(400).json({ success: false, message: 'cedula y contraseña son obligatorios' });
     }
 
-    Login.login(email, password, (err, result) => {
+    Login.login(cedula, password, (err, result) => {
         if (err) {
             return res.status(500).json({ success: false, message: 'Error en el servidor' });
         }
