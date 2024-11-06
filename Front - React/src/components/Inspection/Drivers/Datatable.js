@@ -305,7 +305,7 @@ const DatatableDrivers = () => {
               )}
             </div>
           )}
-        <div className="bg-white shadow-md rounded-lg overflow-x-auto">
+        <div className="bg-white shadow-md rounded-lg">
           <table
             ref={tableRef}
             className="display w-full table-auto border-collapse"

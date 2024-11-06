@@ -13,7 +13,7 @@ function LoginForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
+    cedula: "",
     password: ""
   });
   const [error, setError] = useState(null);
@@ -55,12 +55,12 @@ function LoginForm() {
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-medium font-medium text-gray-700">
-            Usuario:
+            Cedula:
           </label>
           <input
             type="text" // Corrige el tipo de input
-            name="email"
-            value={formData.email}
+            name="cedula"
+            value={formData.cedula}
             onChange={handleChange}
             className="px-3 py-2 border border-blue-900 rounded-2xl shadow-sm bg-gray-100 font-medium w-full"
             required

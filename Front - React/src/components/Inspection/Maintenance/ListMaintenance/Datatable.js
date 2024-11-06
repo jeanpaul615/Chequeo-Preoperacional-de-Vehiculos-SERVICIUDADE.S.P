@@ -145,7 +145,7 @@ const DatatableListMaintenance = () => {
     <div className="flex flex-col md:flex-row mt-8">
       <Sidebar />
       <div className="flex-1 md:ml-72 ml-4 text-sm md:mr-5 mr-5 overflow-x-auto">
-        <Navbar Title={"Mantenimientos Pendientes"} />
+        <Navbar Title={"Mantenimientos Pendientes del Chequeo Preoperacional"} />
 
         <div className="flex justify-between items-center mb-4">
           {/* Botón para seleccionar vehículo */}
