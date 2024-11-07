@@ -10,7 +10,7 @@ export default function InspectionMaintenance ({ formData, handleChange }) {
     {label: "Mantenimiento 3", name: "mantenimiento 3"},
 
   ];
-  
+  //Setea el item de la inspeccion con el nombre enviado
   const handleItemClick = (itemName) => {
     setSelectedItem(selectedItem === itemName ? null : itemName);
   };

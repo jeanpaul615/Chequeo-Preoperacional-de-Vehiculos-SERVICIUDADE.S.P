@@ -18,7 +18,7 @@ export default function InspectionRevisionInterna({ formData, handleChange }) {
     { label: "Sillas o Cojinería", name: "sillas_cojineria" }
   ];
 
-  
+  //Setea el item de la inspeccion con el nombre enviado
   const handleItemClick = (itemName) => {
     setSelectedItem(selectedItem === itemName ? null : itemName);
   };

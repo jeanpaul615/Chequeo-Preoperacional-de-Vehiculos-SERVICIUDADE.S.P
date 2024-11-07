@@ -16,7 +16,7 @@ export default function InspectionLuces({ formData, handleChange }) {
 
   ];
 
-
+//Setea el item de la inspeccion con el nombre enviado
   const handleItemClick = (itemName) => {
     setSelectedItem(selectedItem === itemName ? null : itemName);
   };

@@ -10,7 +10,7 @@ const user_id = sessionStorage.getItem('user_id');
 const InspectionDriver = ({ formData, handleChange }) => {
   const [drivers, setDrivers] = useState([]);
   const [licenseUntil, setLicenseUntil] = useState(""); // Cambiar el nombre a licenseUntil
-
+//Trae los datos de la API 
   useEffect(() => {
     const fetchLicense = async () => {
       if (formData.nombre_conductor) {
@@ -37,7 +37,7 @@ const InspectionDriver = ({ formData, handleChange }) => {
     fetchLicense();
     // eslint-disable-next-line
   }, [formData.nombre_conductor]);
-
+//Filtra los datos de la inspeccion basado en el nombre
   useEffect(() => {
     const fetchDrivers = async () => {
       try {

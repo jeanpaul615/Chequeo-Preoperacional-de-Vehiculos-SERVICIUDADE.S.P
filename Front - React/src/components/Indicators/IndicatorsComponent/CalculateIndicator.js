@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
  */
 const CalculateIndicator = ({ variables, id_indicador, onCalculate }) => {
   const [result, setResult] = useState('');
-
+//UseEffect para setear los datos
   useEffect(() => {
     setResult('');
   }, []);

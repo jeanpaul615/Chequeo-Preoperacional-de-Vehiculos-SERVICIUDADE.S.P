@@ -13,7 +13,7 @@ export default function InspectionInstrumentos({ formData, handleChange }) {
     { label: "Temperatura Motor", name: "temperatura_motor" },
     { label: "Tacómetro - Velocímetro", name: "tacometro_velocimetro" }
   ];
-
+//Setea el item de la inspeccion con el nombre enviado
   const handleItemClick = (itemName) => {
     setSelectedItem(selectedItem === itemName ? null : itemName);
   };

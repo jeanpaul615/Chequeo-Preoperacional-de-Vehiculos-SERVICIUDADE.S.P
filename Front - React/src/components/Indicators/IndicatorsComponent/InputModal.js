@@ -24,7 +24,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
   const [period, setPeriod] = useState("");
   // eslint-disable-next-line
   const [value, setValue] = useState("");
-
+//Setea los datos 
   useEffect(() => {
     const fetchIndicators = async () => {
       try {
@@ -37,7 +37,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
 
     fetchIndicators();
   }, []);
-
+//Filtra los datos
   useEffect(() => {
     const fetchVariables = async () => {
       if (selectedIndicator) {
@@ -57,18 +57,18 @@ const InputModal = ({ isOpen, onRequestClose }) => {
 
     fetchVariables();
   }, [selectedIndicator, indicators]);
-
+//Manejador de cambios en los inputs
   const handleChange = (e) => {
     setInputs({
       ...inputs,
       [e.target.name]: e.target.value,
     });
   };
-
+//Setea el valor calculado que recibe de otro componente
   const handleCalculate = (calculatedValue) => {
     setValue(calculatedValue);
   };
-
+//Maneja el envio de los datos
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -199,7 +199,7 @@ const InputModal = ({ isOpen, onRequestClose }) => {
     }
   };
   
-
+//Filtra los datos
   const selectedIndicatorId = indicators.find(
     (ind) => ind.nombre_indicador === selectedIndicator
   )?.id_indicador;

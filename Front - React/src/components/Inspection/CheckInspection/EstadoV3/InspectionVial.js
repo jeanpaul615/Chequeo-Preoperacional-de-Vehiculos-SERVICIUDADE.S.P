@@ -10,7 +10,7 @@ export default function InspectionVial({ formData, handleChange }) {
     {label: "Chaleco Reflectivo", name: "chaleco_reflectivo"},
     {label: "Campana", name: "campana"}
   ];
-
+//Setea el item de la inspeccion con el nombre enviado
   const handleItemClick = (itemName) => {
     setSelectedItem(selectedItem === itemName ? null : itemName);
   };

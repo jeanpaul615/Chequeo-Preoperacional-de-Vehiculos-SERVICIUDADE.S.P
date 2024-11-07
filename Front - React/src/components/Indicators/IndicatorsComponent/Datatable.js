@@ -30,7 +30,7 @@ const DataTableIndicators = () => {
   const [selectedFrequency, setSelectedFrequency] = useState("");
   const roleUser = RoleVerify();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+//Use Effect para setear los datos
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,7 +43,7 @@ const DataTableIndicators = () => {
     };
     fetchData();
   }, []);
-
+//Filtra los datos y controla la tabla, ademas de la columna de botones
   useEffect(() => {
     const tableElement = tableRef.current;
 
@@ -150,7 +150,7 @@ const DataTableIndicators = () => {
     };
     // eslint-disable-next-line
   }, [filteredData]);
-
+//Filtra los datos por mes, año, frecuencia del indicador y indicador
   useEffect(() => {
     // Filter data based on the selected month, year, and frequency
     const filtered = data.filter((item) => {
@@ -168,22 +168,23 @@ const DataTableIndicators = () => {
     });
     setFilteredData(filtered);
   }, [selectedMonth, selectedYear, selectedFrequency, selectedIndicator, data]);
-
+//Abre el modal seteando el estado del componente
   const openModal = () => {
     setModalIsOpen(true);
   };
+//Maneja el estado para abrir el modal
   const HandleStatsOpen = () => {
     setModalStatsIsOpen(true);
   };
-
+//Maneja el estado para cerrar el modal
   const HandleStatsClose = () => {
     setModalStatsIsOpen(false);
   };
-
+//Cierra el modal seteando el estado del componente
   const closeModal = () => {
     setModalIsOpen(false);
   };
-
+//Se encarga de exportar en PDF basado en los parametros enviados y usando una libreria
   const exportToPDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(10);
@@ -205,11 +206,11 @@ const DataTableIndicators = () => {
     });
     doc.save("indicadores.pdf");
   };
-
+//Setea el estado isdropdownopen
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
-
+//Se encarga de exportar en EXCEL
   const exportToExcel = () => {
     const inspectionInSpanish = data.map((item) => ({
       "ID Indicador": item.id_indicador,

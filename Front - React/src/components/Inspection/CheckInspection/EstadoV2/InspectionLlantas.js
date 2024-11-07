@@ -11,7 +11,7 @@ export default function InspectionLlantas({ formData, handleChange }) {
     { label: "Trasera Izquierda", name: "llanta_trasera_izquierda" },
     { label: "Llanta Repuesto", name: "llanta_repuesto" }
   ];
-
+//Setea el item de la inspeccion con el nombre enviado
   const handleItemClick = (itemName) => {
     setSelectedItem(selectedItem === itemName ? null : itemName);
   };

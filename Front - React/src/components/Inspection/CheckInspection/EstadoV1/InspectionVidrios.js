@@ -13,7 +13,7 @@ export default function InspectionVidrios({ formData, handleChange }) {
     { label: "Espejos Retrovisor", name: "espejo_retrovisor" },
     { label: "Espejos Laterales", name: "espejos_laterales" },
   ];
-
+//Setea el item de la inspeccion con el nombre enviado
   const handleItemClick = (itemName) => {
     setSelectedItem(selectedItem === itemName ? null : itemName);
   };

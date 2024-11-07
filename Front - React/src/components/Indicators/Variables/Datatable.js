@@ -22,7 +22,7 @@ const DataTableVariable = () => {
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedIndicator, setSelectedIndicator] = useState("");
 
-
+//Setea los datos recibidos de la API
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,7 +35,7 @@ const DataTableVariable = () => {
     };
     fetchData();
   }, []);
-
+//Inicializa la datatable
   useEffect(() => {
     const tableElement = tableRef.current;
 
@@ -88,7 +88,7 @@ const DataTableVariable = () => {
       }
     };
   }, [filteredData]);
-
+//Filtra y compara los datos
   useEffect(() => {
     // Filter data based on the selected month, year, and frequency
     const filtered = data.filter((item) => {

@@ -12,7 +12,7 @@ export default function InspectionNiveles ({ formData, handleChange }) {
     {label: "Agua Parabrisas", name: "agua_parabrisas"},
     {label: "Nivel Combustible", name: "nivel_combustible"}
   ];
-  
+  //Setea el item de la inspeccion con el nombre enviado
   const handleItemClick = (itemName) => {
     setSelectedItem(selectedItem === itemName ? null : itemName);
   };

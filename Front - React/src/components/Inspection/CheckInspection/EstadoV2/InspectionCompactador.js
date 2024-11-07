@@ -12,7 +12,7 @@ export default function InspectionCompactador({ formData, handleChange }) {
     { label: "Cilindros Hidráulicos", name: "cilindros_hidraulicos" },
     { label: "Seguro de Portalón", name: "seguro_portalon" }
   ];
-
+//Setea el item de la inspeccion con el nombre enviado
   const handleItemClick = (itemName) => {
     setSelectedItem(selectedItem === itemName ? null : itemName);
   };

@@ -7,14 +7,14 @@ import { motion } from "framer-motion";
 const ModalUpdate = ({ isOpen, onRequestClose, indicator }) => {
   const [formData, setFormData] = useState({});
   const [originalFrequency, setOriginalFrequency] = useState("");
-
+//Datos de la tabla
   const labelMap = {
     id_indicador: "Id Indicador",
     frecuencia: "Frecuencia",
     valor: "Valor",
     periodo_inicio: "Periodo de Inicio",
   };
-
+//Filtra los datos que recibe para usar solo el de la columna que corresponde
   useEffect(() => {
     if (indicator && Object.keys(indicator).length > 0) {
       const formattedData = {
@@ -27,7 +27,7 @@ const ModalUpdate = ({ isOpen, onRequestClose, indicator }) => {
       setOriginalFrequency(formattedData.frecuencia);
     }
   }, [indicator]);
-
+//Manejador de cambios de inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -35,13 +35,13 @@ const ModalUpdate = ({ isOpen, onRequestClose, indicator }) => {
       [name]: value,
     }));
   };
-
+//Formatea los datos de la tabla
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const [year, month, day] = dateString.split("-");
     return `${year}-${month}-${day}`;
   };
-
+//Manejador de envio de datos a la API
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -82,7 +82,7 @@ const ModalUpdate = ({ isOpen, onRequestClose, indicator }) => {
   };
 
   if (!isOpen) return null;
-
+//Filtra los datos
   const filteredKeys = Object.keys(formData).filter(
     (key) => key !== "Estado" && key !== "nombre_indicador" && key !== "id_registro"
   );
