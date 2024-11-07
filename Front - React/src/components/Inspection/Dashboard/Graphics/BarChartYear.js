@@ -40,10 +40,18 @@ const BarChartYear = ({ data }) => {
       legend: {
         position: 'top',
         labels: {
-          color: 'rgb(0, 0, 0)', // Color de texto de la leyenda
+          color: 'rgba(0, 0, 0, 1)', // Color de la leyenda
+          font: {
+            size: 14, // Tamaño de fuente de la leyenda
+            family: '', // Fuente moderna para la leyenda
+            weight: 'bold',
+          },
         },
       },
       tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0, 0)', // Fondo del tooltip
+        titleColor: 'white', // Color del título del tooltip
+        bodyColor: 'white', // Color del cuerpo del tooltip
         callbacks: {
           label: (context) => `Inspecciones: ${context.raw}`,
         },
@@ -56,6 +64,11 @@ const BarChartYear = ({ data }) => {
         },
         ticks: {
           color: 'rgba(0, 0, 0, 0.7)', // Color de las etiquetas del eje X
+          font: {
+            size: 14, // Tamaño de fuente de las etiquetas del eje X
+            family: 'Arial, sans-serif', // Fuente moderna
+            weight: 'bold', // Peso de la fuente
+          },
         },
       },
       y: {
@@ -64,6 +77,11 @@ const BarChartYear = ({ data }) => {
         },
         ticks: {
           color: 'rgba(0, 0, 0, 0.7)', // Color de las etiquetas del eje Y
+          font: {
+            size: 14, // Tamaño de fuente de las etiquetas del eje Y
+            family: 'Arial, sans-serif', // Fuente moderna
+            weight: 'bold', // Peso de la fuente
+          },
         },
       },
     },
@@ -75,12 +93,16 @@ const BarChartYear = ({ data }) => {
         left: 20,
       },
     },
+    animation: {
+      duration: 1000, // Duración de la animación al renderizar el gráfico
+      easing: 'easeInOutQuad', // Tipo de animación
+    },
   };
 
   return (
-      <div className="items-center justify-center flex rounded-lg border shadow-xl md:h-44 w-full p-4 bg-white"> {/* Ajusta la altura aquí según tus necesidades */}
-        <Bar data={chartData} options={options} />
-      </div>
+    <div className="w-full h-64">
+    <Bar data={chartData} options={options} />
+  </div>
   );
 };
 

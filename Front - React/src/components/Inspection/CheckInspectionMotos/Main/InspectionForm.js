@@ -114,7 +114,6 @@ const InspectionForm = () => {
         return false;
       }
     }
-
     return true;
   };
 

@@ -3,6 +3,17 @@ import BarChart from "./Graphics/BarChart";
 import BarChartYear from "./Graphics/BarChartYear";
 import FetchPieChart from "./Graphics/fetchPieChart";
 import FetchPieChartUser from "./Graphics/fetchPieChartUser";
+import { UserGroupIcon } from "@heroicons/react/outline";
+import { TruckIcon } from "@heroicons/react/outline";
+import { CheckCircleIcon } from "@heroicons/react/outline";
+import {  HomeIcon } from "@heroicons/react/outline";
+import {  ShieldCheckIcon } from "@heroicons/react/outline";
+import {  PaperAirplaneIcon } from "@heroicons/react/outline";
+import {  ArchiveIcon } from "@heroicons/react/outline";
+
+
+
+
 
 const DashboardStats = ({
   driversCount,
@@ -16,68 +27,105 @@ const DashboardStats = ({
   yearlyInspectionData,
 }) => {
   return (
-    <div className="p-6 space-y-6">
-  {/* ROW 1: Four statistic cards */}
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-    <div className="flex items-center justify-center p-4 text-center rounded-lg bg-blue-100 shadow-md border border-blue-200 h-24">
-      <p className="text-base font-semibold text-blue-800">
-        Conductores registrados: {driversCount}
-      </p>
+<div className="p-6 space-y-6">
+  {/* ROW 1: Cuatro tarjetas estadísticas */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    {/* Tarjeta de Conductores Registrados */}
+    <div className="flex flex-col items-end justify-between p-4 text-right rounded-lg bg-blue-50 shadow-lg border-l-8 border-blue-500 hover:shadow-xl transition-shadow duration-300 ease-in-out h-32 w-full">
+      <div className="flex items-center space-x-4">
+        <UserGroupIcon className="h-10 w-10 text-blue-600 flex-shrink-0" />
+        <p className="text-sm font-medium text-gray-800">Conductores registrados:</p>
+      </div>
+      <p className="text-3xl font-bold text-blue-700 mb-2">{driversCount}</p>
     </div>
-    <div className="flex items-center justify-center p-4 text-center rounded-lg bg-green-100 shadow-md border border-green-200 h-24">
-      <p className="text-base font-semibold text-green-800">
-        Vehículos registrados: {vehiclesCount}
-      </p>
+
+    {/* Tarjeta de Vehículos Registrados */}
+    <div className="flex flex-col items-end justify-between p-4 text-right rounded-lg bg-green-50 shadow-lg border-l-8 border-green-500 hover:shadow-xl transition-shadow duration-300 ease-in-out h-32 w-full">
+      <div className="flex items-center space-x-4">
+        <TruckIcon className="h-12 w-12 text-green-600 flex-shrink-0" />
+        <p className="text-sm font-medium text-gray-800 mb-1">Vehículos registrados:</p>
+      </div>
+      <p className="text-3xl font-bold text-green-700">{vehiclesCount}</p>
     </div>
-    <div className="flex items-center justify-center p-4 text-center rounded-lg bg-yellow-100 shadow-md border border-yellow-200 h-24">
-      <p className="text-base font-semibold text-yellow-800">
-        Tipos de Vehículos: {vehicleTypes.join(", ")}
-      </p>
+
+    {/* Tarjeta de Tipos de Vehículos */}
+    <div className="flex flex-col items-end justify-between p-4 text-right rounded-lg bg-orange-50 shadow-lg border-l-8 border-orange-500 hover:shadow-xl transition-shadow duration-300 ease-in-out h-32 w-full">
+      <div className="flex items-center space-x-4">
+        <CheckCircleIcon className="h-12 w-12 text-orange-600 flex-shrink-0" />
+        <p className="text-sm font-medium text-gray-800 mb-1">Tipos de Vehículos:</p>
+      </div>
+      <p className="text-xs font-semibold text-gray-700">{vehicleTypes.join(", ")}</p>
     </div>
-    <div className="flex items-center justify-center p-4 text-center rounded-lg bg-red-100 shadow-md border border-red-200 h-24">
-      <p className="text-base font-semibold text-red-800">
-        Dependencias: {vehicleDependencies.join(", ")}
-      </p>
+
+    {/* Tarjeta de Dependencias */}
+    <div className="flex flex-col items-end justify-between p-4 text-right rounded-lg bg-purple-50 shadow-lg border-l-8 border-purple-500 hover:shadow-xl transition-shadow duration-300 ease-in-out h-32 w-full">
+      <div className="flex items-center space-x-4">
+        <HomeIcon className="h-12 w-12 text-purple-600 flex-shrink-0" />
+        <p className="text-sm font-medium text-gray-800 mb-1">Dependencias:</p>
+      </div>
+      <p className="text-xs font-semibold text-gray-700">{vehicleDependencies.join(", ")}</p>
     </div>
   </div>
 
-  {/* ROW 2: Inspection Data Bar Chart */}
-  <div className="w-full bg-gray-100 rounded-lg shadow-md border border-gray-200 p-2">
+  {/* ROW 2: Gráfico de barras de inspección */}
+  <div className="w-full bg-gray-50 rounded-lg shadow-xl border border-gray-200 hover:shadow-2xl transition-shadow duration-300 ease-in-out">
     <BarChart data={inspectionData} />
   </div>
 
-  {/* ROW 3: Inspection Statistics */}
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-    <div className="flex items-center justify-center p-4 text-center rounded-lg bg-purple-100 shadow-md border border-purple-200 h-24">
-      <p className="text-base font-semibold text-purple-800">
-        Total Inspecciones: {numberInspection}
-      </p>
+  {/* ROW 3: Estadísticas de inspección */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+    {/* Total Inspecciones */}
+    <div className="flex flex-col items-end justify-between p-4 text-right rounded-lg bg-yellow-50 shadow-lg border-l-8 border-yellow-500 hover:shadow-xl transition-shadow duration-300 ease-in-out h-32 w-full">
+      <div className="flex items-center space-x-4">
+        <ShieldCheckIcon className="h-12 w-12 text-yellow-600 flex-shrink-0" />
+        <p className="text-sm font-medium text-gray-800 mb-1">Total Inspecciones:</p>
+      </div>
+      <p className="text-3xl font-bold text-yellow-700">{numberInspection}</p>
     </div>
-    <div className="flex items-center justify-center p-4 text-center rounded-lg bg-teal-100 shadow-md border border-teal-200 h-24">
-      <p className="text-base font-semibold text-teal-800">
-        Inspecciones hoy: {inspectionsToday}
-      </p>
+
+    {/* Inspecciones hoy */}
+    <div className="flex flex-col items-end justify-between p-4 text-right rounded-lg bg-green-50 shadow-lg border-l-8 border-green-500 hover:shadow-xl transition-shadow duration-300 ease-in-out h-32 w-full">
+      <div className="flex items-center space-x-4">
+        <PaperAirplaneIcon className="h-12 w-12 text-green-600 flex-shrink-0" />
+        <p className="text-sm font-medium text-gray-800 mb-1">Inspecciones hoy:</p>
+      </div>
+      <p className="text-3xl font-bold text-green-700">{inspectionsToday}</p>
     </div>
-    <div className="flex items-center justify-center p-4 text-center rounded-lg bg-indigo-100 shadow-md border border-indigo-200 h-24">
-      <p className="text-base font-semibold text-indigo-800">
-        Inspecciones este mes: {inspectionsThisMonth}
-      </p>
+
+    {/* Inspecciones este mes */}
+    <div className="flex flex-col items-end justify-between p-4 text-right rounded-lg bg-blue-50 shadow-lg border-l-8 border-blue-500 hover:shadow-xl transition-shadow duration-300 ease-in-out h-32 w-full">
+      <div className="flex items-center space-x-4">
+        <ArchiveIcon className="h-12 w-12 text-blue-600 flex-shrink-0" />
+        <p className="text-sm font-medium text-gray-800 mb-1">Inspecciones este mes:</p>
+      </div>
+      <p className="text-3xl font-bold text-blue-700">{inspectionsThisMonth}</p>
     </div>
   </div>
 
-  {/* ROW 4: Mixed Content Row */}
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-    <div className="flex-col items-center justify-center p-1 text-center rounded-lg bg-white shadow-md border border-gray-200">
-      <p className="text-orange-700 font-medium">Distribución Vehículos</p>
+  {/* ROW 4: Contenido mixto */}
+{/* ROW 4: Contenido mixto */}
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
+  {/* Distribución Vehículos */}
+  <div className="flex flex-col items-center justify-center text-center rounded-lg bg-rose-100 shadow-md border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300 ease-in-out">
+    <p className="text-sm text-gray-700 font-semibold mb-4">Distribución Vehículos</p>
+    <div className="w-full">
       <FetchPieChart />
     </div>
-    <div className="h-48 w-full p-2 text-center rounded-2xl shadow-2xl border border-white col-span-2">
-      <BarChartYear data={yearlyInspectionData} />
-    </div>
-    <div className="flex-col items-center justify-center p-1 text-center rounded-lg bg-white shadow-md border border-gray-200">
-      <p className="text-blue-600 font-medium">Distribución Usuarios</p>
+  </div>
+
+  {/* Distribución Usuarios */}
+  <div className="flex flex-col items-center justify-center text-center rounded-lg bg-violet-100 shadow-md border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300 ease-in-out">
+    <p className="text-sm text-gray-700 font-semibold mb-4">Distribución Usuarios</p>
+    <div className="w-full">
       <FetchPieChartUser />
     </div>
+  </div>
+</div>
+
+
+  {/* Gráfico de barras anual */}
+  <div className="w-full bg-gray-50 rounded-lg shadow-xl border border-gray-200 hover:shadow-2xl transition-shadow duration-300 ease-in-out">
+    <BarChartYear data={yearlyInspectionData} />
   </div>
 </div>
 

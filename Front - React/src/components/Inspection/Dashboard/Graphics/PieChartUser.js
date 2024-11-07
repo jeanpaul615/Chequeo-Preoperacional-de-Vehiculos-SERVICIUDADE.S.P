@@ -53,22 +53,35 @@ const PieChartUser = ({ data }) => {
 
   const chartOptions = {
     responsive: true,
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+    },
     plugins: {
       legend: {
-        display: false, // Hide the legend
-      },
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            return `${context.label}: ${context.raw}`;
+        position: 'right',
+        labels: {
+          font: {
+            size: 12,
+            weight: 'bold',
           },
         },
       },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        titleColor: '#fff',
+        bodyColor: '#fff',
+        callbacks: {
+          label: function(context) {
+            return `${context.label}: ${context.raw}`;
+          }
+        }
+      }
     },
   };
 
   return (
-    <div className="items-center justify-center flex rounded-lg border shadow-xl h-40 w-full p-4 bg-white">
+    <div className="w-full justify-center items-center flex h-80">
       <Pie data={chartData()} options={chartOptions} />
     </div>
   );

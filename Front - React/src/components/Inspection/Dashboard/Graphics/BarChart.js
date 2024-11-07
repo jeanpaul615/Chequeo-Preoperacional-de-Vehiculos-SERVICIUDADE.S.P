@@ -12,8 +12,8 @@ const BarChart = ({ data }) => {
       {
         label: 'Inspecciones por Mes',
         data: data.map(item => item.value),
-        backgroundColor: data.map((_, index) => `rgba(${(index * 40) % 255}, ${(index * 80) % 255}, ${(index * 120) % 255}, 0.2)`),
-        borderColor: data.map((_, index) => `rgba(${(index * 40) % 255}, ${(index * 80) % 255}, ${(index * 120) % 255}, 1)`),
+        backgroundColor: data.map((_, index) => `rgba(113, 173, 249, 0.1)`), // Color uniforme para las barras
+        borderColor: data.map((_, index) => `rgba(54, 162, 235, 1)`), // Color uniforme para los bordes
         borderWidth: 1,
       },
     ],
@@ -21,15 +21,23 @@ const BarChart = ({ data }) => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Permite que el gráfico ajuste su tamaño basado en el contenedor
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',
         labels: {
-          color: 'rgb(0, 0, 0)', // Color de texto de la leyenda
+          color: 'rgba(0, 0, 0, 1)', // Color de la leyenda
+          font: {
+            size: 14, // Tamaño de fuente de la leyenda
+            family: '', // Fuente moderna para la leyenda
+            weight: 'bold',
+          },
         },
       },
       tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0, 0)', // Fondo del tooltip
+        titleColor: 'white', // Color del título del tooltip
+        bodyColor: 'white', // Color del cuerpo del tooltip
         callbacks: {
           label: (context) => `Inspecciones: ${context.raw}`,
         },
@@ -38,18 +46,29 @@ const BarChart = ({ data }) => {
     scales: {
       x: {
         grid: {
-          color: 'rgba(0, 0, 0, 0.1)', // Color de la cuadrícula del eje X
+          color: 'rgba(0, 0, 0, 0.05)', // Cuadrícula más suave en el eje X
+          borderColor: 'rgba(0, 0, 0, 0.1)', // Línea de borde más suave
         },
         ticks: {
           color: 'rgba(0, 0, 0, 0.7)', // Color de las etiquetas del eje X
+          font: {
+            size: 14, // Tamaño de fuente de las etiquetas del eje X
+            family: 'Arial, sans-serif', // Fuente moderna
+            weight: 'bold', // Peso de la fuente
+          },
         },
       },
       y: {
         grid: {
-          color: 'rgba(0, 0, 0, 0.1)', // Color de la cuadrícula del eje Y
+          color: 'rgba(0, 0, 0, 0.07)', // Cuadrícula más suave en el eje Y
         },
         ticks: {
           color: 'rgba(0, 0, 0, 0.7)', // Color de las etiquetas del eje Y
+          font: {
+            size: 14, // Tamaño de fuente de las etiquetas del eje Y
+            family: 'Arial, sans-serif', // Fuente moderna
+            weight: 'bold', // Peso de la fuente
+          },
         },
       },
     },
@@ -61,11 +80,15 @@ const BarChart = ({ data }) => {
         left: 20,
       },
     },
+    animation: {
+      duration: 1000, // Duración de la animación al renderizar el gráfico
+      easing: 'easeInOutQuad', // Tipo de animación
+    },
   };
 
   return (
-    <div className="bg-white border border-gray-300 rounded-lg p-4">
-      <div className="w-full h-64"> {/* Ajusta la altura aquí según tus necesidades */}
+    <div className="p-6">
+      <div className="w-full h-64">
         <Bar data={chartData} options={options} />
       </div>
     </div>

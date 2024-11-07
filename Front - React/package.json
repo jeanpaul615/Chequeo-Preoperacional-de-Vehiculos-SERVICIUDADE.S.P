@@ -16,7 +16,7 @@
     "datatables.net-responsive-dt": "^3.0.2",
     "es6-promise": "^4.2.8",
     "framer-motion": "^11.3.24",
-    "heroicons": "^2.1.4",
+    "heroicons": "^2.1.5",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.2",
     "jquery": "^3.7.1",
