@@ -8,6 +8,12 @@ import Navbar from "../../../../containers/Navbar";
 import SolutionModal from "./SolutionModal";
 import { motion } from "framer-motion";
 
+
+const formatDate = (dateString) => {
+  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
+
 const DatatableListMaintenance = () => {
   const tableRef = useRef(null);
   const [data, setData] = useState([]);
@@ -103,6 +109,7 @@ const DatatableListMaintenance = () => {
                 </div>`;
             },
           },
+          {title: "Fecha de Creación", data: "created_at", render: (data) => formatDate(data)}
         ],
         createdRow: (row, data) => {
           if (!data.solution || data.solution === "") {
@@ -122,6 +129,8 @@ const DatatableListMaintenance = () => {
           { width: "10%", targets: 4 },
           { width: "20%", targets: 5 },
           { width: "15%", targets: 6 },
+          { width: "15%", targets: 7 },
+
         ],
       });
 
@@ -260,6 +269,7 @@ const DatatableListMaintenance = () => {
                 <th className="px-2 py-1">Condición</th>
                 <th className="px-2 py-1">Comentario</th>
                 <th className="px-2 py-1">Solución</th>
+                <th className="px-2 py-1">Fecha de Creación</th>
               </tr>
             </thead>
             <tbody className="bg-white text-gray-600 font-medium">

@@ -9,6 +9,10 @@ import ModalMaintenance from "./ModalMaintenance"; // Import the modal component
 import ModalDocumentLoad from './ModalDocumentLoad'; // Asegúrate de que la ruta sea correcta
 import { motion } from "framer-motion";
 
+const formatDate = (dateString) => {
+  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
 
 const DatatableMaintenance = () => {
   const tableRef = useRef(null);
@@ -65,7 +69,8 @@ const DatatableMaintenance = () => {
       columns: [
         { title: "Id Mantenimiento", data: "id_maintenance" },
         { title: "Vehículo", data: "license_plate" },
-        { title: "Creación", data: "created_at" },
+        { title: "Creación", data: "created_at", render: (data) => formatDate(data) },
+        { title: "Ultima Actualización", data: "updated_at", render: (data) => formatDate(data) },
         {
           title: "Hoja de Mantenimiento",
           data: null,
@@ -93,6 +98,8 @@ const DatatableMaintenance = () => {
         { width: "20%", targets: 1 },
         { width: "20%", targets: 2 },
         { width: "10%", targets: 3 },
+        { width: "10%", targets: 4 },
+
       ],
     });
 
@@ -198,6 +205,8 @@ const DatatableMaintenance = () => {
                 <th className="px-2 py-1">Id Mantenimiento</th>
                 <th className="px-2 py-1">Vehículo</th>
                 <th className="px-2 py-1">Creación</th>
+                <th className="px-2 py-1">Ultima Actualización</th>
+
                 <th className="px-2 py-1">Hoja de Mantenimiento</th>
               </tr>
             </thead>

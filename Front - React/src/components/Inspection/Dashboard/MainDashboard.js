@@ -190,7 +190,9 @@ const MainDashboard = () => {
           />
         </div>
       </div>
+      <div className="md:flex hidden">
       <Footer />
+      </div>
     </div>
   );
 };
