@@ -1,10 +1,12 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Tooltip, ArcElement } from 'chart.js';
+
+// Registro de elementos obligatorios
 ChartJS.register(Tooltip, ArcElement);
 
 const PieChartUser = ({ data }) => {
-  // Count the occurrences of each role
+  // Construcción de los datos del gráfico
   const chartData = () => {
     if (!Array.isArray(data) || data.length === 0) {
       return {
@@ -72,11 +74,11 @@ const PieChartUser = ({ data }) => {
         titleColor: '#fff',
         bodyColor: '#fff',
         callbacks: {
-          label: function(context) {
+          label: function (context) {
             return `${context.label}: ${context.raw}`;
-          }
-        }
-      }
+          },
+        },
+      },
     },
   };
 

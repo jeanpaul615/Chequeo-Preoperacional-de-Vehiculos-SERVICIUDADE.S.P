@@ -1,8 +1,6 @@
 import React from "react";
 import BarChart from "./Graphics/BarChart";
 import BarChartYear from "./Graphics/BarChartYear";
-import FetchPieChart from "./Graphics/fetchPieChart";
-import FetchPieChartUser from "./Graphics/fetchPieChartUser";
 import { UserGroupIcon } from "@heroicons/react/outline";
 import { TruckIcon } from "@heroicons/react/outline";
 import { CheckCircleIcon } from "@heroicons/react/outline";
@@ -101,27 +99,6 @@ const DashboardStats = ({
       <p className="text-3xl font-bold text-blue-700">{inspectionsThisMonth}</p>
     </div>
   </div>
-
-  {/* ROW 4: Contenido mixto */}
-{/* ROW 4: Contenido mixto */}
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
-  {/* Distribución Vehículos */}
-  <div className="flex flex-col items-center justify-center text-center rounded-lg bg-rose-100 shadow-md border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300 ease-in-out">
-    <p className="text-sm text-gray-700 font-semibold mb-4">Distribución Vehículos</p>
-    <div className="w-full">
-      <FetchPieChart />
-    </div>
-  </div>
-
-  {/* Distribución Usuarios */}
-  <div className="flex flex-col items-center justify-center text-center rounded-lg bg-violet-100 shadow-md border border-gray-200 p-6 hover:shadow-xl transition-shadow duration-300 ease-in-out">
-    <p className="text-sm text-gray-700 font-semibold mb-4">Distribución Usuarios</p>
-    <div className="w-full">
-      <FetchPieChartUser />
-    </div>
-  </div>
-</div>
-
 
   {/* Gráfico de barras anual */}
   <div className="w-full bg-gray-50 rounded-lg shadow-xl border border-gray-200 hover:shadow-2xl transition-shadow duration-300 ease-in-out">

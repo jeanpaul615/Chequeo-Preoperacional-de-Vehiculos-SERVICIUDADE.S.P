@@ -1,6 +1,15 @@
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import React, { useState, useEffect } from 'react';
 import { GetVariablesbyIndicators } from '../../../../../controllers/Indicators/Variables/GetVariables';
+
+// Register required Chart.js components
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChart = ({ selectedIndicator }) => {
   const [indicatorData, setIndicatorData] = useState({
@@ -9,7 +18,7 @@ const PieChart = ({ selectedIndicator }) => {
     colors: [],
   });
 
-  // Función para obtener las variables enlazadas al indicador seleccionado
+  // Function to fetch variables data
   const fetchVariablesData = async () => {
     try {
       if (!selectedIndicator) {
@@ -23,17 +32,22 @@ const PieChart = ({ selectedIndicator }) => {
         return;
       }
 
-      const filteredVariables = response.filter(variable => Number(variable.id_indicador) === Number(selectedIndicator));
-      
-      
+      const filteredVariables = response.filter(
+        (variable) => Number(variable.id_indicador) === Number(selectedIndicator)
+      );
+
       const chartLabels = [];
       const chartData = [];
       const chartColors = [];
 
-      filteredVariables.forEach(variable => {
-        chartLabels.push(variable.nombre); // Asume que 'nombre' es el nombre de la variable
-        chartData.push(variable.id_variable); // Supongo que quieres usar el id_variable como valor; puedes cambiarlo
-        chartColors.push(`rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`); // Colores aleatorios
+      filteredVariables.forEach((variable) => {
+        chartLabels.push(variable.nombre); // Assuming 'nombre' is the variable name
+        chartData.push(variable.id_variable); // Using id_variable as value
+        chartColors.push(
+          `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
+            Math.random() * 255
+          )}, ${Math.floor(Math.random() * 255)}, 0.6)`
+        ); // Random colors
       });
 
       setIndicatorData({
@@ -63,9 +77,7 @@ const PieChart = ({ selectedIndicator }) => {
     ],
   };
 
-  return (
-      <Pie data={data} />
-  );
+  return <Pie data={data} />;
 };
 
 export default PieChart;

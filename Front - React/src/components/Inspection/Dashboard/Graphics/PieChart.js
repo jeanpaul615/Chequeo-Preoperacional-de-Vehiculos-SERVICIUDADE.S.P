@@ -1,82 +1,75 @@
-import React from 'react';
 import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, Tooltip, ArcElement, CategoryScale, LinearScale } from 'chart.js';
-ChartJS.register(Tooltip, ArcElement, CategoryScale, LinearScale);
+import React, { useState, useEffect } from 'react';
+import { GetVariablesbyIndicators } from '../../../../../controllers/Indicators/Variables/GetVariables';
 
-const PieChart = ({ data }) => {
+const PieChart = ({ selectedIndicator }) => {
+  const [indicatorData, setIndicatorData] = useState({
+    labels: [],
+    data: [],
+    colors: [],
+  });
 
-  // Configura los datos de la gráfica circular
-  const chartData = () => {
-    if (!Array.isArray(data)) {
-      return {
-        labels: [],
-        datasets: [],
-      };
-    }
-  
-    const typeCount = data.reduce((acc, item) => {
-      acc[item.type] = (acc[item.type] || 0) + 1;
-      return acc;
-    }, {});
-  
-    return {
-      labels: Object.keys(typeCount),
-      datasets: [
-        {
-          data: Object.values(typeCount),
-          backgroundColor: [
-            'rgba(75, 192, 192, 0.6)',
-            'rgba(255, 159, 64, 0.6)',
-            'rgba(153, 102, 255, 0.6)',
-            'rgba(255, 99, 132, 0.6)',
-            'rgba(255, 205, 86, 0.6)',
-          ],
-          borderColor: [
-            'rgba(75, 192, 192, 1)',
-            'rgba(255, 159, 64, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 99, 132, 1)',
-            'rgba(255, 205, 86, 1)',
-          ],
-          borderWidth: 2,
-        },
-      ],
-    };
-  };
-  
-
-  const chartOptions = {
-    responsive: true,
-    animation: {
-      animateRotate: true,
-      animateScale: true,
-    },
-    plugins: {
-      legend: {
-        position: 'right',
-        labels: {
-          font: {
-            size: 12,
-            weight: 'bold',
-          },
-        },
-      },
-      tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        titleColor: '#fff',
-        bodyColor: '#fff',
-        callbacks: {
-          label: function(context) {
-            return `${context.label}: ${context.raw}`;
-          }
-        }
+  // Función para obtener las variables enlazadas al indicador seleccionado
+  const fetchVariablesData = async () => {
+    try {
+      if (!selectedIndicator) {
+        console.warn("selectedIndicator is not defined");
+        return;
       }
-    },
+
+      const response = await GetVariablesbyIndicators(selectedIndicator);
+
+      if (!response || response.length === 0) {
+        console.warn("No variables found for selectedIndicator:", selectedIndicator);
+        return;
+      }
+
+      // Filtrar variables que correspondan al indicador seleccionado
+      const filteredVariables = response.filter(
+        (variable) => Number(variable.id_indicador) === Number(selectedIndicator)
+      );
+
+      // Preparar datos para el gráfico
+      const chartLabels = filteredVariables.map((variable) => variable.nombre);
+      const chartData = filteredVariables.map((variable) => variable.id_variable); // Cambia si necesitas otro valor
+      const chartColors = filteredVariables.map(
+        () =>
+          `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(
+            Math.random() * 255
+          )}, 0.6)` // Colores aleatorios
+      );
+
+      // Actualizar el estado con los datos procesados
+      setIndicatorData({
+        labels: chartLabels,
+        data: chartData,
+        colors: chartColors,
+      });
+    } catch (error) {
+      console.error('Error fetching variables data:', error);
+    }
+  };
+
+  // Ejecutar cuando el indicador seleccionado cambie
+  useEffect(() => {
+    fetchVariablesData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedIndicator]);
+
+  // Configuración de los datos del gráfico
+  const data = {
+    labels: indicatorData.labels,
+    datasets: [
+      {
+        data: indicatorData.data,
+        backgroundColor: indicatorData.colors,
+      },
+    ],
   };
 
   return (
-    <div className="w-full justify-center items-center flex h-80">
-      <Pie data={chartData()} options={chartOptions} />
+    <div className="w-full flex justify-center items-center">
+      <Pie data={data} />
     </div>
   );
 };

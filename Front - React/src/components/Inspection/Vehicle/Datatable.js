@@ -12,6 +12,7 @@ import ModalUpdate from "./ModalUpdate";
 import jsPDF from "jspdf";
 import * as XLSX from "xlsx"; 
 import RoleVerify from "../../../containers/RoleVerify";
+import ModalCalendar from "./ModalCalendar";
 // Función para formatear la fecha
 const formatDate = (dateString) => {
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -22,6 +23,8 @@ const DatatableVehicles = () => {
   const tableRef = useRef(null);
   const [data, setData] = useState([]);
   const [modalUpdateIsOpen, setModalUpdateIsOpen] = useState(false);
+  const [modalCalendarIsOpen, setModalCalendarIsOpen] = useState(false);
+
   const [modalNewVehicleIsOpen, setModalNewVehicleIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown
   const [selectedVehicle, setSelectedVehicle] = useState(null);
@@ -92,6 +95,9 @@ const DatatableVehicles = () => {
                 <button type="button" class="btn-delete  hover:text-white bg-gray-100 hover:bg-red-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2">
                   Eliminar
                 </button>
+                <button type="button" class="btn-calendar  hover:text-white bg-gray-100 hover:bg-green-600 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-full text-sm px-2 py-1 text-center inline-flex items-center me-2 mb-2">
+                  Calendario
+                </button>
               `;
             },
           },
@@ -117,7 +123,9 @@ const DatatableVehicles = () => {
         if (rowData) {
           if (button.hasClass("btn-update")) {
             handleEditClick(rowData);
-          } else if (button.hasClass("btn-delete")) {
+          } else if(button.hasClass("btn-calendar")){
+            handleCalendarClick(rowData);
+            } else if (button.hasClass("btn-delete")) {
             Swal.fire({
               title: "¿Estás seguro?",
               text: "No podrás revertir esto!",
@@ -178,9 +186,18 @@ const DatatableVehicles = () => {
     setModalNewVehicleIsOpen(false);
   };
 
+  const closeCalendarModal = () => {
+    setModalCalendarIsOpen(false);
+  };
+
   const handleEditClick = (vehicle) => {
     openUpdateModal(vehicle);
   };
+
+  const handleCalendarClick = (vehicle) => {
+    setSelectedVehicle(vehicle);
+    setModalCalendarIsOpen(true);
+  }
 
   const exportToPDF = () => {
     const doc = new jsPDF();
@@ -371,6 +388,12 @@ const DatatableVehicles = () => {
           <ModalNewVehicle
             isOpen={modalNewVehicleIsOpen}
             onClose={closeNewVehicleModal}
+          />
+        )}
+        {modalCalendarIsOpen && (
+          <ModalCalendar
+            isOpen={modalCalendarIsOpen}
+            onClose={closeCalendarModal}
           />
         )}
       </div>
