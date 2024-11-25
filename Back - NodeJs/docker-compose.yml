@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./backend
+    environment:
+      - DB1_HOST=${DB1_HOST}
+      - DB1_USER=${DB1_USER}
+      - DB1_PASSWORD=${DB1_PASSWORD}
+      - DB1_NAME=${DB1_NAME}
+      - DB2_HOST=${DB2_HOST}
+      - DB2_USER=${DB2_USER}
+      - DB2_PASSWORD=${DB2_PASSWORD}
+      - DB2_NAME=${DB2_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

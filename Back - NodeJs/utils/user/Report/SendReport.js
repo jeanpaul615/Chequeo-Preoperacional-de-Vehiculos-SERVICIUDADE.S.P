@@ -13,7 +13,6 @@ require('dotenv').config(); // Cargar variables de entorno desde el archivo .env
  * @param {number} reportData.reports - Cantidad de reportes malos.
  */
 const sendReport = async ({ driver_id, fecha, placa, tipo_vehiculo, nombre_conductor, inspection_id, reports }) => {
-    console.log("SENDREPORT: ", driver_id, fecha, placa, tipo_vehiculo, nombre_conductor, inspection_id, reports);
     try {
         // Configura el transporte de nodemailer usando variables de entorno
         const transporter = nodemailer.createTransport({
@@ -26,7 +25,6 @@ const sendReport = async ({ driver_id, fecha, placa, tipo_vehiculo, nombre_condu
 
         // Verificar conexión con el servicio de correo (opcional pero útil)
         await transporter.verify();
-        console.log('Servidor de correo listo para enviar');
 
         // Plantilla HTML para el cuerpo del correo
         const htmlContent = `
@@ -88,7 +86,6 @@ const sendReport = async ({ driver_id, fecha, placa, tipo_vehiculo, nombre_condu
 
         // Enviar el correo
         const info = await transporter.sendMail(mailOptions);
-        console.log('Correo enviado: %s', info.messageId);
         return { success: true, messageId: info.messageId };
     } catch (error) {
         console.error('Error al enviar el correo:', error);
