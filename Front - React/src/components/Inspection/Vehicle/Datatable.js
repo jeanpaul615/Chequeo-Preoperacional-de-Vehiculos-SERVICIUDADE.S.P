@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, Suspense } from "react";
 import $ from "jquery";
 import "datatables.net-dt";
 import "datatables.net-dt/css/dataTables.dataTables.min.css";
@@ -12,7 +12,7 @@ import ModalUpdate from "./ModalUpdate";
 import jsPDF from "jspdf";
 import * as XLSX from "xlsx"; 
 import RoleVerify from "../../../containers/RoleVerify";
-import ModalCalendar from "./ModalCalendar";
+const ModalCalendar = React.lazy(() => import("./ModalCalendar"));
 // Función para formatear la fecha
 const formatDate = (dateString) => {
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
@@ -391,10 +391,13 @@ const DatatableVehicles = () => {
           />
         )}
         {modalCalendarIsOpen && (
+          <Suspense fallback={<div>Loading...</div>}>          
           <ModalCalendar
+            vehicle={selectedVehicle}
             isOpen={modalCalendarIsOpen}
             onClose={closeCalendarModal}
           />
+          </Suspense>
         )}
       </div>
     </div>
