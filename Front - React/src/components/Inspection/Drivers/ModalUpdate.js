@@ -136,6 +136,8 @@ const ModalUpdate = ({ isOpen, onRequestClose, driver }) => {
                       <option value="ADMIN">Administrador</option>
                       <option value="AUDITOR">Auditor</option>
                       <option value="CONDUCTOR">Conductor</option>
+                      <option value="LIDER PESV">Lider PESV</option>
+
                     </select>
                   ) : key === "driver_license_until" ? (
                     <input

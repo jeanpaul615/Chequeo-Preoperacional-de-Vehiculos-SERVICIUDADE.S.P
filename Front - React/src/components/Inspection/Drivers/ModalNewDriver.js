@@ -151,6 +151,7 @@ const ModalNewDriver = ({ onRequestClose }) => {
                   <option value="ADMIN">ADMINISTRADOR</option>
                   <option value="CONDUCTOR">CONDUCTOR</option>
                   <option value="AUDITOR">AUDITOR</option>
+
                 </select>
               </div>
               <div className="mb-4">

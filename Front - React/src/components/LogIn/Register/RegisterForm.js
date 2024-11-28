@@ -138,6 +138,8 @@ function RegisterForm() {
                   <option value="ADMIN">ADMINISTRADOR</option>
                   <option value="CONDUCTOR">CONDUCTOR</option>
                   <option value="AUDITOR">AUDITOR</option>
+                  <option value="lIDER PESV">Lider PESV</option>
+
                 </select>
               </div>
         <div className="mb-4">
