@@ -68,6 +68,18 @@ const Inspection = {
     });
   },
 
+// Función en el modelo (Inspección)
+getInspectionDateByDriver: (data, callback) => {
+  const query = "SELECT created_at FROM inspection WHERE vehicle_id = ?";
+  const { vehicle_id } = data;  // Aquí desestructuramos vehicle_id de data
+  db.query(query, [vehicle_id], (err, results) => {  // Pasamos vehicle_id como parte de un arreglo
+    if (err) {
+      return callback(err, null); // Manejar errores
+    }
+    callback(null, results); // Retornar los resultados
+  });
+},
+
   // Registrar una nueva inspección
   newInspection: (data, callback) => {
     const query = `

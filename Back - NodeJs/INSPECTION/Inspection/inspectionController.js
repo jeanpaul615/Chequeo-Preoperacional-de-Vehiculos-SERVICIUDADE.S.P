@@ -131,6 +131,33 @@ const getVehicleConditionbyId = (req, res) => {
     res.json(condition);//Si todo sale bien que de respuesta en modo JSON
   });
 };
+
+const getInspectionDateByDriver = (req, res) => {
+  const { vehicle_id } = req.body; // Desestructurando req.body para obtener vehicle_id
+  if (!vehicle_id) {
+    return res.status(400).json({ message: "Faltan parámetros" });
+  }
+
+  Inspection.getInspectionDateByDriver({ vehicle_id }, (err, condition) => {
+    if (err) {
+      console.error("Error al obtener fechas de inspecciones", err);
+      return res.status(500).json({ error: "Error en el servidor" });
+    }
+
+    // Aquí se formatean las fechas antes de enviarlas
+    const formattedDates = condition.map(item => {
+      return {
+        ...item,
+        created_at: new Date(item.created_at).toLocaleDateString("es-ES"), // Formato dd/mm/yyyy
+      };
+    });
+
+    res.json(formattedDates); // Devolver las fechas formateadas
+  });
+};
+
+
+
 //Controlador para chequear las inspecciones
 const UpdateCheckedBy = (req, res) => {
   const {checked_by, inspection_id} = req.body; //parametros requeridos en el body
@@ -181,5 +208,6 @@ module.exports = {
   getAllVehicleCondition,
   getVehicleConditionbyId,
   UpdateCheckedBy,
-  VerifyInspection
+  VerifyInspection,
+  getInspectionDateByDriver
 };

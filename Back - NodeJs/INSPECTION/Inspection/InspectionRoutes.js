@@ -13,7 +13,8 @@ router.get('/getvehiclecondition', inspectionController.getAllVehicleCondition);
 //Ruta post para obtener las condiciones de vehiculo por id
 router.post('/getvehicleconditionbyid', inspectionController.getVehicleConditionbyId);
 
-
+//Ruta post para obtener las fechas de inspecciones
+router.post('/getdatesinspection', inspectionController.getInspectionDateByDriver);
 //Ruta post para crear una nueva inspección
 router.post('/newinspection', inspectionController.createInspection);
 //Ruta para crear una nueva condicion de vehiculo enlazada a una inspección
