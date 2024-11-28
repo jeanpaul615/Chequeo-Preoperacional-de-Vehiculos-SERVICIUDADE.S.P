@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "./Container";
 import Swal from "sweetalert2";
 import Comments from "./Comments";
@@ -99,11 +99,20 @@ const InspectionForm = () => {
     empaque_portalon: "Bien",
     cilindros_hidraulicos: "Bien",
     seguro_portalon: "Bien",
-    mantenimientos: "Bien", //Todos los mantenimientos
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [observations, setObservations] = useState({});
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+
+  useEffect(() => {
+    return () => {
+      setFormData(initialFormData);
+      setObservations({});
+    }
+    // eslint-disable-next-line
+  },[]);
 
   const handleChange = (e) => {
     setFormData((prevFormData) => ({
@@ -165,10 +174,19 @@ const InspectionForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log('Form Submitted:', formSubmitted);
+  
+    // Evitar el envío si ya se ha enviado previamente
+    if (formSubmitted) return;
+  
+    setFormSubmitted(true);
+  
     // Validar el formulario
-    if (!validateForm()) return;
-
+    if (!validateForm()) {
+      setFormSubmitted(false); // Reestablecer el estado en caso de validación fallida
+      return;
+    }
+  
     // Generar observaciones
     if (!generateObservations()) {
       Swal.fire({
@@ -176,33 +194,36 @@ const InspectionForm = () => {
         title: "Diligencie las observaciones de cada item (Malo) o (Regular)",
         text: "De no hacerlo no podrá continuar con el envío.",
       });
+      setFormSubmitted(false); // Reestablecer el estado en caso de no completar observaciones
       return;
     }
-
+  
     try {
       // Llama a VerifyInspection y espera su resultado
       const response = await VerifyInspection(
         formData.fecha,
         formData.vehicle_id
       );
-
+  
       if (response && response.message === "Inspección ya existe") {
         Swal.fire({
           icon: "warning",
           title: "Inspección Existente",
           text: "Ya hay una inspección registrada para esta fecha y vehículo.",
         });
+        setFormSubmitted(false); // Reestablecer el estado si la inspección ya existe
         return; // Detener el envío si existe una inspección
       }
+  
       const inspectionData = {
         driver_id: formData.driver_id,
         vehicle_id: formData.vehicle_id,
         mileage: formData.kilometraje,
       };
-
+  
       const inspection_id = await NewInspection(inspectionData);
       formData.inspection_id = inspection_id;
-
+  
       // Construir el array de inspecciones
       const inspections = [];
       Object.keys(formData).forEach((key) => {
@@ -217,9 +238,9 @@ const InspectionForm = () => {
           });
         }
       });
-
+  
       const reports = []; // Variable para almacenar los resultados
-
+  
       // Mapeamos sobre las inspecciones y generamos las promesas
       const promises = inspections.map(async (inspection) => {
         // Solo procesamos inspecciones que están marcadas como "Mal"
@@ -233,7 +254,7 @@ const InspectionForm = () => {
               inspection.name_condition,
               observations[inspection.name_condition] || "" // Agrega observaciones si las hay
             );
-
+  
             reports.push(result); // Añadimos el resultado a reports si la inspección es "Mal"
           } catch (error) {
             console.error("Error al crear mantenimiento:", error);
@@ -241,12 +262,11 @@ const InspectionForm = () => {
           }
         }
       });
-
+  
       await Promise.all(promises); // Asegúrate de esperar todas las promesas
-
+  
       // Verificamos si se generaron reportes malos antes de enviar el correo
       if (reports.length > 0) {
-
         // Llamamos a la función SendReport pasándole formData y la cantidad de reports
         await SendReport({
           ...formData, // Pasamos todos los datos del formulario
@@ -255,16 +275,17 @@ const InspectionForm = () => {
       } else {
         console.log("No se generaron reportes malos, no se enviará el correo.");
       }
-
+  
       await NewVehicleCondition({ inspections });
       Swal.fire({
         icon: "success",
         title: "Formulario Enviado",
         text: "El formulario se ha enviado con éxito.",
       });
-
+  
       setFormData(initialFormData); // Resetea el formulario a su estado inicial
       setObservations({}); // Limpia las observaciones
+      setFormSubmitted(false); // Permitir que se envíe el formulario nuevamente
     } catch (error) {
       console.error("Error en el envío de la inspección:", error);
       Swal.fire({
@@ -272,8 +293,11 @@ const InspectionForm = () => {
         title: "Error",
         text: `Error al enviar la inspección: ${error.message}`,
       });
+      setFormSubmitted(false); // Reestablecer el estado en caso de error
     }
   };
+  
+
 
   return (
     <div className="container mx-auto px-6 py-12">
@@ -290,7 +314,7 @@ const InspectionForm = () => {
         />
         <div className="flex justify-end">
           <button
-            type="submit"
+          onClick={onsubmit}
             className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-6 py-3 text-center transition-all duration-300 ease-in-out"
           >
             <svg

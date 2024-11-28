@@ -67,7 +67,6 @@ const InspectionForm = () => {
     limpieza: "Bien",
     fijaciono: "Bien",
     estado: "Bien",
-    mantenimientos: "Bien"
 
     
   };
@@ -134,7 +133,6 @@ const InspectionForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     // Validar el formulario
     if (!validateForm()) return;
 

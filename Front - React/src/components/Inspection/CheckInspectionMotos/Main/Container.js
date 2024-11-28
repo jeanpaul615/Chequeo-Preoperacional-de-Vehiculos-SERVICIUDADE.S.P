@@ -13,21 +13,20 @@ import InspectionVehicule from "../../CheckInspection/DriverVehicule/InspectionV
 import InspectionDriver from "../../CheckInspection/DriverVehicule/InspectionDriver";
 import Navbar from "../../../../containers/Navbar";
 // Importación de imágenes
-import Conductor from "../../../../assets/CheckInspection/moto.png";
-import Luces from "../../../../assets/CheckInspection/proteccionpersonal.png";
-import Llantas from "../../../../assets/CheckInspection/llantas.jpg";
-import Vial from "../../../../assets/CheckInspection/kitseguridad.jpg";
-import Maintenance from "../../../../assets/CheckInspection/maintenance.png";
+//import Conductor from "../../../../assets/CheckInspection/moto.png";
+import Moto from "../../../../assets/CheckInspection/motos_img1.jpg"
+import EPP from "../../../../assets/CheckInspection/EPP.jpg";
+//import Luces from "../../../../assets/CheckInspection/proteccionpersonal.png";
+import Suspension from "../../../../assets/CheckInspection/Suspension.jpg";
+import Vidrios from "../../../../assets/CheckInspection/vidrios.jpg";
 import Swal from "sweetalert2";
-import InspectionMaintenance from "../Maintenance/InspectionMaintenance";
 
 // Define paths para las imágenes usadas en los grupos de componentes
 const images = {
-  vehiculeDriver: Conductor,
-  estadoV1: Luces,
-  estadoV2: Llantas,
-  estadoV3: Vial,
-  Maintenance: Maintenance
+  vehiculeDriver: Moto,
+  estadoV1: EPP,
+  estadoV2: Suspension,
+  estadoV3: Vidrios
 };
 
 // Define los grupos de componentes para la inspección
@@ -70,14 +69,7 @@ const componentGroups = [
       { id: "Vidrios y Espejos", component: InspectionVidriosyEspejos },
     ],
   },
-  {
-    id: "Maintenance",
-    title: "Mantenimientos",
-    image: images.Maintenance,
-    components: [
-      { id: "Mantenimientos", component: InspectionMaintenance },
-    ],
-  },
+
 ];
 
 /**
@@ -150,7 +142,7 @@ export default function ContainerInspection({ formData, handleChange }) {
               key={group.id}
               layoutId={group.id}
               onClick={() => setSelectedGroupId(group.id)}
-              className="relative cursor-pointer p-4 border rounded-lg shadow-lg bg-white hover:bg-gray-100 flex items-center overflow-hidden"
+              className="relative cursor-pointer p-12 border rounded-lg shadow-lg bg-white hover:bg-gray-100 flex items-center overflow-hidden"
               whileHover={{ scale: 1.05 }}
             >
               <div className="absolute inset-0 w-full h-full">
@@ -162,7 +154,7 @@ export default function ContainerInspection({ formData, handleChange }) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-30"></div>
               </div>
-              <div className="relative z-10 flex items-center justify-center w-full h-full p-4">
+              <div className="relative z-10 flex items-center justify-center w-full h-full p-12">
                 <motion.h3
                   className="text-lg md:text-xl font-normal text-white bg-black bg-opacity-60 p-2 rounded-lg shadow-md"
                   whileHover={{ scale: 1.1, color: "#E85120" }} // Cambia el color en hover
@@ -187,7 +179,8 @@ export default function ContainerInspection({ formData, handleChange }) {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-white rounded-lg shadow-xl w-full sm:w-11/12 md:w-2/3 lg:w-1/2 p-6 relative"
+              className="bg-white rounded-lg shadow-xl w-full sm:w-11/12 md:w-2/3 lg:w-1/2 p-6
+               relative"
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}

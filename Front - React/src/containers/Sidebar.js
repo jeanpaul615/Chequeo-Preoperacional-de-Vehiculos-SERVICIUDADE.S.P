@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import React from "react";
 import RoleVerify from "./RoleVerify";
 import AvatarUser from "./AvatarUser";
@@ -13,38 +13,14 @@ import AvatarUser from "./AvatarUser";
  */
 function Sidebar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [maintenanceOpen, setMaintenanceOpen] = useState(false); // Estado para desplegar el submenú
 
   const sidebarRef = useRef(null);
 
   const roleUser = RoleVerify();
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
-  const toggleMaintenance = () => {
-    setMaintenanceOpen(!maintenanceOpen);
-  };
-
-  const handleClickOutside = (event) => {
-    if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-      setMenuOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    if (menuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [menuOpen]);
-
+  // Function to toggle the menu
+  const toggleMenu = () => setMenuOpen(prevState => !prevState);
+  
   return (
     <div>
       <button
@@ -164,35 +140,7 @@ function Sidebar() {
             {roleUser === "ADMIN" || roleUser === "AUDITOR" ? (
               <>
                 <li>
-                  <button
-                    onClick={toggleMaintenance}
-                    className="flex items-center p-2 text-white rounded-lg hover:bg-green-700 group w-full"
-                  >
-                      
-                    <svg      className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-white" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M112 0C85.5 0 64 21.5 64 48l0 48L16 96c-8.8 0-16 7.2-16 16s7.2 16 16 16l48 0 208 0c8.8 0 16 7.2 16 16s-7.2 16-16 16L64 160l-16 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l16 0 176 0c8.8 0 16 7.2 16 16s-7.2 16-16 16L64 224l-48 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l48 0 144 0c8.8 0 16 7.2 16 16s-7.2 16-16 16L64 288l0 128c0 53 43 96 96 96s96-43 96-96l128 0c0 53 43 96 96 96s96-43 96-96l32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64 0-32 0-18.7c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7L416 96l0-48c0-26.5-21.5-48-48-48L112 0zM544 237.3l0 18.7-128 0 0-96 50.7 0L544 237.3zM160 368a48 48 0 1 1 0 96 48 48 0 1 1 0-96zm272 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0z"/></svg>
-                    <span className="ml-3 whitespace-nowrap">
-                      Mantenimiento
-                    </span>
-                    <svg
-                      className={`w-4 h-4 ms-auto ${
-                        maintenanceOpen ? "rotate-180" : ""
-                      }`}
-                      fill="currentColor"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 9l-7 7-7-7"
-                      ></path>
-                    </svg>
-                  </button>
                   {/* Submenú */}
-                  {maintenanceOpen && (
-                    <ul className=" ml-3">
                       <li className="flex items-center  hover:bg-green-600 text-white rounded-lg p-2">
                         <a
                           href="/sheetmaintenance"
@@ -226,8 +174,6 @@ function Sidebar() {
                           Lista de Mantenimientos de Chequeo Preoperacional
                         </a>
                       </li>
-                    </ul>
-                  )}
                 </li>
                 <li>
                   <a

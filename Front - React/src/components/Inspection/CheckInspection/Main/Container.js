@@ -14,21 +14,18 @@ import InspectionVehicule from "../DriverVehicule/InspectionVehicule";
 import InspectionDriver from "../DriverVehicule/InspectionDriver";
 import Navbar from "../../../../containers/Navbar";
 // Importación de imágenes
-import Conductor from "../../../../assets/CheckInspection/conductor2.jpg";
-import Luces from "../../../../assets/CheckInspection/lucesvidrios.jpg";
-import Llantas from "../../../../assets/CheckInspection/llantas.jpg";
-import Vial from "../../../../assets/CheckInspection/kitseguridad.jpg";
-import Maintenance from "../../../../assets/CheckInspection/maintenance.png"
+import Vehiculo from "../../../../assets/CheckInspection/vehiculo1.jpg";
+import Luces from "../../../../assets/CheckInspection/luces.jpg";
+import Llantas from "../../../../assets/CheckInspection/llantas2.jpg";
+import Vial from "../../../../assets/CheckInspection/vial2.jpg";
 import Swal from "sweetalert2";
-import InspectionMaintenance from "../Maintenance/InspectionMaintenance";
 
 // Define paths para las imágenes usadas en los grupos de componentes
 const images = {
-  vehiculeDriver: Conductor,
+  vehiculeDriver: Vehiculo,
   estadoV1: Luces,
   estadoV2: Llantas,
-  estadoV3: Vial,
-  Maintenance: Maintenance,
+  estadoV3: Vial
 };
 
 // Define los grupos de componentes para la inspección
@@ -71,15 +68,7 @@ const componentGroups = [
       { id: "otros", component: InspectionOtros },
       { id: "vial", component: InspectionVial },
     ],
-  },
-  {
-    id: "Maintenance",
-    title: "Mantenimientos",
-    image: images.Maintenance,
-    components: [
-      { id: "maintenance", component: InspectionMaintenance }
-    ],
-  },
+  }
 
 ];
 
@@ -154,7 +143,7 @@ export default function ContainerInspection({ formData, handleChange }) {
               key={group.id}
               layoutId={group.id}
               onClick={() => setSelectedGroupId(group.id)}
-              className="relative cursor-pointer p-4 border rounded-lg shadow-lg bg-white hover:bg-gray-100 flex items-center overflow-hidden"
+              className="relative cursor-pointer p-12 border rounded-lg shadow-lg bg-white hover:bg-gray-100 flex items-center overflow-hidden"
               whileHover={{ scale: 1.05 }}
             >
               <div className="absolute inset-0 w-full h-full">
@@ -166,7 +155,7 @@ export default function ContainerInspection({ formData, handleChange }) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-30"></div>
               </div>
-              <div className="relative z-10 flex items-center justify-center w-full h-full p-4">
+              <div className="relative z-10 flex items-center justify-center w-full h-full p-12">
                 <motion.h3
                   className="text-lg md:text-xl font-normal text-white bg-black bg-opacity-60 p-2 rounded-lg shadow-md"
                   whileHover={{ scale: 1.1, color: "#E85120" }} // Cambia el color en hover
