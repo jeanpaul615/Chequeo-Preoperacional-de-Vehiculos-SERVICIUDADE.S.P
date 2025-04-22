@@ -1,5 +1,6 @@
+![image](https://github.com/user-attachments/assets/0cc64df3-6de8-4aa1-a256-6c395d7c21c7)
 
-# 🛠️ Chequeo Preoperacional de Vehículos - SERVICIUDADE S.P
+# 🛠️ Chequeo Preoperacional de Vehículos - SERVICIUDAD E.S.P
 
 Este proyecto es un sistema completo para la gestión de chequeos preoperacionales de vehículos, desarrollado con un stack tecnológico moderno: **Node.js**, **React**, **Tailwind CSS**, y **MySQL**. Proporciona una solución eficiente para garantizar la seguridad y el mantenimiento adecuado de los vehículos.
 
